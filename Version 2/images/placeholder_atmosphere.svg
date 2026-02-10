@@ -1,0 +1,12 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <filter id="noise" x="0%" y="0%" width="100%" height="100%">
+   <feTurbulence baseFrequency="0.01" numOctaves="3" result="noise" type="fractalNoise"/>
+   <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0.33 0.33 0.33 0 0  0 0 0 0.5 0"/>
+   <feBlend in="SourceGraphic" mode="multiply"/>
+  </filter>
+ </defs>
+ <rect width="100%" height="100%" fill="#E8D5B5"/>
+ <rect width="100%" height="100%" filter="url(#noise)" opacity="0.5"/>
+ <text x="50%" y="50%" font-family="serif" font-size="40" fill="#4A3B32" text-anchor="middle" dominant-baseline="middle">Atmosphäre</text>
+</svg>

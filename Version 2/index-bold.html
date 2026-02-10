@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CaFEE Brückenmühle - FEE-nomenal lecker! Dein magisches Café für unvergessliche Kaffee-Momente, hausgemachte Köstlichkeiten und echte Gemütlichkeit.">
+    <meta name="keywords" content="Café, Brückenmühle, Kaffee, Frühstück, Kuchen, Gemütlichkeit, Fee, FEE-nomenal">
+    <title>CaFEE Brückenmühle – FEE-nomenal lecker!</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/Fee CaFEE_favicon_ohne Dampf.svg">
+
+    <!-- Google Fonts - Bold Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bold Design Stylesheet -->
+    <link rel="stylesheet" href="styles-bold.css">
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE">
+            </div>
+            <div class="preloader-text">
+                <span class="preloader-word">FEE</span>
+                <span class="preloader-word accent">-NOMENAL</span>
+                <span class="preloader-word">LECKER</span>
+            </div>
+            <div class="preloader-bar">
+                <div class="preloader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="mainNav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE Brückenmühle Logo">
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Navigation öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home">Start</a></li>
+                <li><a href="#warum">Warum wir</a></li>
+                <li><a href="#angebot">Angebot</a></li>
+                <li><a href="#galerie">Einblicke</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#kontakt" class="nav-cta">Besuchen</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section - BOLD -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline class="hero-video">
+                <source src="images/Imagefilm.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-quote reveal-up">
+                <span class="quote-mark">"</span>
+            </div>
+
+            <h1 class="hero-headline">
+                <span class="headline-row reveal-up" data-delay="100">
+                    <span class="headline-text">FEE-</span>
+                </span>
+                <span class="headline-row reveal-up" data-delay="200">
+                    <span class="headline-text highlight-copper">NOMENAL</span>
+                </span>
+                <span class="headline-row reveal-up" data-delay="300">
+                    <span class="headline-text highlight-white">LECKER</span>
+                </span>
+            </h1>
+
+            <div class="hero-tagline reveal-up" data-delay="400">
+                <p>Mehr als ein Café. Ein Gefühl.</p>
+            </div>
+
+            <div class="hero-cta reveal-up" data-delay="500">
+                <a href="#warum" class="btn-bold">
+                    <span>Entdecken</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M19 12l-7 7-7-7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-scroll-hint">
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Marquee Band 1 -->
+    <div class="marquee-band">
+        <div class="marquee">
+            <span class="marquee-text">GENUSS IST EINE EINSTELLUNG • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • DEIN
+                HAPPY PLACE • KAFFEE MAGIE • BRÜCKENMÜHLE VIBES • GENUSS IST EINE EINSTELLUNG • FEE-NOMENAL LECKER •
+                HANDGEMACHT MIT LIEBE • DEIN HAPPY PLACE • KAFFEE MAGIE • BRÜCKENMÜHLE VIBES • </span>
+            <span class="marquee-text">GENUSS IST EINE EINSTELLUNG • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • DEIN
+                HAPPY PLACE • KAFFEE MAGIE • BRÜCKENMÜHLE VIBES • GENUSS IST EINE EINSTELLUNG • FEE-NOMENAL LECKER •
+                HANDGEMACHT MIT LIEBE • DEIN HAPPY PLACE • KAFFEE MAGIE • BRÜCKENMÜHLE VIBES • </span>
+        </div>
+    </div>
+
+    <!-- Statement Section -->
+    <section class="statement" id="warum">
+        <div class="statement-container">
+            <!-- Genuss Badge - Circular Text Element -->
+            <div class="genuss-badge scroll-reveal">
+                <svg viewBox="0 0 200 200" class="circular-text">
+                    <defs>
+                        <path id="circlePath" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                    </defs>
+                    <text>
+                        <textPath href="#circlePath" startOffset="0%">
+                            GENUSS IST EINE EINSTELLUNG • GENUSS IST EINE EINSTELLUNG •
+                        </textPath>
+                    </text>
+                </svg>
+                <div class="badge-fairy-large">
+                    <img src="images/Fee CaFEE_favicon_ohne Dampf.svg" alt="Fee">
+                </div>
+            </div>
+
+            <div class="statement-grid">
+                <div class="statement-visual">
+                    <div class="video-wrapper scroll-reveal">
+                        <video id="previewVideo" muted loop playsinline class="preview-video">
+                            <source src="images/Imagefilm.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay"></div>
+                        <button class="play-button" id="playButton" aria-label="Video abspielen">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5,3 19,12 5,21" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="statement-content">
+                    <div class="content-badge scroll-reveal">
+                        <span>Warum CaFEE?</span>
+                    </div>
+
+                    <h2 class="statement-headline">
+                        <span class="headline-row scroll-reveal" data-delay="100">
+                            <span class="text-outline">WEIL DU</span>
+                        </span>
+                        <span class="headline-row scroll-reveal" data-delay="200">
+                            <span class="text-solid highlight-copper">MEHR</span>
+                        </span>
+                        <span class="headline-row scroll-reveal" data-delay="300">
+                            <span class="text-solid">VERDIENST</span>
+                        </span>
+                    </h2>
+
+                    <div class="statement-text scroll-reveal" data-delay="400">
+                        <p class="text-large">
+                            Ein lang gehegter Traum wurde Wirklichkeit. Als wir über die
+                            Brückenmühle gestolpert sind, wussten wir sofort: Hier ist unser Ort.
+                        </p>
+                        <p>
+                            Hier, wo die Murg im Hintergrund rauscht und die wunderschöne Altstadt
+                            von Gernsbach auf dich wartet. <strong>Ein Ort der Begegnung</strong> für alle,
+                            die sich an gutem Essen erfreuen, gute Getränke lieben und Spaß am Leben haben.
+                            Ein Ort, an dem man reinkommt und bleiben will.
+                        </p>
+                    </div>
+
+                    <div class="statement-stats scroll-reveal" data-delay="500">
+                        <div class="stat-item">
+                            <div class="stat-counter-wrapper">
+                                <span class="stat-number counter" data-target="1">0</span>
+                            </div>
+                            <span class="stat-label">Ort der Begegnung</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-counter-wrapper">
+                                <span class="stat-number counter" data-target="2">0</span>
+                            </div>
+                            <span class="stat-label">Welten vereint</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-counter-wrapper">
+                                <span class="stat-number counter" data-target="100">0</span>
+                                <span class="stat-unit">%</span>
+                            </div>
+                            <span class="stat-label">Herzlichkeit</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Lightbox -->
+        <div class="lightbox" id="videoLightbox">
+            <div class="lightbox-content">
+                <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+                <video id="lightboxVideo" controls class="lightbox-video">
+                    <source src="images/Imagefilm.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section - Grid Layout -->
+    <section class="features">
+        <div class="features-container">
+            <div class="features-header">
+                <h2 class="features-title scroll-reveal">
+                    <span class="title-row">
+                        <span class="text-huge highlight-copper">DAS</span>
+                    </span>
+                    <span class="title-row">
+                        <span class="text-huge">ERWARTET</span>
+                    </span>
+                    <span class="title-row">
+                        <span class="text-huge highlight-dark">DICH</span>
+                    </span>
+                </h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card scroll-reveal" data-delay="100">
+                    <div class="feature-image">
+                        <img src="images/Capuccino.png" alt="Kaffee">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">KAFFEE</span>
+                        <span>DER WACH MACHT</span>
+                    </h3>
+                    <p class="feature-text">
+                        Frisch geröstete Bohnen, perfekt extrahiert. Ob Espresso, Cappuccino
+                        oder unser Signature "Fee's Zauber-Latte" – jeder Schluck ein Erlebnis.
+                    </p>
+                </div>
+
+                <div class="feature-card scroll-reveal" data-delay="200">
+                    <div class="feature-image">
+                        <img src="images/Frühstück.png" alt="Frühstück">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">FRÜHSTÜCK</span>
+                        <span>DAS SÜCHTIG MACHT</span>
+                    </h3>
+                    <p class="feature-text">
+                        Vergiss Cornflakes. Bei uns gibt's: Das Große Fee-Frühstück,
+                        Avocado-Ei-Toast, frische Granola Bowls. Alles, was das Herz begehrt.
+                    </p>
+                </div>
+
+                <div class="feature-card scroll-reveal" data-delay="300">
+                    <div class="feature-image">
+                        <img src="images/Avocado Ei.png" alt="Kuchen">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">KUCHEN</span>
+                        <span>DER GLÜCKLICH MACHT</span>
+                    </h3>
+                    <p class="feature-text">
+                        Jeden Tag frisch gebacken. Warmer Apfelstrudel mit Vanillesoße,
+                        belgische Waffeln, Tiramisu nach Originalrezept. Pure Liebe.
+                    </p>
+                </div>
+
+                <div class="feature-card scroll-reveal" data-delay="400">
+                    <div class="feature-image">
+                        <img src="images/Cafe blurred.png" alt="Atmosphäre">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">ATMOSPHÄRE</span>
+                        <span>DIE ENTSPANNT</span>
+                    </h3>
+                    <p class="feature-text">
+                        Historische Brückenmühle trifft moderne Gemütlichkeit.
+                        Hohe Decken, warmes Holz, und überall ein Hauch von Magie.
+                    </p>
+                </div>
+
+                <div class="feature-card scroll-reveal" data-delay="500">
+                    <div class="feature-image">
+                        <img src="images/Kaffebohnen.png" alt="Qualität">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">QUALITÄT</span>
+                        <span>DIE MAN SCHMECKT</span>
+                    </h3>
+                    <p class="feature-text">
+                        Nur die besten Zutaten. Regionale Produkte, fair gehandelter Kaffee
+                        und Rezepte, die von Herzen kommen. Das ist unser Versprechen.
+                    </p>
+                </div>
+
+                <div class="feature-card scroll-reveal" data-delay="600">
+                    <div class="feature-image">
+                        <img src="images/Team/Fee.PNG" alt="Service">
+                    </div>
+                    <h3 class="feature-title">
+                        <span class="highlight-copper">SERVICE</span>
+                        <span>MIT HERZ</span>
+                    </h3>
+                    <p class="feature-text">
+                        Bei uns bist du nicht einfach Gast – du bist Familie.
+                        Persönlich, herzlich und immer mit einem Lächeln.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Band 2 -->
+    <div class="marquee-band reverse">
+        <div class="marquee reverse">
+            <span class="marquee-text">KUCHEN LIEBE • KAFFEE ZAUBER • BRÜCKENMÜHLE MAGIE • ANKOMMEN DURCHATMEN GENIESSEN
+                • FEE-NOMENAL • DEIN ORT ZUM WOHLFÜHLEN • KUCHEN LIEBE • KAFFEE ZAUBER • BRÜCKENMÜHLE MAGIE • ANKOMMEN
+                DURCHATMEN GENIESSEN • FEE-NOMENAL • DEIN ORT ZUM WOHLFÜHLEN • </span>
+            <span class="marquee-text">KUCHEN LIEBE • KAFFEE ZAUBER • BRÜCKENMÜHLE MAGIE • ANKOMMEN DURCHATMEN GENIESSEN
+                • FEE-NOMENAL • DEIN ORT ZUM WOHLFÜHLEN • KUCHEN LIEBE • KAFFEE ZAUBER • BRÜCKENMÜHLE MAGIE • ANKOMMEN
+                DURCHATMEN GENIESSEN • FEE-NOMENAL • DEIN ORT ZUM WOHLFÜHLEN • </span>
+        </div>
+    </div>
+
+    <!-- Menu Teaser Section -->
+    <section class="menu-section" id="angebot">
+        <div class="menu-container">
+            <div class="menu-header scroll-reveal">
+                <span class="section-badge">Speisekarte</span>
+                <h2 class="menu-title">
+                    <span class="text-outline">WAS</span>
+                    <span class="text-solid highlight-copper">DARF'S</span>
+                    <span class="text-solid">SEIN?</span>
+                </h2>
+            </div>
+
+            <div class="menu-categories">
+                <div class="menu-category scroll-reveal" data-delay="100">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <path d="M12 48h32c0 4-6 8-16 8s-16-4-16-8z" fill="var(--color-copper)" opacity="0.2" />
+                            <path d="M12 24c0-8 7-14 16-14s16 6 16 14v24H12V24z" stroke="var(--color-copper)"
+                                stroke-width="2.5" fill="none" />
+                            <path d="M44 28h6c4 0 6 3 6 8s-2 8-6 8h-6" stroke="var(--color-copper)" stroke-width="2.5"
+                                stroke-linecap="round" />
+                            <path d="M22 8c0-4 2-6 2-6" stroke="var(--color-copper)" stroke-width="2"
+                                stroke-linecap="round" opacity="0.6">
+                                <animate attributeName="d"
+                                    values="M22 8c0-4 2-6 2-6;M22 6c0-4 2-6 2-6;M22 8c0-4 2-6 2-6" dur="2s"
+                                    repeatCount="indefinite" />
+                            </path>
+                            <path d="M28 6c0-4 2-6 2-6" stroke="var(--color-copper)" stroke-width="2"
+                                stroke-linecap="round" opacity="0.6">
+                                <animate attributeName="d"
+                                    values="M28 6c0-4 2-6 2-6;M28 4c0-4 2-6 2-6;M28 6c0-4 2-6 2-6" dur="2s" begin="0.3s"
+                                    repeatCount="indefinite" />
+                            </path>
+                            <path d="M34 8c0-4 2-6 2-6" stroke="var(--color-copper)" stroke-width="2"
+                                stroke-linecap="round" opacity="0.6">
+                                <animate attributeName="d"
+                                    values="M34 8c0-4 2-6 2-6;M34 6c0-4 2-6 2-6;M34 8c0-4 2-6 2-6" dur="2s" begin="0.6s"
+                                    repeatCount="indefinite" />
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="category-title">KAFFEE & CO.</h3>
+                    <ul class="category-items">
+                        <li>
+                            <span class="item-name">Espresso</span>
+                            <span class="item-price">2,80 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Cappuccino</span>
+                            <span class="item-price">3,90 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Fee's Zauber-Latte</span>
+                            <span class="item-price">4,50 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Flat White</span>
+                            <span class="item-price">4,20 €</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category scroll-reveal" data-delay="200">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <ellipse cx="32" cy="42" rx="26" ry="12" fill="var(--color-copper)" opacity="0.15" />
+                            <ellipse cx="32" cy="38" rx="24" ry="10" stroke="var(--color-copper)" stroke-width="2.5"
+                                fill="none" />
+                            <ellipse cx="32" cy="28" rx="12" ry="8" fill="var(--color-copper)" opacity="0.3" />
+                            <ellipse cx="32" cy="26" rx="10" ry="6" stroke="var(--color-copper)" stroke-width="2"
+                                fill="#fff8f0" />
+                            <circle cx="32" cy="26" r="4" fill="var(--color-copper)" opacity="0.8" />
+                            <path d="M10 38c-2 1-3 3-3 5" stroke="var(--color-copper)" stroke-width="2"
+                                stroke-linecap="round" opacity="0.5" />
+                            <path d="M54 38c2 1 3 3 3 5" stroke="var(--color-copper)" stroke-width="2"
+                                stroke-linecap="round" opacity="0.5" />
+                            <path d="M20 18l4-6M28 14v-6M36 14v-6M44 18l-4-6" stroke="var(--color-copper)"
+                                stroke-width="1.5" stroke-linecap="round" opacity="0.4" />
+                        </svg>
+                    </div>
+                    <h3 class="category-title">FRÜHSTÜCK</h3>
+                    <ul class="category-items">
+                        <li>
+                            <span class="item-name">Das Große Fee-Frühstück</span>
+                            <span class="item-price">14,90 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Avocado-Ei-Toast</span>
+                            <span class="item-price">9,80 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Granola Bowl</span>
+                            <span class="item-price">8,50 €</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category scroll-reveal" data-delay="300">
+                    <div class="category-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <path d="M14 52h36c0 4-8 6-18 6s-18-2-18-6z" fill="var(--color-copper)" opacity="0.2" />
+                            <path d="M16 52l3-20h26l3 20" stroke="var(--color-copper)" stroke-width="2.5"
+                                fill="#fff8f0" />
+                            <path d="M19 32c0-10 6-16 13-16s13 6 13 16" stroke="var(--color-copper)" stroke-width="2.5"
+                                fill="var(--color-copper)" opacity="0.3" />
+                            <ellipse cx="32" cy="32" rx="13" ry="4" fill="var(--color-copper)" opacity="0.4" />
+                            <circle cx="32" cy="22" r="5" fill="#c0392b" stroke="#9b2c22" stroke-width="1" />
+                            <path d="M32 17v-6" stroke="#27ae60" stroke-width="2" stroke-linecap="round" />
+                            <path d="M30 13c-2-1-3 0-4 1" stroke="#27ae60" stroke-width="1.5" stroke-linecap="round"
+                                fill="none" />
+                            <circle cx="24" cy="42" r="2" fill="var(--color-copper)" opacity="0.5" />
+                            <circle cx="38" cy="44" r="1.5" fill="var(--color-copper)" opacity="0.4" />
+                            <circle cx="28" cy="46" r="1" fill="var(--color-copper)" opacity="0.3" />
+                        </svg>
+                    </div>
+                    <h3 class="category-title">SÜSSES</h3>
+                    <ul class="category-items">
+                        <li>
+                            <span class="item-name">Hausgemachter Kuchen</span>
+                            <span class="item-price">4,50 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Warmer Apfelstrudel</span>
+                            <span class="item-price">5,90 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Belgische Waffeln</span>
+                            <span class="item-price">6,90 €</span>
+                        </li>
+                        <li>
+                            <span class="item-name">Tiramisu</span>
+                            <span class="item-price">5,50 €</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="menu-download scroll-reveal">
+                <button class="btn-bold btn-large" id="openFlipbook">
+                    <span>KARTE DURCHBLÄTTERN</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+                    </svg>
+                </button>
+                <a href="Speisekarte.pdf" download class="btn-bold btn-large">
+                    <span>KOMPLETTE KARTE HERUNTERLADEN</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section - Mosaic -->
+    <section class="gallery-section" id="galerie">
+        <div class="gallery-header scroll-reveal">
+            <span class="section-badge">Einblicke</span>
+            <h2 class="gallery-title">
+                <span class="text-solid">SO</span>
+                <span class="text-solid highlight-copper">SCHÖN</span>
+                <span class="text-outline">IST ES BEI UNS</span>
+            </h2>
+        </div>
+
+        <div class="gallery-mosaic">
+            <!-- Item 1: Large (2x2) -->
+            <div class="mosaic-item large scroll-reveal" data-delay="100">
+                <img src="images/Frühstück.png" alt="Frühstück im CaFEE">
+                <div class="mosaic-overlay">
+                    <span>Frühstücksmomente</span>
+                </div>
+            </div>
+
+            <!-- Item 2: Standard due to grid flow -->
+            <div class="mosaic-item scroll-reveal" data-delay="200">
+                <img src="images/Capuccino.png" alt="Cappuccino">
+                <div class="mosaic-overlay">
+                    <span>Kaffeekunst</span>
+                </div>
+            </div>
+
+            <!-- Item 3: Standard -->
+            <div class="mosaic-item scroll-reveal" data-delay="300">
+                <img src="images/Tresen.png" alt="Unser Tresen">
+                <div class="mosaic-overlay">
+                    <span>Am Tresen</span>
+                </div>
+            </div>
+
+            <!-- Item 4: Tall (1x2) -->
+            <div class="mosaic-item tall scroll-reveal" data-delay="400">
+                <img src="images/Avocado Ei.png" alt="Avocado Toast">
+                <div class="mosaic-overlay">
+                    <span>Avocado Liebe</span>
+                </div>
+            </div>
+
+            <!-- Item 5: Standard -->
+            <div class="mosaic-item scroll-reveal" data-delay="500">
+                <img src="images/Kaffebohnen.png" alt="Kaffeebohnen">
+                <div class="mosaic-overlay">
+                    <span>Beste Bohnen</span>
+                </div>
+            </div>
+
+            <!-- Item 6: Instagram Tile (Wide 2x1) -->
+            <div class="mosaic-item wide instagram-tile scroll-reveal" data-delay="600">
+                <a href="https://instagram.com/cafee_brueckenmuehle" target="_blank" class="instagram-link">
+                    <span class="insta-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" />
+                            <circle cx="12" cy="12" r="4" />
+                            <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+                        </svg>
+                    </span>
+                    <span class="insta-text">Folge uns</span>
+                    <span class="insta-handle">@cafee_brueckenmuehle</span>
+                </a>
+            </div>
+
+            <!-- Item 7: Filler to complete grid (Standard) -->
+            <div class="mosaic-item scroll-reveal" data-delay="700">
+                <img src="images/Cafe blurred.png" alt="Atmosphäre">
+                <div class="mosaic-overlay">
+                    <span>Wohlfühlen</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Big Statement Section -->
+    <section class="big-statement">
+        <div class="big-statement-bg parallax-bg"></div>
+        <div class="big-statement-overlay"></div>
+
+        <div class="big-statement-content">
+            <div class="statement-center scroll-reveal">
+                <h2 class="mega-headline">
+                    <span class="line line-1">NICHT NUR</span>
+                    <span class="line line-2 highlight-copper">KAFFEE</span>
+                    <span class="line line-3">SONDERN</span>
+                    <span class="line line-4 highlight-dark">HERZLICHKEIT</span>
+                </h2>
+
+                <p class="statement-subtext">
+                    Jeder soll sich bei uns willkommen fühlen. Ein Ort, an dem Menschen
+                    zusammenkommen, eine schöne Zeit erleben und hier einfach Herzlichkeit herrscht.
+                </p>
+
+                <a href="#kontakt" class="btn-bold btn-large">
+                    <span>JETZT ERLEBEN</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Band 3 -->
+    <div class="marquee-band">
+        <div class="marquee">
+            <span class="marquee-text">WILLKOMMEN IN DER BRÜCKENMÜHLE • WO MAGIE AUF KAFFEE TRIFFT • DEIN NEUER
+                LIEBLINGSORT • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • WILLKOMMEN IN DER BRÜCKENMÜHLE • WO MAGIE
+                AUF KAFFEE TRIFFT • DEIN NEUER LIEBLINGSORT • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • </span>
+            <span class="marquee-text">WILLKOMMEN IN DER BRÜCKENMÜHLE • WO MAGIE AUF KAFFEE TRIFFT • DEIN NEUER
+                LIEBLINGSORT • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • WILLKOMMEN IN DER BRÜCKENMÜHLE • WO MAGIE
+                AUF KAFFEE TRIFFT • DEIN NEUER LIEBLINGSORT • FEE-NOMENAL LECKER • HANDGEMACHT MIT LIEBE • </span>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <section class="team-section" id="team">
+        <div class="team-container">
+            <div class="team-header scroll-reveal">
+                <span class="section-badge">Das Team</span>
+                <h2 class="team-title">
+                    <span class="text-solid">DIE</span>
+                    <span class="text-solid highlight-copper">MENSCHEN</span>
+                    <span class="text-outline">DAHINTER</span>
+                </h2>
+                <p class="team-subtitle">
+                    Keine Maschinen. Keine Roboter. Nur echte Menschen mit echter Leidenschaft.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card scroll-reveal" data-delay="100">
+                    <div class="team-image">
+                        <img src="images/Team/Fee.PNG" alt="Fee">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">FEE</h3>
+                        <span class="team-role">Gründerin & Namensgeberin</span>
+                        <p class="team-quote">"Im CaFEE steckt ganz viel von mir."</p>
+                    </div>
+                </div>
+
+                <div class="team-card scroll-reveal" data-delay="200">
+                    <div class="team-image">
+                        <img src="images/Team/Fabian.PNG" alt="Fabian">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">FABIAN</h3>
+                        <span class="team-role">Gründer</span>
+                        <p class="team-quote">"Ich bin stolz, dass wir den Schritt gewagt haben."</p>
+                    </div>
+                </div>
+
+                <div class="team-card scroll-reveal" data-delay="300">
+                    <div class="team-image">
+                        <img src="images/Team/Vanessa.PNG" alt="Vanessa">
+                        <div class="team-image-overlay"></div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">VANESSA</h3>
+                        <span class="team-role">Gastronomische Leitung</span>
+                        <p class="team-quote">"Es macht mir Spaß, Gästen wunderschöne Momente zu bescheren."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact Section -->
+    <section class="contact-section" id="kontakt">
+        <div class="contact-container">
+            <div class="contact-content">
+                <div class="contact-header scroll-reveal">
+                    <span class="section-badge">Komm vorbei</span>
+                    <h2 class="contact-title">
+                        <span class="line highlight-dark">WORAUF</span>
+                        <span class="line highlight-copper">WARTEST</span>
+                        <span class="line">DU NOCH?</span>
+                    </h2>
+                </div>
+
+                <div class="contact-info scroll-reveal" data-delay="200">
+                    <div class="info-block">
+                        <h4 class="info-label">ADRESSE</h4>
+                        <p class="info-value">
+                            Brückenstraße 12<br>
+                            12345 Musterstadt
+                        </p>
+                    </div>
+
+                    <div class="info-block">
+                        <h4 class="info-label">ÖFFNUNGSZEITEN</h4>
+                        <p class="info-value">
+                            Mo: Ruhetag<br>
+                            Di – Fr: 8 – 18 Uhr<br>
+                            Sa – So: 9 – 18 Uhr
+                        </p>
+                    </div>
+
+                    <div class="info-block">
+                        <h4 class="info-label">KONTAKT</h4>
+                        <p class="info-value">
+                            <a href="tel:+49123456789">+49 123 456 789</a><br>
+                            <a href="mailto:hallo@cafee-brueckenmuehle.de">hallo@cafee-brueckenmuehle.de</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="contact-cta scroll-reveal" data-delay="300">
+                    <a href="tel:+49123456789" class="btn-bold btn-large">
+                        <span>JETZT ANRUFEN</span>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="btn-cafee-insta">
+                        <span class="btn-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" />
+                                <circle cx="12" cy="12" r="4" />
+                                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+                            </svg>
+                        </span>
+                        <span class="btn-text">INSTAGRAM FOLGEN</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="contact-visual scroll-reveal">
+                <div class="map-placeholder">
+                    <div class="map-content">
+                        <span class="map-icon">📍</span>
+                        <span class="map-text">HIER FINDEST DU UNS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="footer-marquee">
+                <div class="marquee fast">
+                    <span class="marquee-text footer-text">FEE-NOMENAL LECKER • CAFEE BRÜCKENMÜHLE • HANDGEMACHT MIT
+                        LIEBE • GENUSS IST EINE EINSTELLUNG • DEIN HAPPY PLACE • FEE-NOMENAL LECKER • CAFEE BRÜCKENMÜHLE
+                        • HANDGEMACHT MIT LIEBE • GENUSS IST EINE EINSTELLUNG • DEIN HAPPY PLACE • </span>
+                    <span class="marquee-text footer-text">FEE-NOMENAL LECKER • CAFEE BRÜCKENMÜHLE • HANDGEMACHT MIT
+                        LIEBE • GENUSS IST EINE EINSTELLUNG • DEIN HAPPY PLACE • FEE-NOMENAL LECKER • CAFEE BRÜCKENMÜHLE
+                        • HANDGEMACHT MIT LIEBE • GENUSS IST EINE EINSTELLUNG • DEIN HAPPY PLACE • </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-main">
+            <div class="footer-container">
+                <div class="footer-logo">
+                    <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE">
+                </div>
+
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>NAVIGATION</h4>
+                        <ul>
+                            <li><a href="#home">Start</a></li>
+                            <li><a href="#warum">Warum wir</a></li>
+                            <li><a href="#angebot">Angebot</a></li>
+                            <li><a href="#galerie">Einblicke</a></li>
+                            <li><a href="#team">Team</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>KONTAKT</h4>
+                        <ul>
+                            <li>Brückenstraße 12</li>
+                            <li>12345 Musterstadt</li>
+                            <li><a href="tel:+49123456789">+49 123 456 789</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>ZEITEN</h4>
+                        <ul>
+                            <li>Mo: Ruhetag</li>
+                            <li>Di – Fr: 8 – 18 Uhr</li>
+                            <li>Sa – So: 9 – 18 Uhr</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" />
+                            <circle cx="12" cy="12" r="4" />
+                            <circle cx="18" cy="6" r="1" fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 CaFEE Brückenmühle. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <!-- Flipbook Lightbox -->
+    <div class="flipbook-lightbox" id="flipbookLightbox">
+        <div class="flipbook-container">
+            <button class="flipbook-close" id="flipbookClose" aria-label="Schließen">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="flipbook-wrapper">
+                <button class="flipbook-nav flipbook-prev" id="flipbookPrev" aria-label="Vorherige Seite">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="flipbook-book" id="flipbookBook">
+                    <div class="flipbook-page-left" id="flipbookPageLeft">
+                        <canvas id="flipbookCanvasLeft"></canvas>
+                    </div>
+                    <div class="flipbook-spine"></div>
+                    <div class="flipbook-page-right" id="flipbookPageRight">
+                        <canvas id="flipbookCanvasRight"></canvas>
+                    </div>
+                    <!-- Flip animation overlay -->
+                    <div class="flipbook-flip-overlay" id="flipOverlay">
+                        <div class="flip-page-front">
+                            <canvas id="flipCanvasFront"></canvas>
+                        </div>
+                        <div class="flip-page-back">
+                            <canvas id="flipCanvasBack"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="flipbook-nav flipbook-next" id="flipbookNext" aria-label="Nächste Seite">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flipbook-info">
+                <span class="flipbook-page-counter" id="flipbookPageCounter">Seite 1 / 1</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
+
+    <script src="script-bold.js"></script>
+    <script src="flipbook.js"></script>
+</body>
+
+</html>
