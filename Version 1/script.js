@@ -520,6 +520,8 @@ function initAll() {
     initTouchSwipe();
     initActiveNavHighlight();
     initVideoLightbox();
+    initInterviewSlider();
+    initInterviewLightbox();
 
     // Trigger initial animations
     setTimeout(() => {
@@ -571,5 +573,142 @@ function initVideoLightbox() {
     });
 }
 
+// ============================================
+// Interview Slider
+// ============================================
+function initInterviewSlider() {
+    const slides = document.querySelectorAll('.interview-slide');
+    const dots = document.querySelectorAll('.interview-dot');
+    const prevBtn = document.getElementById('interviewPrev');
+    const nextBtn = document.getElementById('interviewNext');
+
+    if (slides.length === 0) return;
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        // Wrap around
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        // Pause all videos
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+            const video = slide.querySelector('.interview-video');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+
+        // Update dots
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        // Show current slide
+        currentSlide = index;
+        slides[currentSlide].classList.add('active');
+        if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+
+        // Auto-play video in current slide (muted)
+        const activeVideo = slides[currentSlide].querySelector('.interview-video');
+        if (activeVideo) {
+            activeVideo.muted = true;
+            activeVideo.play().catch(() => { /* autoplay blocked */ });
+        }
+    }
+
+    // Navigation buttons
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+    }
+
+    // Dot navigation
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            const slideIndex = parseInt(dot.dataset.slide);
+            showSlide(slideIndex);
+        });
+    });
+
+    // Touch swipe for interview slider
+    const slidesContainer = document.getElementById('interviewSlides');
+    if (slidesContainer) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        slidesContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        slidesContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) showSlide(currentSlide + 1);
+                else showSlide(currentSlide - 1);
+            }
+        }, { passive: true });
+    }
+
+    // Auto-play first video on load
+    const firstVideo = slides[0]?.querySelector('.interview-video');
+    if (firstVideo) {
+        firstVideo.muted = true;
+        firstVideo.play().catch(() => { /* autoplay blocked */ });
+    }
+}
+
+// ============================================
+// Interview Lightbox
+// ============================================
+function initInterviewLightbox() {
+    const lightbox = document.getElementById('interviewLightbox');
+    const closeBtn = document.getElementById('closeInterviewBtn');
+    const lightboxVideo = document.getElementById('interviewLightboxVideo');
+
+    if (!lightbox || !closeBtn || !lightboxVideo) return;
+
+    // Click on interview video wrapper to open lightbox
+    document.querySelectorAll('.interview-video-wrapper').forEach(wrapper => {
+        wrapper.addEventListener('click', () => {
+            const videoSrc = wrapper.querySelector('source')?.src;
+            if (videoSrc) {
+                lightboxVideo.querySelector('source').src = videoSrc;
+                lightboxVideo.load();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                lightboxVideo.muted = false; // Play with sound in lightbox
+                lightboxVideo.play();
+            }
+        });
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        lightboxVideo.pause();
+        lightboxVideo.currentTime = 0;
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+}
+
 // Start initialization
 init();
+
