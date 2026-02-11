@@ -672,18 +672,32 @@ function initInterviewLightbox() {
 
     if (!lightbox || !closeBtn || !lightboxVideo) return;
 
+    function openInterviewLightbox(videoSrc) {
+        if (!videoSrc) return;
+        lightboxVideo.querySelector('source').src = videoSrc;
+        lightboxVideo.load();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        lightboxVideo.muted = false;
+        lightboxVideo.play();
+    }
+
     // Click on interview video wrapper to open lightbox
     document.querySelectorAll('.interview-video-wrapper').forEach(wrapper => {
         wrapper.addEventListener('click', () => {
             const videoSrc = wrapper.querySelector('source')?.src;
-            if (videoSrc) {
-                lightboxVideo.querySelector('source').src = videoSrc;
-                lightboxVideo.load();
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                lightboxVideo.muted = false; // Play with sound in lightbox
-                lightboxVideo.play();
-            }
+            openInterviewLightbox(videoSrc);
+        });
+    });
+
+    // Round play button (like Imagefilm) opens lightbox
+    document.querySelectorAll('.interview-play-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const slide = btn.closest('.interview-slide');
+            const source = slide?.querySelector('.interview-video source');
+            if (source?.src) openInterviewLightbox(source.src);
         });
     });
 

@@ -45,7 +45,7 @@
     --gradient-hero: linear-gradient(180deg, rgba(60, 60, 59, 0.85) 0%, rgba(60, 60, 59, 0.6) 50%, rgba(60, 60, 59, 0.8) 100%);
     --gradient-fairy: linear-gradient(135deg, rgba(189, 137, 113, 0.1) 0%, rgba(201, 168, 108, 0.1) 100%);
 
-    /* Typography */
+    /* Typography: Display = Josefin Sans, Script = Brushwell */
     --font-display: 'Josefin Sans', 'Arial Narrow', sans-serif;
     --font-script: 'Brushwell', cursive;
     --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -800,8 +800,8 @@ ol {
     margin-bottom: var(--space-lg);
 }
 
-.section-title .title-oswald,
-.section-title:not(:has(.title-oswald)) {
+.section-title .title-display,
+.section-title:not(:has(.title-display)) {
     font-family: var(--font-display);
     font-size: var(--text-4xl);
     font-weight: 600;
@@ -848,7 +848,7 @@ ol {
     line-height: 1.2;
 }
 
-.experience .section-title .title-oswald {
+.experience .section-title .title-display {
     color: var(--color-white);
 }
 
@@ -1186,6 +1186,44 @@ ol {
 /* Video Side */
 .interview-video-side {
     width: 100%;
+    position: relative;
+}
+
+.interview-play-wrapper {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    z-index: 10;
+    animation: float 5s ease-in-out infinite;
+}
+
+.interview-play-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2), var(--shadow-xl);
+}
+
+.interview-play-btn svg {
+    width: 44px;
+    height: 44px;
+    margin-left: 4px;
+}
+
+.interview-play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.3), var(--shadow-2xl);
+    color: var(--color-primary-dark);
+}
+
+@media (max-width: 900px) {
+    .interview-play-wrapper {
+        bottom: -20px;
+        right: 50%;
+        transform: translateX(50%);
+    }
 }
 
 .interview-video-wrapper {
@@ -1866,7 +1904,7 @@ ol {
     border-color: var(--color-primary);
 }
 
-.menu-preview .section-title .title-oswald {
+.menu-preview .section-title .title-display {
     color: var(--color-secondary);
 }
 
