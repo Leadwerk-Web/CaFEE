@@ -394,11 +394,15 @@ function initLazyLoading() {
     }, { threshold: 0.1 });
 
     images.forEach(img => {
+        // Team-Fotos nicht per Opacity einblenden – sonst wirken sie grisselig
+        if (img.closest('.team .card-image')) {
+            img.style.opacity = '1';
+            return;
+        }
         img.style.opacity = '0';
         img.style.transition = 'opacity 0.5s ease';
         imageObserver.observe(img);
 
-        // Fallback for already loaded images
         if (img.complete) {
             img.style.opacity = '1';
         }
