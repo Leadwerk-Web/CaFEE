@@ -1253,7 +1253,13 @@ ol {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
     transition: transform var(--transition-slow);
+}
+
+/* Service-Karte: Bild am oberen Rand ausrichten, Kopf nicht abschneiden */
+.feature-image--top img {
+    object-position: top center;
 }
 
 .feature-card:hover .feature-image img {
