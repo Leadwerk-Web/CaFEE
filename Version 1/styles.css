@@ -1378,18 +1378,18 @@ ol {
 
 /* Menu Book Styles */
 .menu-book-container {
-    max-width: 1000px;
+    max-width: 1300px;
     margin: 0 auto var(--space-2xl);
     perspective: 1500px;
     position: relative;
     z-index: var(--z-base);
-    height: 600px;
+    height: 900px;
 }
 
 @media (max-width: 900px) {
     .menu-book-container {
         height: auto;
-        min-height: 800px;
+        min-height: 1000px;
     }
 }
 
@@ -1622,6 +1622,14 @@ ol {
     margin-top: var(--space-xl);
     position: relative;
     z-index: var(--z-base);
+}
+
+.download-btn-inline {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
 }
 
 .nav-btn {
@@ -1864,7 +1872,7 @@ ol {
 
 /* Menu Book */
 .menu-book-container {
-    max-width: 1100px;
+    max-width: 1300px;
     margin: 0 auto var(--space-3xl);
     perspective: 2000px;
 }
@@ -1872,7 +1880,7 @@ ol {
 .menu-book {
     position: relative;
     width: 100%;
-    min-height: 600px;
+    min-height: 900px;
     transform-style: preserve-3d;
 }
 
@@ -1973,31 +1981,52 @@ ol {
     display: block;
 }
 
+/* Book Pages Container */
+#bookPagesContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    visibility: hidden;
+    /* Hidden until initialized to prevent FOUC */
+    transform-style: preserve-3d;
+}
+
+#bookPagesContainer.active {
+    visibility: visible;
+}
+
 .book-spread {
     display: none;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
-    background: var(--color-white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-2xl);
+    /* Deprecated, kept for safety if needed but usually removed */
+}
+
+/* Page Styles for PageFlip */
+.book-page {
+    background-color: var(--color-white);
     overflow: hidden;
-    animation: page-flip 0.6s ease;
+    /* Dimensions are handled by the library, but we set defaults to match init */
+    width: 650px;
+    height: 900px;
+    padding: var(--space-2xl);
+    box-sizing: border-box;
+    /* Critical for consistent sizing with padding */
 }
 
-.book-spread.active {
-    display: grid;
+/* Shadow for realistic effect (inner page) */
+.book-page.--left {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, #fff 95%, #f0f0f0 100%);
 }
 
-@keyframes page-flip {
-    0% {
-        transform: rotateY(-10deg);
-        opacity: 0.5;
-    }
+.book-page.--right {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to left, #fff 95%, #f0f0f0 100%);
+}
 
-    100% {
-        transform: rotateY(0);
-        opacity: 1;
-    }
+.book-page.hard {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-cream-dark);
 }
 
 @media (max-width: 768px) {
@@ -2011,19 +2040,20 @@ ol {
 }
 
 .book-page {
-    padding: var(--space-2xl);
+    /* Padding is already set above, ensuring it's not overridden */
     text-align: left;
-    position: relative;
+    /* Ensure content fits */
+    display: flex;
+    flex-direction: column;
 }
 
 .book-page.left-page {
-    border-right: 1px solid var(--color-cream-dark);
+    /* Specific styles for left page content if needed */
 }
 
 @media (max-width: 768px) {
-    .book-page.left-page {
-        border-right: none;
-        border-bottom: 1px solid var(--color-cream-dark);
+    .book-page {
+        padding: var(--space-lg);
     }
 }
 
@@ -2137,10 +2167,19 @@ ol {
     align-items: center;
     gap: var(--space-xl);
     margin-top: var(--space-xl);
+    position: relative;
 }
 
 .book-navigation.active {
     display: flex;
+}
+
+.download-btn-inline {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
 }
 
 .nav-btn {

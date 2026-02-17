@@ -20,6 +20,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
 </head>
 
 <body>
@@ -184,215 +185,587 @@
                     </div>
                 </div>
 
-                <!-- Book Pages -->
-                <div class="book-pages" id="bookPages">
-                    <!-- Page 1-2: Kaffee -->
-                    <div class="book-spread" data-page="1">
-                        <div class="book-page left-page">
-                            <div class="page-header">
-                                <h3>Kaffeespezialitäten</h3>
-                                <div class="page-divider"></div>
+                <!-- Book Pages Container for PageFlip -->
+                <div id="bookPagesContainer">
+                    <!-- Page 1 (Left) -->
+                    <div class="book-page left-page">
+                        <div class="page-header">
+                            <h3>Kaffeespezialitäten</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Espresso</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">1,50 €</span>
+                                </div>
+                                <p class="item-desc">Kräftig und aromatisch — die pure Essenz</p>
                             </div>
-                            <div class="menu-items">
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Espresso</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">2,80 €</span>
-                                    </div>
-                                    <p class="item-desc">Kräftig und aromatisch — die pure Essenz</p>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Espresso Doppio</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,50 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Cappuccino</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">3,90 €</span>
-                                    </div>
-                                    <p class="item-desc">Samtiger Milchschaum auf perfektem Espresso</p>
+                                <p class="item-desc">Doppelter Espresso</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Americano</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,00 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Fee's Zauber-Latte</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Unser Signature Drink mit Vanille & Karamell-Magie</p>
+                                <p class="item-desc">Espresso mit heißem Wasser</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Flat White</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,00 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Flat White</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
-                                    </div>
-                                    <p class="item-desc">Doppelter Ristretto mit seidiger Milch</p>
+                                <p class="item-desc">Doppelter Ristretto mit seidiger Milch</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Cappuccino</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,50 €</span>
                                 </div>
+                                <p class="item-desc">Samtiger Milchschaum auf perfektem Espresso</p>
                             </div>
                         </div>
-                        <div class="book-page right-page">
-                            <div class="page-header">
-                                <h3>Heiße Getränke</h3>
-                                <div class="page-divider"></div>
-                            </div>
-                            <div class="menu-items">
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Heiße Schokolade</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">3,80 €</span>
-                                    </div>
-                                    <p class="item-desc">Cremig, schokoladig, himmlisch</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Matcha Latte</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
-                                    </div>
-                                    <p class="item-desc">Japanischer Matcha mit aufgeschäumter Milch</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Chai Latte</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,00 €</span>
-                                    </div>
-                                    <p class="item-desc">Würzige Gewürze in cremiger Milch</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Goldene Milch</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
-                                    </div>
-                                    <p class="item-desc">Kurkuma, Ingwer & ein Hauch Zimt</p>
-                                </div>
-                            </div>
-                            <div class="page-number">1</div>
-                        </div>
+                        <div class="page-number">1</div>
                     </div>
 
-                    <!-- Page 3-4: Frühstück -->
-                    <div class="book-spread" data-page="2">
-                        <div class="book-page left-page">
-                            <div class="page-header">
-                                <h3>Frühstück</h3>
-                                <div class="page-divider"></div>
+                    <!-- Page 2 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-header">
+                            <h3>Kaffeespezialitäten</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Latte Macchiato</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,00 €</span>
+                                </div>
+                                <p class="item-desc">Espresso über aufgeschäumter Milch</p>
                             </div>
-                            <div class="menu-items">
-                                <div class="menu-item featured">
-                                    <div class="item-header">
-                                        <span class="item-name">Das Große Fee-Frühstück</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">14,90 €</span>
-                                    </div>
-                                    <p class="item-desc">Brötchen, Croissant, Aufschnitt, Käse, Konfitüren, Ei, frisches
-                                        Obst</p>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Extra Shot Espresso</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">1,50 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Avocado-Ei-Toast</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">9,80 €</span>
-                                    </div>
-                                    <p class="item-desc">Pochiertes Ei auf cremiger Avocado mit Sauerteigbrot</p>
+                                <p class="item-desc">Zusätzlicher Espresso zu Ihrem Getränk</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Hafer-, Soja- oder Mandelmilch</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">+ 0,50 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Granola Bowl</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">8,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Hausgemachtes Granola mit Joghurt & saisonalem Obst</p>
+                                <p class="item-desc">Pflanzenmilch statt Kuhmilch</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Kännchen Filterkaffee / Café Crema</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,00 €</span>
                                 </div>
+                                <p class="item-desc">Frisch aufgebrühter Filterkaffee</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Espresso Macchiato / Milchkaffee / Haselzauber</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,00 €</span>
+                                </div>
+                                <p class="item-desc">Espresso mit Milchschaum oder Haselnuss-Zauber</p>
                             </div>
                         </div>
-                        <div class="book-page right-page">
-                            <div class="page-header">
-                                <h3>Süße Versuchungen</h3>
-                                <div class="page-divider"></div>
-                            </div>
-                            <div class="menu-items">
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Hausgemachter Kuchen</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">4,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Wechselnde Sorten — fragen Sie nach unserer Tagesauswahl</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Warmer Apfelstrudel</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">5,90 €</span>
-                                    </div>
-                                    <p class="item-desc">Mit Vanillesauce und gerösteten Mandeln</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Belgische Waffeln</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">6,90 €</span>
-                                    </div>
-                                    <p class="item-desc">Mit Sahne, Früchten & Ahornsirup</p>
-                                </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Tiramisu</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">5,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Nach Originalrezept — luftig und verführerisch</p>
-                                </div>
-                            </div>
-                            <div class="page-number">2</div>
-                        </div>
+                        <div class="page-number">2</div>
                     </div>
 
-                    <!-- Page 5-6: Snacks & Specials -->
-                    <div class="book-spread" data-page="3">
-                        <div class="book-page left-page">
-                            <div class="page-header">
-                                <h3>Herzhafte Snacks</h3>
-                                <div class="page-divider"></div>
+                    <!-- Page 3 (Left) -->
+                    <div class="book-page left-page">
+                        <div class="page-header">
+                            <h3>Heiße Getränke & Pimp Your Drink</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Match Latte</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,00 €</span>
+                                </div>
+                                <p class="item-desc">Japanischer Matcha mit aufgeschäumter Milch</p>
                             </div>
-                            <div class="menu-items">
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Quiche Lorraine</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">7,90 €</span>
-                                    </div>
-                                    <p class="item-desc">Mit frischem Blattsalat</p>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Chai Latte</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,50 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Focaccia Mediterran</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">8,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Mit getrockneten Tomaten, Mozzarella & Basilikum</p>
+                                <p class="item-desc">Würzige Gewürze in cremiger Milch</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Heiße Schoki</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,80 €</span>
                                 </div>
-                                <div class="menu-item">
-                                    <div class="item-header">
-                                        <span class="item-name">Suppe des Tages</span>
-                                        <span class="item-dots"></span>
-                                        <span class="item-price">6,50 €</span>
-                                    </div>
-                                    <p class="item-desc">Hausgemacht & saisonal — mit frischem Brot</p>
+                                <p class="item-desc">Cremig, schokoladig, himmlisch</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Flavor — Vanille, Schoko, Haselnuss, Salted Caramel</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">+ 0,50 €</span>
                                 </div>
+                                <p class="item-desc">Sirup zu Ihrem Getränk</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Iced</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">+ 0,50 €</span>
+                                </div>
+                                <p class="item-desc">Ihr Getränk eisgekühlt</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Espresso Martini / Aperol Spritz / Sarti Spritz</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">6,00 €</span>
+                                </div>
+                                <p class="item-desc">Daydrinking — alkoholische Longdrinks</p>
                             </div>
                         </div>
-                        <div class="book-page right-page">
-                            <div class="page-image">
-                                <img src="images/Capuccino.png" alt="Unsere Kaffeespezialitäten">
-                            </div>
-                            <p class="page-quote">
-                                "Ein guter Kaffee ist wie ein Zauberspruch —
-                                er verwandelt den Morgen in etwas Besonderes."
-                            </p>
-                            <div class="page-number">3</div>
+                        <div class="page-number">3</div>
+                    </div>
+
+                    <!-- Page 4 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-header">
+                            <h3>Ohne Feenstaub & Teeträume</h3>
+                            <div class="page-divider"></div>
                         </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Hugo / Lillet Wildberry / Limoncello Spritz</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">6,00 €</span>
+                                </div>
+                                <p class="item-desc">Prosecco-Cocktails mit frischen Aromen</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Kir Royal / Mimosa / Morning Mule</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">6,00 €</span>
+                                </div>
+                                <p class="item-desc">Klassiker für den feinen Genuss</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Teinacher Naturell / Medium</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,00 €</span>
+                                </div>
+                                <p class="item-desc">Mineralwasser</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Cola, Fanta, Sprite</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,00 – 3,50 €</span>
+                                </div>
+                                <p class="item-desc">Classic & Zero</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Genuss Limonade</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,50 €</span>
+                                </div>
+                                <p class="item-desc">Orange, Ingwer, Apfel, Sellerie, Banane, Zitrone, Karotte, Spinat
+                                </p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Tee im Beutel</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,00 €</span>
+                                </div>
+                                <p class="item-desc">Ingwer, Pfefferminz, Zitronengras, Schwarztee, Jasmin</p>
+                            </div>
+                        </div>
+                        <div class="page-number">4</div>
+                    </div>
+
+                    <!-- Page 5 (Left) -->
+                    <div class="book-page left-page">
+                        <div class="page-header">
+                            <h3>Vesperzeit</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item featured">
+                                <div class="item-header">
+                                    <span class="item-name">Brückenmühle</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Geräucherter Lachs & Tunfischcreme, Meerrettich, Frischkäse,
+                                    Brotkorb</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Sonnenstulle</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Wurst- & Käseauswahl, Marmelade, Butter, Brotkorb</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Wie bei Mama</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Müsli, Joghurt, Honig, Marmelade, Butter, Croissant</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Fee-Nomenal</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Wir zaubern dazu: Ei nach Wahl, Avocado, Speck, Croissant</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Eierzauber</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">+ 4,00 € / + 3,00 €</span>
+                                </div>
+                                <p class="item-desc">3 Eier & 3 Wunschzutaten — Sauerteigbrot oder Brioche</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Hafer Beeren Traum</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">11,00 €</span>
+                                </div>
+                                <p class="item-desc">Beerenmix, Haferflocken, Naturjoghurt, Granola, Nussmix</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Knusprige Banane</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">11,00 €</span>
+                                </div>
+                                <p class="item-desc">Bananen, Haferflocken, Naturjoghurt, Granola, Nussmix</p>
+                            </div>
+                        </div>
+                        <div class="page-number">5</div>
+                    </div>
+
+                    <!-- Page 6 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-header">
+                            <h3>Vesperzeit</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Adams Apfel</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">11,00 €</span>
+                                </div>
+                                <p class="item-desc">Apfel, Apfelkompott, Haferflocken, Zimt, Granola, Nussmix</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Fernöstlicher Zauber</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Curry-Dattel-Dip, Tomaten, Artischocken, Pinienkerne</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Burrata Traum</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Pesto, Prosciutto, Burrata, Cherrytomaten, Basilikum, Trüffelöl</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Farmerstraum</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">13,00 €</span>
+                                </div>
+                                <p class="item-desc">Ital. Schinken, Parmesan, Bacon, Philadelphia, Hollandaise</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Avocado Hex Hex</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Guacamole, Datteltomaten, Balsamico-Zwiebeln, wahlweise mit Lachs
+                                </p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Croissant Royal</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Croissant, Smoked Lachs, Cheddar, pochiertes Ei, Hollandaise</p>
+                            </div>
+                        </div>
+                        <div class="page-number">6</div>
+                    </div>
+
+                    <!-- Page 7 (Left) -->
+                    <div class="book-page left-page">
+                        <div class="page-header">
+                            <h3>Zucker für die Seele</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Stück Torte</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,50 €</span>
+                                </div>
+                                <p class="item-desc">Wechselnde hausgemachte Torten</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Stück Kuchen</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">3,50 €</span>
+                                </div>
+                                <p class="item-desc">Hausgemachte Kuchen — Tagesauswahl</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Affogato</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,50 €</span>
+                                </div>
+                                <p class="item-desc">Espresso über Vanilleeis</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Apfelplotzer / Blaubeerplotzer</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">4,00 €</span>
+                                </div>
+                                <p class="item-desc">Flambiert mit Vanilleeis</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Homemade Kräuterbutter</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">+ 2,00 €</span>
+                                </div>
+                                <p class="item-desc">Zu Brot oder Frühstück</p>
+                            </div>
+                        </div>
+                        <div class="page-number">7</div>
+                    </div>
+
+                    <!-- Page 8 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-header">
+                            <h3>Salate & Kleiner Hunger</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Gegrillte Pepperoni</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Mit Knoblauch & Olivenöl</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Knoblauch Garnelen</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">14,00 €</span>
+                                </div>
+                                <p class="item-desc">Mit Knoblauch & Olivenöl</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Tagessuppe</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">7,00 €</span>
+                                </div>
+                                <p class="item-desc">Wechselnde Suppen — hausgemacht</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Markklößchensuppe</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">9,00 €</span>
+                                </div>
+                                <p class="item-desc">Wechselnde Suppen</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Salat Ziegenkäse</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">12,00 €</span>
+                                </div>
+                                <p class="item-desc">Bunter Salat mit Ziegenkäse, Honig & Walnüssen</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Salat Gambas</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">14,00 €</span>
+                                </div>
+                                <p class="item-desc">King Gambas, Parmesan, Tomaten</p>
+                            </div>
+                        </div>
+                        <div class="page-number">8</div>
+                    </div>
+
+                    <!-- Page 9 (Left) -->
+                    <div class="book-page left-page">
+                        <div class="page-header">
+                            <h3>Für den kleinen Hunger</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Wurstsalat</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Essiggurken, Zwiebeln, Beilagensalat, Baguette</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Fleischbällchen</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Schwein in Tomatencreme</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Datteln im Speckmantel</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">10,00 €</span>
+                                </div>
+                                <p class="item-desc">Datteln in Speck</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Tapas Platte</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">18,00 €</span>
+                                </div>
+                                <p class="item-desc">Datteln, Käseauswahl, Oliven, Sardinen, Fleischbällchen</p>
+                            </div>
+                        </div>
+                        <div class="page-number">9</div>
+                    </div>
+
+                    <!-- Page 10 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-header">
+                            <h3>Sattmacher</h3>
+                            <div class="page-divider"></div>
+                        </div>
+                        <div class="menu-items">
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Rinderbäckchen an getrüffeltem Kartoffelbrei</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">18,00 €</span>
+                                </div>
+                                <p class="item-desc">Geschmort mit Brokkoliherzen & Kräuterbutter</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Maishähnchen mit Wurzelgemüse</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">17,00 €</span>
+                                </div>
+                                <p class="item-desc">Im Weißwein-Jus</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Salbei-Käse-Gnocchi</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">16,00 €</span>
+                                </div>
+                                <p class="item-desc">Gnocchi in brauner Butter mit Bergkäse</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Lachsfilet mit Kartoffelbrei</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">17,00 €</span>
+                                </div>
+                                <p class="item-desc">Gebratenes Lachsfilet, Zitronenrahm, Blattspinat</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Kräuterseitling mit Kartoffelstampf</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">16,00 €</span>
+                                </div>
+                                <p class="item-desc">Mit Béchamel-Sauce</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Pesto Spaghetti mit Pulpo</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">19,00 €</span>
+                                </div>
+                                <p class="item-desc">Pesto, Spaghetti, gebratener Pulpo</p>
+                            </div>
+                            <div class="menu-item">
+                                <div class="item-header">
+                                    <span class="item-name">Mediterrane Spaghetti mit Gambas</span>
+                                    <span class="item-dots"></span>
+                                    <span class="item-price">17,00 €</span>
+                                </div>
+                                <p class="item-desc">Tomatensugo, Gambas, Spaghetti, Kirschtomaten</p>
+                            </div>
+                        </div>
+                        <div class="page-number">10</div>
+                    </div>
+
+                    <!-- Page 11 (Right) -->
+                    <div class="book-page right-page">
+                        <div class="page-image">
+                            <img src="images/Capuccino.png" alt="Unsere Kaffeespezialitäten">
+                        </div>
+                        <p class="page-quote">
+                            "Ein guter Kaffee ist wie ein Zauberspruch —
+                            er verwandelt den Morgen in etwas Besonderes."
+                        </p>
+                        <div class="page-number">11</div>
                     </div>
                 </div>
 
@@ -406,7 +779,7 @@
                         <span>Zurück</span>
                     </button>
                     <div class="page-indicator">
-                        <span id="currentPage">1</span> / <span id="totalPages">3</span>
+                        <span id="currentPage">1</span> / <span id="totalPages">6</span>
                     </div>
                     <button class="nav-btn next-btn" id="nextPage">
                         <span>Weiter</span>
@@ -415,18 +788,15 @@
                                 stroke-linejoin="round" />
                         </svg>
                     </button>
+                    <a href="Speisekarte.pdf" download class="download-btn download-btn-inline">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Komplette Speisekarte als PDF</span>
+                    </a>
                 </div>
             </div>
-        </div>
-
-        <div class="menu-download scroll-animate">
-            <a href="Speisekarte.pdf" download class="download-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span>Komplette Speisekarte als PDF</span>
-            </a>
         </div>
     </section>
 
@@ -489,7 +859,8 @@
                 <!-- Card 4 -->
                 <div class="experience-card scroll-animate" data-delay="300">
                     <div class="card-icon">
-                        <img src="images/Kaffee Icon.png" alt="" class="card-icon-img card-icon-tint" aria-hidden="true">
+                        <img src="images/Kaffee Icon.png" alt="" class="card-icon-img card-icon-tint"
+                            aria-hidden="true">
                     </div>
                     <h3>Handwerkskunst</h3>
                     <p>
@@ -547,7 +918,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
@@ -577,7 +949,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
@@ -605,7 +978,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>

@@ -14,7 +14,7 @@ const dom = {
     navToggle: document.getElementById('navToggle'),
     navMenu: document.getElementById('navMenu'),
     bookCover: document.getElementById('bookCover'),
-    bookPages: document.getElementById('bookPages'),
+    bookPages: document.getElementById('bookPagesContainer'),
     bookNav: document.getElementById('bookNav'),
     openBookBtn: document.getElementById('openBookBtn'),
     prevPage: document.getElementById('prevPage'),
@@ -34,7 +34,7 @@ let state = {
     trailX: 0,
     trailY: 0,
     currentPage: 1,
-    totalPages: 3,
+    totalPages: 6,
     isBookOpen: false,
     lastScrollY: 0,
     dustParticles: [],
@@ -197,81 +197,137 @@ function initNavigation() {
 // ============================================
 // Menu Book
 // ============================================
+// ============================================
+// Menu Book (PageFlip Integration)
+// ============================================
 function initMenuBook() {
     if (!dom.openBookBtn || !dom.bookCover || !dom.bookPages) return;
 
-    // Set total pages
+    // Use the St.PageFlip class from the library
+    // We assume the library is loaded globally as St
+    const pageFlip = new St.PageFlip(dom.bookPages, {
+        width: 650,
+        height: 900,
+        size: 'fixed', // Preserve aspect ratio
+        minWidth: 300,
+        maxWidth: 1000,
+        minHeight: 420,
+        maxHeight: 1400,
+        showCover: false, // We handle the cover externally
+        mobileScrollSupport: false, // Disable default mobile scroll to avoid conflicts if needed, or true
+        maxShadowOpacity: 0.5,
+        usePortrait: true, // Single page mode on portrait (mobile)
+        startPage: 0 // 0-based index
+    });
+
+    // Load pages from DOM
+    pageFlip.loadFromHTML(document.querySelectorAll('.book-page'));
+
+    // Sound Effect
+    const turnSound = new Audio('page-turn.mp3');
+    turnSound.volume = 0.5;
+    turnSound.preload = 'auto'; // Ensure it's ready
+
+    // Update state on init
     if (dom.totalPagesEl) {
-        dom.totalPagesEl.textContent = state.totalPages;
+        // PageFlip counts spreads or pages? .getPageCount() returns total pages
+        dom.totalPagesEl.textContent = document.querySelectorAll('.book-page').length;
     }
 
-    // Open book
-    dom.openBookBtn.addEventListener('click', openBook);
+    // Event: Flip (Trigger sound here, but optimize)
+    pageFlip.on('flip', (e) => {
+        // Play sound - reset time immediately
+        turnSound.currentTime = 0;
+        const playPromise = turnSound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(err => {
+                // Auto-play was prevented
+                console.log('Audio play blocked', err);
+            });
+        }
 
-    // Navigation
+        // Update navigation UI
+        updateNavigation(e.data); // e.data is current page index (0-based)
+    });
+
+    // Attempt to trigger sound on state change for faster feedback if supported
+    // 'changeState' event isn't always standard in all versions, but 'flip' should be fast enough if preloaded.
+    // If user says "late", maybe they drag and it only plays on release? 
+    // If so, we can try to play on user interaction if we could detect it, but 'flip' is the safest for the library.
+    // Preloading 'auto' and keeping the object ready helps.
+
+    // Helper: Update Navigation Buttons & Counter
+    function updateNavigation(pageIndex) {
+        // pageIndex is 0-based.
+        // User facing: Page 1, 2, ...
+        // Note: PageFlip index points to the top-left page in 2-page mode? or just current index?
+        // Usually index of the current spread's left page or single page.
+        // Let's rely on pageFlip.getCurrentPageIndex() which is safe.
+
+        const currentIdx = pageFlip.getCurrentPageIndex();
+        const totalPages = pageFlip.getPageCount();
+
+        // Update Counter
+        if (dom.currentPageEl) {
+            dom.currentPageEl.textContent = currentIdx + 1;
+        }
+
+        // Update Buttons
+        if (dom.prevPage) {
+            dom.prevPage.disabled = currentIdx === 0;
+        }
+        if (dom.nextPage) {
+            dom.nextPage.disabled = currentIdx >= totalPages - 1; // or >= totalPages - 2 for spreads?
+            // PageFlip keeps flipping until end.
+        }
+    }
+
+    // Open Book Action
+    dom.openBookBtn.addEventListener('click', () => {
+        state.isBookOpen = true;
+
+        // Animate Cover
+        dom.bookCover.classList.add('hidden');
+
+        // Show Book Container
+        dom.bookPages.classList.add('active');
+
+        // Show Navigation
+        if (dom.bookNav) dom.bookNav.classList.add('active');
+
+        // Force update to ensure layout is correct after becoming visible
+        setTimeout(() => {
+            pageFlip.update();
+            updateNavigation(0);
+        }, 300); // Small delay to allow CSS transitions or visibility change
+    });
+
+    // Close Book Action (Optional: via wrapper click or button?)
+    // Existing code didn't have explicit close button in UI, only Escape key.
+
+    // Navigation Buttons
     if (dom.prevPage) {
-        dom.prevPage.addEventListener('click', () => changePage(-1));
+        dom.prevPage.addEventListener('click', () => pageFlip.flipPrev());
     }
     if (dom.nextPage) {
-        dom.nextPage.addEventListener('click', () => changePage(1));
+        dom.nextPage.addEventListener('click', () => pageFlip.flipNext());
     }
 
-    // Keyboard navigation
+    // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
         if (!state.isBookOpen) return;
-        if (e.key === 'ArrowLeft') changePage(-1);
-        if (e.key === 'ArrowRight') changePage(1);
-        if (e.key === 'Escape') closeBook();
-    });
-}
-
-function openBook() {
-    state.isBookOpen = true;
-    dom.bookCover.classList.add('hidden');
-    dom.bookPages.classList.add('active');
-    dom.bookNav.classList.add('active');
-    showPage(1);
-}
-
-function closeBook() {
-    state.isBookOpen = false;
-    dom.bookCover.classList.remove('hidden');
-    dom.bookPages.classList.remove('active');
-    dom.bookNav.classList.remove('active');
-}
-
-function changePage(direction) {
-    const newPage = state.currentPage + direction;
-    if (newPage < 1 || newPage > state.totalPages) return;
-    showPage(newPage);
-}
-
-function showPage(pageNum) {
-    state.currentPage = pageNum;
-
-    // Update page indicator
-    if (dom.currentPageEl) {
-        dom.currentPageEl.textContent = pageNum;
-    }
-
-    // Update navigation buttons
-    if (dom.prevPage) {
-        dom.prevPage.disabled = pageNum === 1;
-    }
-    if (dom.nextPage) {
-        dom.nextPage.disabled = pageNum === state.totalPages;
-    }
-
-    // Show/hide pages
-    const spreads = document.querySelectorAll('.book-spread');
-    spreads.forEach((spread, index) => {
-        if (index + 1 === pageNum) {
-            spread.classList.add('active');
-        } else {
-            spread.classList.remove('active');
+        if (e.key === 'ArrowLeft') pageFlip.flipPrev();
+        if (e.key === 'ArrowRight') pageFlip.flipNext();
+        if (e.key === 'Escape') {
+            state.isBookOpen = false;
+            dom.bookCover.classList.remove('hidden');
+            dom.bookPages.classList.remove('active');
+            if (dom.bookNav) dom.bookNav.classList.remove('active');
         }
     });
 }
+
+// Helper functions openBook/closeBook/changePage/showPage are removed as they are integrated above or unused.
 
 // ============================================
 // Parallax Effects
@@ -412,37 +468,7 @@ function initLazyLoading() {
 // ============================================
 // Touch Swipe for Menu Book
 // ============================================
-function initTouchSwipe() {
-    const bookPages = dom.bookPages;
-    if (!bookPages) return;
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    bookPages.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    bookPages.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
-        const diff = touchStartX - touchEndX;
-        const threshold = 50;
-
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0) {
-                // Swipe left - next page
-                changePage(1);
-            } else {
-                // Swipe right - previous page
-                changePage(-1);
-            }
-        }
-    }
-}
+// initTouchSwipe handled by PageFlip
 
 // ============================================
 // Performance Optimization
@@ -521,7 +547,8 @@ function initAll() {
     initScrollAnimations();
     initAmbientDust();
     initLazyLoading();
-    initTouchSwipe();
+    initLazyLoading();
+    // initTouchSwipe(); // Handled by PageFlip
     initActiveNavHighlight();
     initVideoLightbox();
     initInterviewSlider();
