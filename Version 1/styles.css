@@ -533,7 +533,7 @@ ol {
     transform: translateY(-50%);
     width: 200px;
     height: 200px;
-    opacity: 0.2;
+    opacity: 0.3;
     background: url('images/Fee CaFEE_favicon_ohne Dampf.svg') center/contain no-repeat;
     animation: float 6s ease-in-out infinite;
 }
@@ -1927,8 +1927,8 @@ ol {
 }
 
 .menu-highlight-icon {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     margin-bottom: var(--space-md);
     color: var(--color-primary);
 }
@@ -1945,11 +1945,6 @@ ol {
     filter: brightness(0) saturate(100%) invert(68%) sepia(32%) saturate(1000%) hue-rotate(328deg) brightness(88%) contrast(92%);
 }
 
-/* Frühstück-Icon größer */
-.menu-highlight-card:nth-child(2) .menu-highlight-icon {
-    width: 64px;
-    height: 64px;
-}
 
 .menu-highlight-title {
     font-family: var(--font-display);
