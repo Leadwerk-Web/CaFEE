@@ -539,10 +539,12 @@ ol {
 }
 
 @keyframes float {
+
     0%,
     100% {
         transform: translateY(-50%) rotate(0deg);
     }
+
     50% {
         transform: translateY(calc(-50% - 20px)) rotate(3deg);
     }
@@ -2024,16 +2026,82 @@ ol {
 }
 
 /* Menu Book */
+.menu-book-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-base);
+    backdrop-filter: blur(10px);
+}
+
+.menu-book-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+body.modal-open section:not(.menu-preview),
+body.modal-open footer {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+body.modal-open .nav {
+    display: none;
+}
+
+.menu-book-modal .page-indicator,
+.menu-book-modal .page-counter {
+    color: var(--color-white);
+}
+
+
+.menu-book-modal .download-btn {
+    color: var(--color-white);
+}
+
 .menu-book-container {
     max-width: 1300px;
-    margin: 0 auto var(--space-3xl);
+    width: 90vw;
+    margin: 0;
+    position: relative;
     perspective: 2000px;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    transition: transform var(--transition-fast);
+}
+
+.btn-close-modal:hover {
+    transform: scale(1.1);
+    color: var(--color-primary-light);
 }
 
 .menu-book {
     position: relative;
     width: 100%;
-    min-height: 900px;
+    min-height: 90vh;
+    /* changed from 900px to fit on screen */
+    max-height: 90vh;
     transform-style: preserve-3d;
 }
 
@@ -2202,6 +2270,8 @@ ol {
 
 .book-page.left-page {
     /* Specific styles for left page content if needed */
+    z-index: 1;
+    /* Dummy rule to keep it valid */
 }
 
 @media (max-width: 768px) {

@@ -203,6 +203,10 @@ function initNavigation() {
 function initMenuBook() {
     if (!dom.openBookBtn || !dom.bookCover || !dom.bookPages) return;
 
+    const openMenuModalBtn = document.getElementById('openMenuModalBtn');
+    const menuBookModal = document.getElementById('menuBookModal');
+    const closeMenuModalBtn = document.getElementById('closeMenuModalBtn');
+
     // Use the St.PageFlip class from the library
     // We assume the library is loaded globally as St
     const pageFlip = new St.PageFlip(dom.bookPages, {
@@ -282,7 +286,41 @@ function initMenuBook() {
         }
     }
 
-    // Open Book Action
+    // Open Modal Action
+    if (openMenuModalBtn && menuBookModal) {
+        openMenuModalBtn.addEventListener('click', () => {
+            menuBookModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+
+            // Ensure flipbook dimensions are updated when becoming visible
+            setTimeout(() => {
+                if (pageFlip) pageFlip.update();
+            }, 300);
+        });
+    }
+
+    // Close Modal Action
+    function closeMenuModal() {
+        if (!menuBookModal) return;
+        menuBookModal.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
+    }
+
+    if (closeMenuModalBtn) {
+        closeMenuModalBtn.addEventListener('click', closeMenuModal);
+    }
+
+    if (menuBookModal) {
+        menuBookModal.addEventListener('click', (e) => {
+            if (e.target === menuBookModal) {
+                closeMenuModal();
+            }
+        });
+    }
+
+    // Open Book Action (Clicking cover)
     dom.openBookBtn.addEventListener('click', () => {
         state.isBookOpen = true;
 
@@ -315,6 +353,10 @@ function initMenuBook() {
 
     // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
+        if (menuBookModal && menuBookModal.classList.contains('active') && e.key === 'Escape') {
+            closeMenuModal();
+        }
+
         if (!state.isBookOpen) return;
         if (e.key === 'ArrowLeft') pageFlip.flipPrev();
         if (e.key === 'ArrowRight') pageFlip.flipNext();
