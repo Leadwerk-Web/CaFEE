@@ -595,6 +595,7 @@ function initAll() {
     initVideoLightbox();
     initInterviewSlider();
     initInterviewLightbox();
+    initOpenTableOverlayFallback();
 
     // Trigger initial animations
     setTimeout(() => {
@@ -796,6 +797,64 @@ function initInterviewLightbox() {
     });
 }
 
+// ============================================
+// OpenTable Overlay Fallback
+// ============================================
+function initOpenTableOverlayFallback() {
+    const fallbackModal = document.getElementById('otFallbackModal');
+    const fallbackFrame = document.getElementById('otFallbackFrame');
+    const fallbackClose = document.getElementById('otFallbackClose');
+
+    if (!fallbackModal || !fallbackFrame) return;
+
+    const nativeWindowOpen = window.open.bind(window);
+    const otAvailabilityPattern = /^https:\/\/www\.opentable\.[^/]+\/booking\/restref\/availability\?/i;
+
+    const closeFallback = () => {
+        fallbackModal.classList.remove('active');
+        document.body.classList.remove('ot-overlay-open');
+
+        // Keep the current content visible during fade-out, then release iframe.
+        setTimeout(() => {
+            if (!fallbackModal.classList.contains('active')) {
+                fallbackFrame.removeAttribute('src');
+            }
+        }, 200);
+    };
+
+    const openFallback = (url) => {
+        fallbackFrame.setAttribute('src', url);
+        fallbackModal.classList.add('active');
+        document.body.classList.add('ot-overlay-open');
+    };
+
+    if (!window.__otFallbackOpenPatched) {
+        window.open = function patchedWindowOpen(url, target, features) {
+            if (typeof url === 'string' && otAvailabilityPattern.test(url)) {
+                openFallback(url);
+                return window;
+            }
+            return nativeWindowOpen(url, target, features);
+        };
+        window.__otFallbackOpenPatched = true;
+    }
+
+    if (fallbackClose) {
+        fallbackClose.addEventListener('click', closeFallback);
+    }
+
+    fallbackModal.addEventListener('click', (e) => {
+        if (e.target === fallbackModal) {
+            closeFallback();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && fallbackModal.classList.contains('active')) {
+            closeFallback();
+        }
+    });
+}
+
 // Start initialization
 init();
-

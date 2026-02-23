@@ -1177,6 +1177,10 @@
                     Ob gemütliches Frühstück, entspannter Nachmittagskaffee oder ein besonderer Anlass —
                     wir freuen uns darauf, Sie bei uns zu begrüßen. Reservieren Sie Ihren Platz in der Brückenmühle.
                 </p>
+                <div class="reservation-widget">
+                    <script type='text/javascript'
+                        src='https://www.opentable.de/widget/reservation/loader?rid=457257&type=standard&theme=wide&color=8&dark=false&iframe=false&domain=de&lang=de-DE&newtab=false&ot_source=Restaurant%20website&font=garamond&ot_logo=subtle&primary_color=c18b71&primary_font_color=333333&button_color=000000&button_font_color=ffffff&cfe=true'></script>
+                </div>
 
                 <div class="reservation-info">
                     <div class="info-item">
@@ -1350,6 +1354,12 @@
                 <source src="" type="video/mp4">
             </video>
         </div>
+    </div>
+
+    <!-- OpenTable Fallback Overlay -->
+    <div class="ot-fallback-modal" id="otFallbackModal" aria-hidden="true">
+        <button class="ot-fallback-close" id="otFallbackClose" aria-label="Schließen">&times;</button>
+        <iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="lazy"></iframe>
     </div>
 
     <script src="script.js"></script>
