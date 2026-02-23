@@ -2050,9 +2050,9 @@ ol {
 
 body.modal-open section:not(.menu-preview),
 body.modal-open footer {
-    opacity: 0;
+    /* Kept intentionally empty to override any other active styles, but removed the opacity: 0 to keep them visible under the blur backdrop */
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    /* Ensure no interaction is possible below modal */
 }
 
 body.modal-open .nav {
