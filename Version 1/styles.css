@@ -1852,7 +1852,7 @@ ol {
     background-color: var(--color-cream);
     overflow: hidden;
     position: relative;
-    z-index: 1;
+    z-index: 100;
 }
 
 .menu-header {
@@ -3366,4 +3366,3 @@ body.ot-overlay-open {
     z-index: 1000;
     pointer-events: auto;
 }
-
