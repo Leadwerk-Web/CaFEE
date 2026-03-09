@@ -350,8 +350,8 @@ ol {
 }
 
 .nav-menu a {
-    font-size: var(--text-sm);
-    font-weight: 500;
+    font-size: calc(var(--text-sm) + 2px);
+    font-weight: 400;
     color: var(--color-white);
     position: relative;
     padding: var(--space-xs) 0;
@@ -474,7 +474,7 @@ ol {
     }
 
     .nav-menu a {
-        font-size: var(--text-xl);
+        font-size: calc(var(--text-xl) + 2px);
         color: var(--color-secondary);
     }
 
@@ -1044,7 +1044,7 @@ ol {
     float: left;
     font-family: var(--font-display);
     font-size: 4rem;
-    line-height: 0.8;
+    line-height: 1.1;
     padding: 0 var(--space-md) 0 0;
     color: var(--color-primary);
 }
@@ -1734,7 +1734,7 @@ ol {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-4xl);
     align-items: center;
 }
@@ -1748,6 +1748,7 @@ ol {
 
 .reservation-content {
     text-align: left;
+    min-width: 0;
 }
 
 .reservation-title {
@@ -1793,7 +1794,7 @@ ol {
     float: left;
     font-family: var(--font-display);
     font-size: 4rem;
-    line-height: 0.8;
+    line-height: 1.1;
     padding: 0 var(--space-md) 0 0;
     color: var(--color-primary);
 }
@@ -1942,10 +1943,7 @@ ol {
     object-fit: contain;
 }
 
-/* Bild-Icons in #bd8971 färben (Filter-Näherung), keine weiteren Filter */
-.menu-highlight-icon-img {
-    filter: brightness(0) saturate(100%) invert(68%) sepia(32%) saturate(1000%) hue-rotate(328deg) brightness(88%) contrast(92%);
-}
+/* Icons in Originalfarbe der SVG-Dateien (für #bd8971 SVGs in kaffee-1, breakfast-1, sweets-1 verwenden) */
 
 
 .menu-highlight-title {
@@ -2822,7 +2820,7 @@ body.modal-open .nav {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-4xl);
     align-items: center;
 }
@@ -2836,6 +2834,7 @@ body.modal-open .nav {
 
 .reservation-content {
     text-align: left;
+    min-width: 0;
 }
 
 .reservation-title {
@@ -2919,6 +2918,7 @@ body.modal-open .nav {
    Contact Form
    ---------------------------------------- */
 .contact-form-wrapper {
+    min-width: 0;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
@@ -3365,4 +3365,9 @@ body.ot-overlay-open {
     position: relative;
     z-index: 1000;
     pointer-events: auto;
+}
+
+.ot-dtp-picker.ot-standard.wide {
+    width: 32.5rem !important;
+    align-items: normal !important;
 }
