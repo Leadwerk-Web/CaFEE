@@ -2026,146 +2026,208 @@ ol {
 /* Menu Book */
 .menu-book-modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
+    inset: 0;
     z-index: 99999;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding:
+        max(0.75rem, env(safe-area-inset-top))
+        max(0.75rem, env(safe-area-inset-right))
+        max(0.75rem, env(safe-area-inset-bottom))
+        max(0.75rem, env(safe-area-inset-left));
+    background: rgba(12, 10, 8, 0.8);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity var(--transition-base);
-    backdrop-filter: blur(10px);
+    transition: opacity var(--transition-base), visibility 0s linear var(--transition-base);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    overscroll-behavior: contain;
 }
 
 .menu-book-modal.active {
     opacity: 1;
-    pointer-events: all;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity var(--transition-base);
+}
+
+body.modal-open {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    overflow: hidden;
+    padding-right: var(--scrollbar-compensation, 0px);
 }
 
 body.modal-open section:not(.menu-preview),
 body.modal-open footer {
-    /* Kept intentionally empty to override any other active styles, but removed the opacity: 0 to keep them visible under the blur backdrop */
     pointer-events: none;
-    /* Ensure no interaction is possible below modal */
 }
 
 body.modal-open .nav {
     display: none;
 }
 
-.menu-book-modal .page-indicator,
-.menu-book-modal .page-counter {
-    color: var(--color-white);
-}
-
-
-.menu-book-modal .download-btn {
-    color: var(--color-white);
-}
-
-.menu-book-container {
-    max-width: 1300px;
-    width: 90vw;
+.menu-book-modal .menu-book-container {
+    width: min(100%, clamp(18rem, 98vw, 92rem));
+    max-width: 92rem;
+    max-height: calc(100dvh - max(1rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
     margin: 0;
     position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: clamp(0.75rem, 1vw, 1.25rem);
     perspective: 2000px;
+    height: auto;
+    min-height: 0;
+}
+
+.menu-book-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: clamp(2.75rem, 5vw, 3.25rem);
+    padding-inline: clamp(0.125rem, 0.4vw, 0.25rem);
 }
 
 .btn-close-modal {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: transparent;
-    border: none;
+    position: relative;
+    top: auto;
+    right: auto;
+    width: clamp(2.75rem, 7vw, 3.25rem);
+    height: clamp(2.75rem, 7vw, 3.25rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
     color: var(--color-white);
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     line-height: 1;
     cursor: pointer;
     z-index: 20;
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), background var(--transition-fast),
+        color var(--transition-fast), border-color var(--transition-fast);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
-.btn-close-modal:hover {
-    transform: scale(1.1);
+.btn-close-modal:hover,
+.btn-close-modal:focus-visible {
+    transform: scale(1.04);
+    background: rgba(255, 255, 255, 0.18);
     color: var(--color-primary-light);
+    border-color: rgba(255, 255, 255, 0.42);
 }
 
-.menu-book {
+.btn-close-modal:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 3px;
+}
+
+.menu-book-modal .menu-book {
     position: relative;
     width: 100%;
-    min-height: 90vh;
-    /* changed from 900px to fit on screen */
-    max-height: 90vh;
+    min-height: 0;
+    height: min(clamp(32rem, 90vh, 66rem), calc(100dvh - 4.75rem));
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 1vw, 1.25rem);
     transform-style: preserve-3d;
 }
 
-/* Book Cover */
-/* Book Cover */
-/* Book Cover */
-.book-cover {
+.menu-book-stage {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+}
+
+.menu-book-modal #bookPagesContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    z-index: 5;
+    visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.menu-book-modal #bookPagesContainer.active {
+    visibility: visible;
+}
+
+.menu-book-modal .book-cover {
     position: absolute;
     inset: 0;
-    background-color: #333;
-    border-radius: var(--radius-lg);
+    min-width: 0;
+    max-height: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-2xl);
+    overflow: hidden;
+    background: linear-gradient(145deg, #424241 0%, #2b2b2a 100%);
+    border-radius: clamp(1rem, 1.6vw, 1.75rem);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
     transition: transform var(--transition-slower), opacity var(--transition-slower);
     transform-origin: left center;
     z-index: 10;
 }
 
-.book-cover.hidden {
+.menu-book-modal .book-cover.hidden {
     transform: rotateY(-180deg);
     opacity: 0;
     pointer-events: none;
 }
 
 .cover-content {
+    width: min(100%, 28rem);
+    padding: clamp(1.5rem, 4vw, 4rem);
     text-align: center;
     color: var(--color-white);
-    padding: var(--space-3xl);
 }
 
 .cover-logo {
-    width: 250px;
-    margin: 0 auto var(--space-xl);
-    /* No filter needed for original logo, or adjust if SVG is black */
+    width: clamp(7rem, 28vw, 15rem);
+    margin: 0 auto clamp(1rem, 2vw, 2rem);
     filter: none;
 }
 
 .cover-content h3 {
     font-family: var(--font-display);
-    font-size: var(--text-4xl);
+    font-size: clamp(2rem, 4vw, 4rem);
     font-weight: 400;
-    margin-bottom: var(--space-md);
-    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: clamp(0.5rem, 1vw, 1rem);
+    letter-spacing: 0.02em;
+    text-wrap: balance;
 }
 
 .cover-content p {
-    font-size: var(--text-base);
-    opacity: 0.8;
-    margin-bottom: var(--space-2xl);
-    color: rgba(255, 255, 255, 0.7);
+    max-width: 24rem;
+    margin: 0 auto clamp(1.25rem, 2vw, 2.5rem);
+    font-size: clamp(0.95rem, 1.35vw, 1.125rem);
+    color: rgba(255, 255, 255, 0.75);
+    text-wrap: pretty;
 }
 
 .open-book-btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    padding: var(--space-md) var(--space-xl);
+    min-height: 3rem;
+    padding: clamp(0.85rem, 1.1vw, 1rem) clamp(1.1rem, 2vw, 1.75rem);
     background: var(--color-primary);
     color: var(--color-white);
     font-size: var(--text-sm);
     font-weight: 600;
     border-radius: var(--radius-full);
-    transition: all var(--transition-base);
-    position: relative;
+    transition: transform var(--transition-base), background var(--transition-base);
     overflow: hidden;
 }
 
@@ -2181,256 +2243,449 @@ body.modal-open .nav {
     pointer-events: none;
 }
 
-.open-book-btn:hover::before {
+.open-book-btn:hover::before,
+.open-book-btn:focus-visible::before {
     left: 100%;
 }
 
-.open-book-btn:hover {
+.open-book-btn:hover,
+.open-book-btn:focus-visible {
     background: var(--color-primary-light);
-    transform: scale(1.05);
+    transform: translateY(-1px);
 }
 
-/* Book Pages */
-.book-pages {
-    display: none;
-    width: 100%;
+.open-book-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.55);
+    outline-offset: 3px;
 }
 
-.book-pages.active {
-    display: block;
-}
-
-/* Book Pages Container */
-#bookPagesContainer {
+.menu-book-modal .book-page {
     position: relative;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    visibility: hidden;
-    /* Hidden until initialized to prevent FOUC */
-    transform-style: preserve-3d;
-}
-
-#bookPagesContainer.active {
-    visibility: visible;
-}
-
-.book-spread {
-    display: none;
-    /* Deprecated, kept for safety if needed but usually removed */
-}
-
-/* Page Styles for PageFlip */
-.book-page {
+    width: 720px;
+    height: 980px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
     background-color: var(--color-white);
-    overflow: hidden;
-    /* Dimensions are handled by the library, but we set defaults to match init */
-    width: 650px;
-    height: 900px;
-    padding: var(--space-2xl);
+    padding: clamp(1rem, 1.8vw, 2.5rem);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
     box-sizing: border-box;
-    /* Critical for consistent sizing with padding */
+    text-align: left;
+    overflow: hidden;
 }
 
-/* Shadow for realistic effect (inner page) */
-.book-page.--left {
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    background: linear-gradient(to right, #fff 95%, #f0f0f0 100%);
+.menu-book-modal .book-page.stf__item {
+    position: absolute;
 }
 
-.book-page.--right {
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    background: linear-gradient(to left, #fff 95%, #f0f0f0 100%);
+.menu-book-modal .book-page.--left {
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(to right, #fff 94%, #f3efe9 100%);
 }
 
-.book-page.hard {
+.menu-book-modal .book-page.--right {
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(to left, #fff 94%, #f3efe9 100%);
+}
+
+.menu-book-modal .book-page.hard {
     background-color: var(--color-white);
     border: 1px solid var(--color-cream-dark);
 }
 
-@media (max-width: 768px) {
-    .book-spread {
-        grid-template-columns: 1fr;
-    }
-
-    .menu-book {
-        min-height: auto;
-    }
+.menu-book-modal .page-header {
+    flex-shrink: 0;
 }
 
-.book-page {
-    /* Padding is already set above, ensuring it's not overridden */
-    text-align: left;
-    /* Ensure content fits */
-    display: flex;
-    flex-direction: column;
-}
-
-.book-page.left-page {
-    /* Specific styles for left page content if needed */
-    z-index: 1;
-    /* Dummy rule to keep it valid */
-}
-
-@media (max-width: 768px) {
-    .book-page {
-        padding: var(--space-lg);
-    }
-}
-
-.page-header h3 {
+.menu-book-modal .page-header h3 {
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: clamp(1.15rem, 1.4vw, 1.55rem);
+    line-height: 1.1;
     color: var(--color-secondary);
-    margin-bottom: var(--space-md);
+    margin-bottom: clamp(0.4rem, 0.8vw, 0.8rem);
+    text-wrap: balance;
 }
 
-.page-divider {
-    width: 60px;
+.menu-book-modal .page-divider {
+    width: clamp(3rem, 5vw, 4rem);
     height: 2px;
+    margin-bottom: clamp(1rem, 1.8vw, 1.75rem);
     background: var(--color-primary);
-    margin-bottom: var(--space-xl);
 }
 
-.menu-items {
+.menu-book-modal .menu-items {
     display: flex;
+    flex: 1;
+    min-height: 0;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: clamp(0.75rem, 0.8vw, 1.2rem);
+    overflow: auto;
+    padding-right: clamp(0.1rem, 0.3vw, 0.35rem);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-primary-rgb), 0.35) transparent;
 }
 
-.menu-item {
-    padding-bottom: var(--space-md);
+.menu-book-modal .menu-item {
+    min-width: 0;
+    padding-bottom: clamp(0.7rem, 0.8vw, 1rem);
     border-bottom: 1px dotted var(--color-cream-dark);
 }
 
-.menu-item:last-child {
+.menu-book-modal .menu-item:last-child {
     border-bottom: none;
 }
 
-.menu-item.featured {
+.menu-book-modal .menu-item.featured {
     background: var(--gradient-fairy);
-    margin: calc(-1 * var(--space-md));
-    padding: var(--space-md);
+    margin: 0;
+    padding: clamp(0.85rem, 1vw, 1rem);
     border-radius: var(--radius-md);
     border-bottom: none;
 }
 
-.item-header {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-xs);
+.menu-book-modal .item-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0.5rem, 0.55fr) minmax(3.1rem, auto);
+    align-items: start;
+    column-gap: clamp(0.35rem, 0.55vw, 0.6rem);
+    margin-bottom: 0.25rem;
+    min-width: 0;
 }
 
-.item-name {
+.menu-book-modal .item-name {
+    min-width: 0;
     font-weight: 600;
+    line-height: 1.28;
     color: var(--color-secondary);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: pretty;
 }
 
-.item-dots {
-    flex: 1;
-    border-bottom: 1px dotted var(--color-secondary-light);
-    min-width: 20px;
-    align-self: center;
-    margin-bottom: 4px;
+.menu-book-modal .item-dots {
+    min-width: 0.5rem;
+    align-self: start;
+    margin-top: 0.9rem;
+    border-bottom: 1px dotted rgba(var(--color-secondary-rgb), 0.35);
+    transform: none;
 }
 
-.item-price {
+.menu-book-modal .item-price {
+    min-width: 0;
+    max-width: min(26vw, 8rem);
+    justify-self: end;
+    align-self: start;
+    text-align: right;
     font-weight: 600;
+    line-height: 1.2;
+    padding-top: 0.08rem;
     color: var(--color-primary);
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 
-.item-desc {
-    font-size: var(--text-sm);
+.menu-book-modal .item-desc {
+    font-size: clamp(0.82rem, 1vw, 0.96rem);
+    line-height: 1.55;
     color: var(--color-secondary-light);
     font-style: italic;
+    text-wrap: pretty;
 }
 
-.page-number {
+.menu-book-modal .page-number {
     position: absolute;
-    bottom: var(--space-lg);
-    right: var(--space-xl);
+    right: clamp(0.9rem, 2vw, 1.5rem);
+    bottom: clamp(0.7rem, 1.75vw, 1.25rem);
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: clamp(1rem, 1.2vw, 1.35rem);
     color: var(--color-primary);
     opacity: 0.5;
+    pointer-events: none;
 }
 
-.page-image {
-    margin-bottom: var(--space-xl);
+.menu-book-modal .page-image {
+    margin-bottom: clamp(1rem, 1.8vw, 1.75rem);
     border-radius: var(--radius-md);
     overflow: hidden;
 }
 
-.page-image img {
+.menu-book-modal .page-image img {
     width: 100%;
-    height: 250px;
+    height: clamp(10rem, 28vh, 15.625rem);
     object-fit: cover;
 }
 
-.page-quote {
+.menu-book-modal .page-quote {
+    margin-top: auto;
+    padding: clamp(1rem, 1.8vw, 1.75rem);
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
     font-style: italic;
+    line-height: 1.45;
     color: var(--color-secondary-light);
     text-align: center;
-    padding: var(--space-xl);
     border: 1px solid var(--color-cream-dark);
     border-radius: var(--radius-md);
+    text-wrap: balance;
 }
 
 /* Book Navigation */
-.book-navigation {
+.menu-book-modal .book-navigation {
     display: none;
-    justify-content: center;
+    grid-template-columns: auto auto auto;
     align-items: center;
-    gap: var(--space-xl);
-    margin-top: var(--space-xl);
-    position: relative;
+    justify-content: center;
+    gap: clamp(0.75rem, 1.75vw, 1.5rem);
 }
 
-.book-navigation.active {
-    display: flex;
+.menu-book-modal .book-navigation.active {
+    display: grid;
 }
 
-.download-btn-inline {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-top: 0;
-}
-
-.nav-btn {
+.menu-book-modal .nav-btn {
+    min-width: clamp(3rem, 8vw, 3.5rem);
+    min-height: clamp(3rem, 8vw, 3.5rem);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-lg);
+    padding: clamp(0.7rem, 1vw, 0.9rem);
     font-size: var(--text-sm);
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-secondary);
-    border: 1px solid var(--color-cream-dark);
+    background: rgba(250, 247, 244, 0.95);
+    border: 1px solid rgba(var(--color-secondary-rgb), 0.12);
     border-radius: var(--radius-full);
-    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), background var(--transition-base),
+        color var(--transition-base), border-color var(--transition-base);
+    touch-action: manipulation;
 }
 
-.nav-btn:hover:not(:disabled) {
+.menu-book-modal .nav-btn:hover:not(:disabled),
+.menu-book-modal .nav-btn:focus-visible:not(:disabled) {
     background: var(--color-primary);
     color: var(--color-white);
     border-color: var(--color-primary);
+    transform: translateY(-1px);
 }
 
-.nav-btn:disabled {
-    opacity: 0.3;
+.menu-book-modal .nav-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 3px;
+}
+
+.menu-book-modal .nav-btn:disabled {
+    opacity: 0.35;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-.page-indicator {
+.menu-book-modal .page-indicator {
+    min-width: 5.5rem;
+    padding: 0.5rem 0.9rem;
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    color: var(--color-secondary-light);
+    font-size: clamp(1rem, 1.15vw, 1.25rem);
+    color: var(--color-white);
+    text-align: center;
+    background: rgba(20, 18, 16, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+@media (max-width: 1279.98px) {
+    .menu-book-modal .menu-book-container {
+        width: min(100%, 95vw);
+    }
+
+    .menu-book-modal .menu-book {
+        height: min(clamp(28rem, 84vh, 58rem), calc(100dvh - 6rem));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .menu-book-modal {
+        align-items: flex-start;
+    }
+
+    .menu-book-modal .menu-book-container {
+        width: min(100%, clamp(22rem, 82vw, 40rem));
+        max-height: calc(100dvh - max(0.75rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    }
+
+    .menu-book-modal .menu-book {
+        height: min(clamp(31.5rem, 89vh, 58rem), calc(100dvh - 4.5rem));
+    }
+
+    .menu-book-modal .book-page {
+        padding: clamp(0.95rem, 2vw, 1.5rem);
+        padding-bottom: clamp(2.2rem, 5vw, 3rem);
+    }
+}
+
+@media (pointer: coarse) and (min-width: 768px) and (max-width: 1366px) {
+    .menu-book-modal {
+        padding:
+            max(0.35rem, env(safe-area-inset-top))
+            max(0.35rem, env(safe-area-inset-right))
+            max(0.35rem, env(safe-area-inset-bottom))
+            max(0.35rem, env(safe-area-inset-left));
+    }
+
+    .menu-book-modal .menu-book-container {
+        width: min(100%, clamp(22.75rem, 49.5vw, 31.75rem));
+        max-height: calc(100dvh - max(0.35rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+        grid-template-rows: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .menu-book-modal .menu-book-toolbar {
+        position: absolute;
+        top: 0.4rem;
+        right: 0.4rem;
+        min-height: 0;
+        padding: 0;
+        z-index: 30;
+    }
+
+    .menu-book-modal .btn-close-modal {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .menu-book-modal .menu-book {
+        height: calc(100dvh - max(0.7rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+        gap: 0.65rem;
+    }
+
+    .menu-book-modal .book-navigation {
+        gap: 0.65rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .menu-book-modal {
+        padding:
+            max(0.25rem, env(safe-area-inset-top))
+            max(0.25rem, env(safe-area-inset-right))
+            max(0.25rem, env(safe-area-inset-bottom))
+            max(0.25rem, env(safe-area-inset-left));
+    }
+
+    .menu-book-modal .menu-book-container {
+        width: min(100%, calc(100vw - 0.5rem));
+        max-height: calc(100dvh - max(0.25rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+        grid-template-rows: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .menu-book-modal .menu-book-toolbar {
+        position: absolute;
+        top: 0.35rem;
+        right: 0.35rem;
+        min-height: 0;
+        padding: 0;
+        z-index: 30;
+    }
+
+    .menu-book-modal .btn-close-modal {
+        width: 2.9rem;
+        height: 2.9rem;
+        font-size: 2rem;
+    }
+
+    .menu-book-modal .menu-book {
+        height: calc(100dvh - max(0.5rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+        gap: 0.5rem;
+    }
+
+    .menu-book-modal .item-header {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+    }
+
+    .menu-book-modal .item-dots {
+        display: none;
+    }
+
+    .menu-book-modal .item-price {
+        max-width: min(40vw, 7.5rem);
+        font-size: clamp(0.92rem, 3.4vw, 1rem);
+    }
+
+    .menu-book-modal .book-navigation.active {
+        width: 100%;
+        grid-template-columns: auto 1fr auto;
+    }
+
+    .menu-book-modal .book-navigation {
+        gap: 0.5rem;
+    }
+
+    .menu-book-modal .nav-btn {
+        min-width: 2.85rem;
+        min-height: 2.85rem;
+        padding: 0.65rem;
+    }
+
+    .menu-book-modal .page-indicator {
+        justify-self: center;
+        min-width: 4.75rem;
+        padding: 0.4rem 0.75rem;
+    }
+}
+
+@media (max-width: 374.98px) {
+    .menu-book-modal .menu-book-container {
+        width: min(100%, calc(100vw - 0.35rem));
+    }
+
+    .menu-book-modal .menu-book {
+        height: calc(100dvh - max(0.35rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    }
+
+    .menu-book-modal .btn-close-modal {
+        width: 2.7rem;
+        height: 2.7rem;
+    }
+
+    .cover-content {
+        padding: 1.25rem;
+    }
+
+    .cover-content p {
+        margin-bottom: 1rem;
+    }
+
+    .open-book-btn {
+        width: 100%;
+    }
+
+    .menu-book-modal .book-navigation {
+        gap: 0.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-book-modal,
+    .menu-book-modal .book-cover,
+    .btn-close-modal,
+    .open-book-btn,
+    .menu-book-modal .nav-btn {
+        transition: none;
+    }
+
+    .open-book-btn::before {
+        display: none;
+    }
 }
 
 /* Menu Download */
@@ -3370,4 +3625,31 @@ body.ot-overlay-open {
 .ot-dtp-picker.ot-standard.wide {
     width: 32.5rem !important;
     align-items: normal !important;
+}
+
+/* Temporary Hide Switches
+   Remove this block to show the hidden elements again. */
+
+/* Hide the top navigation "Reservieren" button */
+.nav-menu .nav-cta[href="#reservation"] {
+    display: none !important;
+}
+
+/* Keep the original desktop spacing while removing the hidden CTA slot */
+@media (min-width: 901px) {
+    .nav-menu li:last-child {
+        display: none !important;
+    }
+}
+
+/* Hide the hero "Tisch reservieren" button */
+.hero-buttons .btn.btn-primary[href="#reservation"] {
+    display: none !important;
+}
+
+/* Hide the reservation widget area */
+.reservation-widget,
+[id^="ot-widget-container"],
+#otFallbackFrame {
+    display: none !important;
 }

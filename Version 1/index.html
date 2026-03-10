@@ -239,18 +239,24 @@
         </div>
 
         <!-- Interactive Menu Book Modal -->
-        <div class="menu-book-modal" id="menuBookModal">
-            <div class="menu-book-container">
-                <button type="button" class="btn-close-modal" id="closeMenuModalBtn"
+        <div class="menu-book-modal" id="menuBookModal" role="dialog" aria-modal="true"
+            aria-labelledby="menuBookModalTitle" aria-hidden="true">
+            <div class="menu-book-container" role="document">
+                <div class="menu-book-toolbar">
+                    <h2 class="sr-only" id="menuBookModalTitle">Interaktive Speisekarte</h2>
+                    <button type="button" class="btn-close-modal" id="closeMenuModalBtn"
                     aria-label="Schließen">&times;</button>
+                </div>
                 <div class="menu-book" id="menuBook">
-                    <!-- Book Cover -->
-                    <div class="book-cover active" id="bookCover">
+                    <div class="menu-book-stage">
+                        <!-- Book Cover -->
+                        <div class="book-cover active" id="bookCover">
                         <div class="cover-content">
                             <img src="images/Fee CaFEE_favicon_ohne Dampf.svg" alt="CaFEE – Fee" class="cover-logo">
                             <h3>Speisekarte</h3>
                             <p>Blättere durch unsere Köstlichkeiten</p>
-                            <button class="open-book-btn" id="openBookBtn">
+                            <button type="button" class="open-book-btn" id="openBookBtn"
+                                aria-controls="bookPagesContainer" aria-expanded="false">
                                 <span>Karte öffnen</span>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"
@@ -849,6 +855,8 @@
                         </div>
                     </div>
 
+                    </div>
+
                     <!-- Book Navigation -->
                     <div class="book-navigation" id="bookNav">
                         <button class="nav-btn prev-btn" id="prevPage" aria-label="Vorherige Seite" disabled>
@@ -857,8 +865,8 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                        <div class="page-indicator">
-                            <span id="currentPage">1</span> / <span id="totalPages">10</span>
+                        <div class="page-indicator" aria-live="polite" aria-atomic="true">
+                            <span id="currentPage">1</span> / <span id="totalPages">11</span>
                         </div>
                         <button class="nav-btn next-btn" id="nextPage" aria-label="Nächste Seite">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -866,14 +874,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                        <a href="Speisekarte.pdf" download class="download-btn download-btn-inline">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            <span>Komplette Speisekarte als PDF</span>
-                        </a>
+
                     </div>
                 </div>
             </div>

@@ -206,167 +206,362 @@ function initMenuBook() {
     const openMenuModalBtn = document.getElementById('openMenuModalBtn');
     const menuBookModal = document.getElementById('menuBookModal');
     const closeMenuModalBtn = document.getElementById('closeMenuModalBtn');
+    if (!openMenuModalBtn || !menuBookModal || !closeMenuModalBtn || !window.St?.PageFlip) return;
 
-    // Use the St.PageFlip class from the library
-    // We assume the library is loaded globally as St
-    const pageFlip = new St.PageFlip(dom.bookPages, {
-        width: 650,
-        height: 900,
-        size: 'fixed', // Preserve aspect ratio
-        minWidth: 300,
-        maxWidth: 1000,
-        minHeight: 420,
-        maxHeight: 1400,
-        showCover: false, // We handle the cover externally
-        mobileScrollSupport: false, // Disable default mobile scroll to avoid conflicts if needed, or true
-        maxShadowOpacity: 0.5,
-        usePortrait: true, // Single page mode on portrait (mobile)
-        startPage: 0 // 0-based index
-    });
+    const pageElements = Array.from(dom.bookPages.querySelectorAll('.book-page'));
+    const modalParent = menuBookModal.parentElement;
+    const inertSiblings = [
+        ...Array.from(document.body.children).filter(node => node !== menuBookModal && !node.contains(menuBookModal)),
+        ...(modalParent ? Array.from(modalParent.children).filter(node => node !== menuBookModal) : [])
+    ].filter((node, index, collection) => collection.indexOf(node) === index);
+    const focusableSelector = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea:not([disabled])',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])'
+    ].join(', ');
 
-    // Load pages from DOM
-    pageFlip.loadFromHTML(document.querySelectorAll('.book-page'));
+    let lastActiveElement = null;
+    let lockedScrollY = 0;
+    let resizeFrame = null;
 
-    // Sound Effect
+    const bookPageWidth = 720;
+    const desktopBookPageHeight = 980;
+    const tabletBookPageHeight = 1180;
+    const mobileBookPageHeight = 1280;
+    let pageFlip = null;
+    let bookPageLayout = 'default';
+
     const turnSound = new Audio('page-turn.mp3');
     turnSound.volume = 0.5;
-    turnSound.preload = 'auto'; // Ensure it's ready
+    turnSound.preload = 'auto';
 
-    // Update state on init
+    state.totalPages = pageElements.length;
     if (dom.totalPagesEl) {
-        // PageFlip counts spreads or pages? .getPageCount() returns total pages
-        dom.totalPagesEl.textContent = document.querySelectorAll('.book-page').length;
+        dom.totalPagesEl.textContent = String(state.totalPages);
     }
 
-    // Event: Flip (Trigger sound here, but optimize)
-    pageFlip.on('flip', (e) => {
-        // Play sound - reset time immediately
-        turnSound.currentTime = 0;
-        const playPromise = turnSound.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(err => {
-                // Auto-play was prevented
-                console.log('Audio play blocked', err);
-            });
+    function getBookPageLayout() {
+        const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+        const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+        if (viewportWidth <= 767.98) {
+            return 'mobile';
         }
 
-        // Update navigation UI
-        updateNavigation(e.data); // e.data is current page index (0-based)
-    });
+        if (isCoarsePointer && viewportWidth <= 1366) {
+            return 'tablet';
+        }
 
-    // Attempt to trigger sound on state change for faster feedback if supported
-    // 'changeState' event isn't always standard in all versions, but 'flip' should be fast enough if preloaded.
-    // If user says "late", maybe they drag and it only plays on release? 
-    // If so, we can try to play on user interaction if we could detect it, but 'flip' is the safest for the library.
-    // Preloading 'auto' and keeping the object ready helps.
+        return 'default';
+    }
 
-    // Helper: Update Navigation Buttons & Counter
-    function updateNavigation(pageIndex) {
-        // pageIndex is 0-based.
-        // User facing: Page 1, 2, ...
-        // Note: PageFlip index points to the top-left page in 2-page mode? or just current index?
-        // Usually index of the current spread's left page or single page.
-        // Let's rely on pageFlip.getCurrentPageIndex() which is safe.
+    function buildPageFlip(startPage = 0) {
+        const pageLayout = getBookPageLayout();
+        const bookPageHeight = pageLayout === 'mobile'
+            ? mobileBookPageHeight
+            : pageLayout === 'tablet'
+                ? tabletBookPageHeight
+                : desktopBookPageHeight;
+        const safeStartPage = Math.max(0, Math.min(startPage, pageElements.length - 1));
 
+        pageElements.forEach(pageElement => {
+            pageElement.style.width = `${bookPageWidth}px`;
+            pageElement.style.height = `${bookPageHeight}px`;
+        });
+
+        dom.bookPages.dataset.bookLayout = pageLayout;
+        dom.bookPages.replaceChildren(...pageElements);
+
+        pageFlip = new St.PageFlip(dom.bookPages, {
+            width: bookPageWidth,
+            height: bookPageHeight,
+            size: 'stretch',
+            minWidth: 260,
+            maxWidth: bookPageWidth,
+            minHeight: pageLayout === 'default' ? 380 : 420,
+            maxHeight: bookPageHeight,
+            autoSize: false,
+            showCover: false,
+            mobileScrollSupport: true,
+            maxShadowOpacity: 0.35,
+            usePortrait: true,
+            startPage: safeStartPage
+        });
+
+        pageFlip.loadFromHTML(pageElements);
+        pageFlip.on('flip', () => {
+            turnSound.currentTime = 0;
+
+            const playPromise = turnSound.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    console.log('Audio play blocked', err);
+                });
+            }
+
+            updateNavigation();
+        });
+
+        bookPageLayout = pageLayout;
+    }
+
+    function refreshPageFlipLayoutIfNeeded() {
+        const nextPageLayout = getBookPageLayout();
+
+        if (!pageFlip || nextPageLayout !== bookPageLayout) {
+            const currentPageIndex = pageFlip ? pageFlip.getCurrentPageIndex() : 0;
+
+            if (pageFlip) {
+                pageFlip.destroy();
+            }
+
+            buildPageFlip(currentPageIndex);
+        }
+    }
+
+    function updateNavigation() {
         const currentIdx = pageFlip.getCurrentPageIndex();
         const totalPages = pageFlip.getPageCount();
 
-        // Update Counter
+        state.currentPage = currentIdx + 1;
+
         if (dom.currentPageEl) {
-            dom.currentPageEl.textContent = currentIdx + 1;
+            dom.currentPageEl.textContent = String(state.currentPage);
         }
 
-        // Update Buttons
         if (dom.prevPage) {
             dom.prevPage.disabled = currentIdx === 0;
         }
+
         if (dom.nextPage) {
-            dom.nextPage.disabled = currentIdx >= totalPages - 1; // or >= totalPages - 2 for spreads?
-            // PageFlip keeps flipping until end.
+            dom.nextPage.disabled = currentIdx >= totalPages - 1;
         }
     }
 
-    // Open Modal Action
-    if (openMenuModalBtn && menuBookModal) {
-        openMenuModalBtn.addEventListener('click', () => {
-            menuBookModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.body.classList.add('modal-open');
-
-            // Ensure flipbook dimensions are updated when becoming visible
-            setTimeout(() => {
-                if (pageFlip) pageFlip.update();
-            }, 300);
+    function getFocusableElements() {
+        return Array.from(menuBookModal.querySelectorAll(focusableSelector)).filter(element => {
+            const style = window.getComputedStyle(element);
+            return element.getClientRects().length > 0 &&
+                style.visibility !== 'hidden' &&
+                !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true';
         });
     }
 
-    // Close Modal Action
-    function closeMenuModal() {
-        if (!menuBookModal) return;
-        menuBookModal.classList.remove('active');
-        document.body.style.overflow = '';
-        document.body.classList.remove('modal-open');
-    }
+    function setSiblingsInert(shouldInert) {
+        inertSiblings.forEach(node => {
+            if (shouldInert) {
+                const previousAriaHidden = node.getAttribute('aria-hidden');
+                if (!node.dataset.modalPrevAriaHidden) {
+                    node.dataset.modalPrevAriaHidden = previousAriaHidden ?? '__unset__';
+                }
 
-    if (closeMenuModalBtn) {
-        closeMenuModalBtn.addEventListener('click', closeMenuModal);
-    }
-
-    if (menuBookModal) {
-        menuBookModal.addEventListener('click', (e) => {
-            if (e.target === menuBookModal) {
-                closeMenuModal();
+                node.setAttribute('inert', '');
+                node.setAttribute('aria-hidden', 'true');
+                return;
             }
+
+            node.removeAttribute('inert');
+
+            if (node.dataset.modalPrevAriaHidden === '__unset__') {
+                node.removeAttribute('aria-hidden');
+            } else if (node.dataset.modalPrevAriaHidden) {
+                node.setAttribute('aria-hidden', node.dataset.modalPrevAriaHidden);
+            }
+
+            delete node.dataset.modalPrevAriaHidden;
         });
     }
 
-    // Open Book Action (Clicking cover)
-    dom.openBookBtn.addEventListener('click', () => {
+    function lockBackgroundScroll() {
+        lockedScrollY = window.scrollY;
+        const scrollbarCompensation = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+
+        document.documentElement.style.setProperty('--scrollbar-compensation', `${scrollbarCompensation}px`);
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.classList.add('modal-open');
+    }
+
+    function unlockBackgroundScroll() {
+        document.body.classList.remove('modal-open');
+        document.body.style.top = '';
+        document.documentElement.style.removeProperty('--scrollbar-compensation');
+        window.scrollTo(0, lockedScrollY);
+    }
+
+    function syncBookA11y() {
+        const isOpen = state.isBookOpen;
+
+        dom.bookCover.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+        dom.bookPages.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        dom.openBookBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+
+        if (dom.bookNav) {
+            dom.bookNav.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        }
+    }
+
+    function scheduleBookUpdate() {
+        if (!menuBookModal.classList.contains('active')) return;
+
+        if (resizeFrame) {
+            window.cancelAnimationFrame(resizeFrame);
+        }
+
+        resizeFrame = window.requestAnimationFrame(() => {
+            refreshPageFlipLayoutIfNeeded();
+            pageFlip.update();
+            updateNavigation();
+        });
+    }
+
+    function resetBookState() {
+        state.isBookOpen = false;
+        dom.bookCover.classList.remove('hidden');
+        dom.bookPages.classList.remove('active');
+
+        if (dom.bookNav) {
+            dom.bookNav.classList.remove('active');
+        }
+
+        syncBookA11y();
+    }
+
+    function openMenuModal() {
+        lastActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : openMenuModalBtn;
+        menuBookModal.classList.add('active');
+        menuBookModal.setAttribute('aria-hidden', 'false');
+
+        lockBackgroundScroll();
+        setSiblingsInert(true);
+        refreshPageFlipLayoutIfNeeded();
+        syncBookA11y();
+        closeMenuModalBtn.focus({ preventScroll: true });
+
+        window.requestAnimationFrame(() => {
+            closeMenuModalBtn.focus({ preventScroll: true });
+            window.setTimeout(() => {
+                pageFlip.update();
+                updateNavigation();
+            }, 120);
+        });
+    }
+
+    function closeMenuModal() {
+        if (!menuBookModal.classList.contains('active')) return;
+
+        resetBookState();
+        menuBookModal.classList.remove('active');
+        menuBookModal.setAttribute('aria-hidden', 'true');
+
+        unlockBackgroundScroll();
+        setSiblingsInert(false);
+
+        if (lastActiveElement && document.contains(lastActiveElement)) {
+            lastActiveElement.focus();
+        }
+    }
+
+    function openBook() {
         state.isBookOpen = true;
-
-        // Animate Cover
+        refreshPageFlipLayoutIfNeeded();
         dom.bookCover.classList.add('hidden');
-
-        // Show Book Container
         dom.bookPages.classList.add('active');
 
-        // Show Navigation
-        if (dom.bookNav) dom.bookNav.classList.add('active');
+        if (dom.bookNav) {
+            dom.bookNav.classList.add('active');
+        }
 
-        // Force update to ensure layout is correct after becoming visible
-        setTimeout(() => {
+        syncBookA11y();
+
+        window.setTimeout(() => {
             pageFlip.update();
-            updateNavigation(0);
-        }, 300); // Small delay to allow CSS transitions or visibility change
-    });
+            updateNavigation();
+            closeMenuModalBtn.focus({ preventScroll: true });
+        }, 160);
+    }
 
-    // Close Book Action (Optional: via wrapper click or button?)
-    // Existing code didn't have explicit close button in UI, only Escape key.
+    function handleKeydown(event) {
+        if (!menuBookModal.classList.contains('active')) return;
 
-    // Navigation Buttons
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeMenuModal();
+            return;
+        }
+
+        if (event.key === 'Tab') {
+            const focusableElements = getFocusableElements();
+
+            if (!focusableElements.length) {
+                event.preventDefault();
+                closeMenuModalBtn.focus();
+                return;
+            }
+
+            const activeIndex = focusableElements.indexOf(document.activeElement);
+            const direction = event.shiftKey ? -1 : 1;
+            const nextIndex = activeIndex === -1
+                ? (event.shiftKey ? focusableElements.length - 1 : 0)
+                : (activeIndex + direction + focusableElements.length) % focusableElements.length;
+
+            event.preventDefault();
+            focusableElements[nextIndex].focus();
+            return;
+        }
+
+        if (!state.isBookOpen) return;
+
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            pageFlip.flipPrev();
+        }
+
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            pageFlip.flipNext();
+        }
+    }
+
+    openMenuModalBtn.addEventListener('click', openMenuModal);
+    closeMenuModalBtn.addEventListener('click', closeMenuModal);
+    dom.openBookBtn.addEventListener('click', openBook);
+
     if (dom.prevPage) {
         dom.prevPage.addEventListener('click', () => pageFlip.flipPrev());
     }
+
     if (dom.nextPage) {
         dom.nextPage.addEventListener('click', () => pageFlip.flipNext());
     }
 
-    // Keyboard Navigation
-    document.addEventListener('keydown', (e) => {
-        if (menuBookModal && menuBookModal.classList.contains('active') && e.key === 'Escape') {
+    menuBookModal.addEventListener('click', event => {
+        if (event.target === menuBookModal) {
             closeMenuModal();
         }
-
-        if (!state.isBookOpen) return;
-        if (e.key === 'ArrowLeft') pageFlip.flipPrev();
-        if (e.key === 'ArrowRight') pageFlip.flipNext();
-        if (e.key === 'Escape') {
-            state.isBookOpen = false;
-            dom.bookCover.classList.remove('hidden');
-            dom.bookPages.classList.remove('active');
-            if (dom.bookNav) dom.bookNav.classList.remove('active');
-        }
     });
+
+    document.addEventListener('keydown', handleKeydown);
+    window.addEventListener('resize', scheduleBookUpdate, { passive: true });
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', scheduleBookUpdate);
+    }
+
+    if (window.ResizeObserver) {
+        const bookStage = menuBookModal.querySelector('.menu-book-stage');
+        const resizeObserver = new ResizeObserver(() => scheduleBookUpdate());
+
+        if (bookStage) {
+            resizeObserver.observe(bookStage);
+        }
+    }
+
+    buildPageFlip(0);
+    resetBookState();
+    updateNavigation();
 }
 
 // Helper functions openBook/closeBook/changePage/showPage are removed as they are integrated above or unused.
