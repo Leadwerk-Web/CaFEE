@@ -1,0 +1,34 @@
+{
+  "version": "1",
+  "source_root": "",
+  "pages": [
+    {
+      "source_key": "cafee-home-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "is_front_page": true,
+      "slug": "home",
+      "title": "CaFEE Brückenmühle",
+      "seo": {
+        "title": "CaFEE Brückenmühle – Wo Magie auf Kaffee trifft",
+        "meta_description": "CaFEE Brückenmühle - Ein magischer Ort für Kaffeeliebhaber. Entdecken Sie handgemachte Kaffeespezialitäten, hausgemachte Kuchen und die herzliche Atmosphäre unseres Cafés."
+      }
+    },
+    {
+      "source_key": "impressum-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "impressum",
+      "title": "Impressum",
+      "content_file": "impressum-content.html"
+    },
+    {
+      "source_key": "datenschutz-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "datenschutz",
+      "title": "Datenschutz",
+      "content_file": "datenschutz-content.html"
+    }
+  ]
+}

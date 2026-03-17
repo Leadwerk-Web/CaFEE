@@ -1,0 +1,139 @@
+{
+  "key": "group_leadwerk_startseite",
+  "title": "Startseite – Sektionen",
+  "fields": [
+    {
+      "key": "field_leadwerk_home_sections",
+      "label": "Startseiten-Sektionen",
+      "name": "home_sections",
+      "type": "flexible_content",
+      "layouts": {
+        "layout_hero": {
+          "key": "layout_hero",
+          "name": "hero",
+          "label": "Hero",
+          "sub_fields": [
+            { "key": "f_hero_badge", "name": "badge_text", "label": "Badge-Text", "type": "text" },
+            { "key": "f_hero_l1", "name": "title_line_1", "label": "Titel Zeile 1", "type": "text" },
+            { "key": "f_hero_l2", "name": "title_line_2_accent", "label": "Titel Zeile 2 (Akzent)", "type": "text" },
+            { "key": "f_hero_sub", "name": "subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_hero_btn1_t", "name": "button_1_text", "label": "Button 1 Text", "type": "text" },
+            { "key": "f_hero_btn1_u", "name": "button_1_url", "label": "Button 1 URL", "type": "url" },
+            { "key": "f_hero_btn2_t", "name": "button_2_text", "label": "Button 2 Text", "type": "text" },
+            { "key": "f_hero_btn2_u", "name": "button_2_url", "label": "Button 2 URL", "type": "url" }
+          ]
+        },
+        "layout_story": {
+          "key": "layout_story",
+          "name": "story",
+          "label": "Story",
+          "sub_fields": [
+            { "key": "f_story_video", "name": "video", "label": "Video", "type": "file" },
+            { "key": "f_story_prefix", "name": "headline_prefix", "label": "Überschrift Präfix", "type": "text" },
+            { "key": "f_story_accent", "name": "headline_accent", "label": "Überschrift Akzent", "type": "text" },
+            { "key": "f_story_content", "name": "content", "label": "Inhalt", "type": "wysiwyg" },
+            { "key": "f_story_cta_t", "name": "cta_text", "label": "CTA-Text", "type": "text" },
+            { "key": "f_story_cta_u", "name": "cta_url", "label": "CTA-URL", "type": "url" }
+          ]
+        },
+        "layout_menu_preview": {
+          "key": "layout_menu_preview",
+          "name": "menu_preview",
+          "label": "Speisekarte",
+          "sub_fields": [
+            { "key": "f_menu_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_menu_title_d", "name": "section_title_display", "label": "Titel (Display)", "type": "text" },
+            { "key": "f_menu_title_s", "name": "section_title_script", "label": "Titel (Script)", "type": "text" },
+            { "key": "f_menu_subtitle", "name": "section_subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_menu_cover_logo", "name": "menu_book_cover_logo", "label": "Cover-Logo", "type": "image" },
+            { "key": "f_menu_cover_title", "name": "menu_book_cover_title", "label": "Cover-Titel", "type": "text" },
+            { "key": "f_menu_cover_sub", "name": "menu_book_cover_subtitle", "label": "Cover-Untertitel", "type": "text" },
+            { "key": "f_menu_categories", "name": "menu_categories", "label": "Kategorien", "type": "repeater", "sub_fields": [
+              { "key": "f_menu_cat_title", "name": "category_title", "label": "Kategorie-Titel", "type": "text" },
+              { "key": "f_menu_items", "name": "items", "label": "Einträge", "type": "repeater", "sub_fields": [
+                { "key": "f_menu_item_name", "name": "name", "label": "Name", "type": "text" },
+                { "key": "f_menu_item_price", "name": "price", "label": "Preis", "type": "text" },
+                { "key": "f_menu_item_desc", "name": "description", "label": "Beschreibung", "type": "text" },
+                { "key": "f_menu_item_featured", "name": "featured", "label": "Hervorheben", "type": "true_false" }
+              ]}
+            ]},
+            { "key": "f_menu_quote", "name": "menu_quote", "label": "Zitat", "type": "text" },
+            { "key": "f_menu_quote_img", "name": "menu_quote_image", "label": "Zitat-Bild", "type": "image" },
+            { "key": "f_menu_pdf", "name": "pdf_download", "label": "PDF Speisekarte", "type": "file" }
+          ]
+        },
+        "layout_experience": {
+          "key": "layout_experience",
+          "name": "experience",
+          "label": "Erlebnis",
+          "sub_fields": [
+            { "key": "f_exp_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_exp_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_exp_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_exp_cards", "name": "experience_cards", "label": "Karten", "type": "repeater", "sub_fields": [
+              { "key": "f_exp_icon", "name": "icon", "label": "Icon", "type": "image" },
+              { "key": "f_exp_title", "name": "title", "label": "Titel", "type": "text" },
+              { "key": "f_exp_text", "name": "text", "label": "Text", "type": "textarea" }
+            ]},
+            { "key": "f_exp_gallery", "name": "gallery", "label": "Galerie", "type": "gallery" },
+            { "key": "f_exp_instagram", "name": "instagram_url", "label": "Instagram-URL", "type": "url" }
+          ]
+        },
+        "layout_interviews": {
+          "key": "layout_interviews",
+          "name": "interviews",
+          "label": "Interviews",
+          "sub_fields": [
+            { "key": "f_int_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_int_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_int_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_int_slides", "name": "slides", "label": "Slides", "type": "repeater", "sub_fields": [
+              { "key": "f_int_video", "name": "video", "label": "Video", "type": "file" },
+              { "key": "f_int_quote", "name": "quote", "label": "Zitat", "type": "textarea" },
+              { "key": "f_int_name", "name": "author_name", "label": "Name", "type": "text" },
+              { "key": "f_int_detail", "name": "author_detail", "label": "Detail", "type": "text" }
+            ]}
+          ]
+        },
+        "layout_team": {
+          "key": "layout_team",
+          "name": "team",
+          "label": "Team",
+          "sub_fields": [
+            { "key": "f_team_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_team_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_team_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_team_subtitle", "name": "section_subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_team_members", "name": "team_members", "label": "Mitglieder", "type": "repeater", "sub_fields": [
+              { "key": "f_team_img", "name": "image", "label": "Bild", "type": "image" },
+              { "key": "f_team_name", "name": "name", "label": "Name", "type": "text" },
+              { "key": "f_team_role", "name": "role", "label": "Rolle", "type": "text" }
+            ]}
+          ]
+        },
+        "layout_reservation": {
+          "key": "layout_reservation",
+          "name": "reservation",
+          "label": "Reservierung",
+          "sub_fields": [
+            { "key": "f_res_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_res_l1", "name": "title_line_1", "label": "Titel Zeile 1", "type": "text" },
+            { "key": "f_res_l2", "name": "title_line_2_accent", "label": "Titel Zeile 2", "type": "text" },
+            { "key": "f_res_intro", "name": "intro_text", "label": "Intro-Text", "type": "textarea" },
+            { "key": "f_res_address", "name": "address_block", "label": "Adresse", "type": "group", "sub_fields": [
+              { "key": "f_res_street", "name": "street", "label": "Straße", "type": "text" },
+              { "key": "f_res_city", "name": "city", "label": "Ort/PLZ", "type": "text" }
+            ]},
+            { "key": "f_res_hours", "name": "opening_hours", "label": "Öffnungszeiten", "type": "textarea" },
+            { "key": "f_res_phone", "name": "phone", "label": "Telefon", "type": "text" },
+            { "key": "f_res_email", "name": "email", "label": "E-Mail", "type": "email" },
+            { "key": "f_res_form_alias", "name": "form_alias", "label": "WPForms-Alias", "type": "text" },
+            { "key": "f_res_btn_phone", "name": "button_phone_label", "label": "Button Telefon", "type": "text" },
+            { "key": "f_res_btn_email", "name": "button_email_label", "label": "Button E-Mail", "type": "text" }
+          ]
+        }
+      }
+    }
+  ],
+  "location": [[{ "param": "page_type", "operator": "==", "value": "front_page" }]]
+}

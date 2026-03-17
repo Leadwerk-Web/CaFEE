@@ -1,0 +1,18 @@
+{
+  "key": "group_leadwerk_options",
+  "title": "Leadwerk Optionen (Global)",
+  "fields": [
+    { "key": "field_opt_logo", "label": "Logo (Header)", "name": "logo", "type": "image" },
+    { "key": "field_opt_footer_logo", "label": "Footer-Logo", "name": "footer_logo", "type": "image" },
+    { "key": "field_opt_footer_text", "label": "Footer-Text", "name": "footer_text", "type": "textarea" },
+    { "key": "field_opt_phone", "label": "Telefon", "name": "phone", "type": "text" },
+    { "key": "field_opt_email", "label": "E-Mail", "name": "email", "type": "email" },
+    { "key": "field_opt_opening_hours", "label": "Öffnungszeiten", "name": "opening_hours", "type": "textarea" },
+    { "key": "field_opt_copyright", "label": "Copyright-Text", "name": "copyright_text", "type": "text" },
+    { "key": "field_opt_social", "label": "Social Links", "name": "social_links", "type": "repeater", "sub_fields": [
+      { "key": "f_opt_platform", "name": "platform", "label": "Plattform", "type": "text" },
+      { "key": "f_opt_url", "name": "url", "label": "URL", "type": "url" }
+    ]}
+  ],
+  "location": [[{ "param": "options_page", "operator": "==", "value": "acf-options" }]]
+}
