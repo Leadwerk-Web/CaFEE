@@ -7,12 +7,39 @@
 class Leadwerk_Media_Importer {
 
 	protected $source_root = '';
-	protected $attachment_map = array(); // source_path => attachment_id
+	protected $attachment_map = array();
 	protected $dry_run = false;
 
 	public function __construct( $source_root, $dry_run = false ) {
 		$this->source_root = rtrim( $source_root, '/\\' );
 		$this->dry_run     = $dry_run;
+		add_filter( 'upload_mimes', array( $this, 'allow_extra_mimes' ) );
+		add_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_detection' ), 10, 5 );
+	}
+
+	public function allow_extra_mimes( $mimes ) {
+		$mimes['svg']  = 'image/svg+xml';
+		$mimes['svgz'] = 'image/svg+xml';
+		$mimes['ico']  = 'image/x-icon';
+		return $mimes;
+	}
+
+	public function fix_mime_detection( $data, $file, $filename, $mimes, $real_mime = '' ) {
+		if ( ! empty( $data['ext'] ) && ! empty( $data['type'] ) ) {
+			return $data;
+		}
+		$ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+		$map = array(
+			'svg'  => 'image/svg+xml',
+			'svgz' => 'image/svg+xml',
+			'ico'  => 'image/x-icon',
+		);
+		if ( isset( $map[ $ext ] ) ) {
+			$data['ext']             = $ext;
+			$data['type']            = $map[ $ext ];
+			$data['proper_filename'] = false;
+		}
+		return $data;
 	}
 
 	/**
@@ -72,7 +99,10 @@ class Leadwerk_Media_Importer {
 	}
 
 	protected function normalize_path( $path ) {
-		return trim( str_replace( array( '\\', '//' ), array( '/', '/' ), $path ), '/' );
+		$path = str_replace( array( '\\', '//' ), array( '/', '/' ), $path );
+		// Unicode-Dashes (En-Dash, Em-Dash) zu normalem Bindestrich vereinheitlichen.
+		$path = str_replace( array( "\xE2\x80\x93", "\xE2\x80\x94" ), '-', $path );
+		return trim( $path, '/' );
 	}
 
 	/**

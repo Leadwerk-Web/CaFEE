@@ -1,6 +1,8 @@
 {
   "version": "1",
   "source_root": "",
+  "site_title": "CaFEE Brückenmühle – Café in Gernsbach",
+  "site_tagline": "Wo Magie auf Kaffee trifft",
   "pages": [
     {
       "source_key": "cafee-home-v1",
@@ -10,8 +12,13 @@
       "slug": "home",
       "title": "CaFEE Brückenmühle",
       "seo": {
-        "title": "CaFEE Brückenmühle – Wo Magie auf Kaffee trifft",
-        "meta_description": "CaFEE Brückenmühle - Ein magischer Ort für Kaffeeliebhaber. Entdecken Sie handgemachte Kaffeespezialitäten, hausgemachte Kuchen und die herzliche Atmosphäre unseres Cafés."
+        "title": "CaFEE Brückenmühle Gernsbach – Café, Frühstück & Kuchen | Wo Magie auf Kaffee trifft",
+        "meta_description": "Willkommen im CaFEE Brückenmühle in Gernsbach – handgemachte Kaffeespezialitäten, hausgemachter Kuchen und ein verzaubertes Frühstück in historischem Ambiente. Jetzt Tisch reservieren!",
+        "og_title": "CaFEE Brückenmühle – Wo Magie auf Kaffee trifft ✨",
+        "og_description": "Ein magischer Ort für Kaffeeliebhaber in der historischen Brückenmühle Gernsbach. Handgemachte Spezialitäten, liebevolle Atmosphäre und Genuss, der Flügel hat.",
+        "og_image_source": "images/Frühstück.png",
+        "focus_keyphrase": "CaFEE Brückenmühle Gernsbach",
+        "schema_type": "LocalBusiness"
       }
     },
     {
@@ -20,15 +27,25 @@
       "post_status": "publish",
       "slug": "impressum",
       "title": "Impressum",
-      "content_file": "impressum-content.html"
+      "content_file": "impressum-content.html",
+      "seo": {
+        "title": "Impressum – CaFEE Brückenmühle Gernsbach",
+        "meta_description": "Impressum und rechtliche Angaben zum CaFEE Brückenmühle in Gernsbach. Betreiber, Kontaktdaten und Verantwortlichkeiten gemäß § 5 TMG.",
+        "meta_robots": "noindex, follow"
+      }
     },
     {
       "source_key": "datenschutz-v1",
       "target_type": "page",
       "post_status": "publish",
       "slug": "datenschutz",
-      "title": "Datenschutz",
-      "content_file": "datenschutz-content.html"
+      "title": "Datenschutzerklärung",
+      "content_file": "datenschutz-content.html",
+      "seo": {
+        "title": "Datenschutzerklärung – CaFEE Brückenmühle Gernsbach",
+        "meta_description": "Datenschutzerklärung des CaFEE Brückenmühle. Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäß DSGVO.",
+        "meta_robots": "noindex, follow"
+      }
     }
   ]
 }

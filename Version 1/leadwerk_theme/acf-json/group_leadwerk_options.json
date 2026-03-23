@@ -2,17 +2,140 @@
   "key": "group_leadwerk_options",
   "title": "Leadwerk Optionen (Global)",
   "fields": [
-    { "key": "field_opt_logo", "label": "Logo (Header)", "name": "logo", "type": "image" },
-    { "key": "field_opt_footer_logo", "label": "Footer-Logo", "name": "footer_logo", "type": "image" },
-    { "key": "field_opt_footer_text", "label": "Footer-Text", "name": "footer_text", "type": "textarea" },
-    { "key": "field_opt_phone", "label": "Telefon", "name": "phone", "type": "text" },
-    { "key": "field_opt_email", "label": "E-Mail", "name": "email", "type": "email" },
-    { "key": "field_opt_opening_hours", "label": "Öffnungszeiten", "name": "opening_hours", "type": "textarea" },
-    { "key": "field_opt_copyright", "label": "Copyright-Text", "name": "copyright_text", "type": "text" },
-    { "key": "field_opt_social", "label": "Social Links", "name": "social_links", "type": "repeater", "sub_fields": [
-      { "key": "f_opt_platform", "name": "platform", "label": "Plattform", "type": "text" },
-      { "key": "f_opt_url", "name": "url", "label": "URL", "type": "url" }
-    ]}
+    {
+      "key": "field_opt_tab_branding",
+      "label": "Branding",
+      "name": "",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_opt_logo",
+      "label": "Logo (Header & Navigation)",
+      "name": "logo",
+      "type": "image",
+      "return_format": "id",
+      "preview_size": "medium",
+      "instructions": "SVG oder PNG. Wird in der Navigation und im Footer verwendet."
+    },
+    {
+      "key": "field_opt_footer_logo",
+      "label": "Footer-Logo",
+      "name": "footer_logo",
+      "type": "image",
+      "return_format": "id",
+      "preview_size": "medium",
+      "instructions": "Optional – falls leer, wird das Header-Logo verwendet."
+    },
+    {
+      "key": "field_opt_footer_text",
+      "label": "Footer-Beschreibung",
+      "name": "footer_text",
+      "type": "textarea",
+      "rows": 3,
+      "instructions": "Kurzer Beschreibungstext unter dem Logo im Footer."
+    },
+    {
+      "key": "field_opt_copyright",
+      "label": "Copyright-Text",
+      "name": "copyright_text",
+      "type": "text",
+      "instructions": "z. B. „© 2026 CaFEE Brückenmühle. Alle Rechte vorbehalten.""
+    },
+    {
+      "key": "field_opt_tab_kontakt",
+      "label": "Kontakt",
+      "name": "",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_opt_street",
+      "label": "Straße",
+      "name": "street",
+      "type": "text"
+    },
+    {
+      "key": "field_opt_city",
+      "label": "PLZ / Ort",
+      "name": "city",
+      "type": "text"
+    },
+    {
+      "key": "field_opt_phone",
+      "label": "Telefon",
+      "name": "phone",
+      "type": "text",
+      "instructions": "Format: +49 151/103 100 59"
+    },
+    {
+      "key": "field_opt_email",
+      "label": "E-Mail",
+      "name": "email",
+      "type": "email"
+    },
+    {
+      "key": "field_opt_tab_zeiten",
+      "label": "Öffnungszeiten",
+      "name": "",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_opt_opening_hours",
+      "label": "Öffnungszeiten (Anzeige)",
+      "name": "opening_hours",
+      "type": "textarea",
+      "rows": 4,
+      "instructions": "Wird im Footer und in der Reservierungs-Sektion angezeigt."
+    },
+    {
+      "key": "field_opt_tab_social",
+      "label": "Social Media",
+      "name": "",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_opt_instagram",
+      "label": "Instagram URL",
+      "name": "instagram_url",
+      "type": "url"
+    },
+    {
+      "key": "field_opt_facebook",
+      "label": "Facebook URL",
+      "name": "facebook_url",
+      "type": "url"
+    },
+    {
+      "key": "field_opt_tab_formular",
+      "label": "Formular",
+      "name": "",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_opt_wpforms_id",
+      "label": "WPForms Formular-ID (Reservierung)",
+      "name": "wpforms_reservation_id",
+      "type": "number",
+      "instructions": "ID des WPForms-Kontaktformulars für die Reservierungs-Sektion."
+    }
   ],
-  "location": [[{ "param": "options_page", "operator": "==", "value": "acf-options" }]]
+  "location": [
+    [
+      {
+        "param": "options_page",
+        "operator": "==",
+        "value": "acf-options"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true
 }

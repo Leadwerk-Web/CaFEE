@@ -54,7 +54,9 @@ class Leadwerk_ACF_Filler {
 
 	protected function normalize_path( $path ) {
 		$path = str_replace( array( '\\', '//' ), array( '/', '/' ), $path );
-		return trim( trim( $path ), '/' );
+		// Unicode-Dashes (En-Dash, Em-Dash) zu normalem Bindestrich vereinheitlichen.
+		$path = str_replace( array( "\xE2\x80\x93", "\xE2\x80\x94" ), '-', $path );
+		return trim( $path, '/' );
 	}
 
 	/**
@@ -285,8 +287,8 @@ class Leadwerk_ACF_Filler {
 			$addr_node = $xpath->query( './/div[contains(@class,"reservation-info")]//div[.//strong[contains(text(),"Adresse")]]/span', $res )->item( 0 );
 			$addr_raw  = $addr_node ? $addr_node->textContent : '';
 			$addr_parts = preg_split( '/,\s*|\n/', $addr_raw, 2 );
-			$street = isset( $addr_parts[0] ) ? trim( $addr_parts[0] ) : 'Brückenstraße 12';
-			$city   = isset( $addr_parts[1] ) ? trim( $addr_parts[1] ) : '12345 Musterstadt';
+		$street = isset( $addr_parts[0] ) ? trim( $addr_parts[0] ) : 'Hofstätte 2';
+		$city   = isset( $addr_parts[1] ) ? trim( $addr_parts[1] ) : '76593 Gernsbach';
 			$sections[] = array(
 				'acf_fc_layout'           => 'reservation',
 				'section_badge'           => $this->text( $xpath, './/div[contains(@class,"section-badge")]', $res ),

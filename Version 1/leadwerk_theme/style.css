@@ -27,6 +27,70 @@ Text Domain: leadwerk-theme
    A Magical Café Experience
    ======================================== */
 
+/* WordPress Block-Theme: Alle Gutenberg-Layout-Eingriffe neutralisieren */
+body {
+    --wp--style--block-gap: 0px !important;
+}
+.wp-site-blocks {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wp-site-blocks > * + * {
+    margin-block-start: 0 !important;
+}
+.wp-site-blocks > .wp-block-group,
+.wp-site-blocks > .wp-block-template-part,
+.wp-site-blocks > header,
+.wp-site-blocks > main,
+.wp-site-blocks > footer {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+}
+body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+body .is-layout-default > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.wp-block-group,
+.wp-block-template-part {
+    max-width: none !important;
+    box-sizing: border-box;
+}
+body .is-layout-constrained,
+body .is-layout-default,
+body .is-layout-flow {
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+}
+:where(body .is-layout-constrained) > :first-child:first-child,
+:where(body .is-layout-default) > :first-child:first-child {
+    margin-block-start: 0 !important;
+}
+:where(body .is-layout-constrained) > :last-child:last-child,
+:where(body .is-layout-default) > :last-child:last-child {
+    margin-block-end: 0 !important;
+}
+body .has-global-padding {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+.footer.wp-block-group {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: var(--space-4xl) var(--space-xl) 0 !important;
+}
+/* ACF-Block-Container: kein Gutenberg-Spacing */
+.acf-block-preview,
+.acf-block-preview > *,
+[data-type="acf/cafee-home-sections"],
+[data-type="acf/cafee-home-sections"] > * {
+    max-width: none !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+}
+
 /* ----------------------------------------
    CSS Custom Properties (Design Tokens)
    ---------------------------------------- */
@@ -140,7 +204,7 @@ body {
     font-size: var(--text-base);
     line-height: 1.8;
     color: var(--color-secondary);
-    background-color: var(--color-cream);
+    background-color: #1a1a1a;
     overflow-x: hidden;
     cursor: none;
 }
@@ -308,20 +372,24 @@ ol {
 /* ----------------------------------------
    Navigation
    ---------------------------------------- */
-.nav {
+.nav,
+.nav.wp-block-group {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    max-width: none !important;
     z-index: var(--z-fixed);
-    padding: var(--space-lg) 0;
+    padding: var(--space-lg) 0 !important;
     transition: background-color var(--transition-base), padding var(--transition-base), box-shadow var(--transition-base);
 }
 
-.nav.scrolled {
+.nav.scrolled,
+.nav.scrolled.wp-block-group {
     background-color: rgba(250, 247, 244, 0.95);
     backdrop-filter: blur(10px);
-    padding: var(--space-md) 0;
+    padding: var(--space-md) 0 !important;
     box-shadow: var(--shadow-md);
 }
 
@@ -364,8 +432,8 @@ ol {
 }
 
 .nav-menu a {
-    font-size: var(--text-sm);
-    font-weight: 500;
+    font-size: calc(var(--text-sm) + 2px);
+    font-weight: 400;
     color: var(--color-white);
     position: relative;
     padding: var(--space-xs) 0;
@@ -488,7 +556,7 @@ ol {
     }
 
     .nav-menu a {
-        font-size: var(--text-xl);
+        font-size: calc(var(--text-xl) + 2px);
         color: var(--color-secondary);
     }
 
@@ -2730,6 +2798,161 @@ ol {
 .btn-full {
     width: 100%;
     justify-content: center;
+}
+
+/* Erfolgs- und Fehlermeldung Kontaktformular */
+.contact-form-success {
+    text-align: center;
+    color: var(--color-white);
+    padding: var(--space-2xl) var(--space-lg);
+}
+.contact-form-success svg {
+    color: var(--color-primary-light);
+    margin-bottom: var(--space-lg);
+}
+.contact-form-success h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-sm);
+}
+.contact-form-success p {
+    color: rgba(255, 255, 255, 0.7);
+}
+.contact-form-error {
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    color: #f8d7da;
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-lg);
+    font-size: var(--text-sm);
+}
+
+/* ----------------------------------------
+   WPForms: Optische Angleichung an Originalformular
+   ---------------------------------------- */
+.wpforms-cafee-wrap .wpforms-container {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+}
+.wpforms-cafee-wrap .wpforms-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+.wpforms-cafee-wrap .wpforms-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+.wpforms-cafee-wrap .wpforms-field {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wpforms-cafee-wrap .wpforms-field-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.wpforms-cafee-wrap .wpforms-field-sublabel {
+    display: none !important;
+}
+.wpforms-cafee-wrap .wpforms-field input[type="text"],
+.wpforms-cafee-wrap .wpforms-field input[type="email"],
+.wpforms-cafee-wrap .wpforms-field input[type="tel"],
+.wpforms-cafee-wrap .wpforms-field input[type="url"],
+.wpforms-cafee-wrap .wpforms-field textarea,
+.wpforms-cafee-wrap .wpforms-field select {
+    width: 100% !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-xs) !important;
+    padding: var(--space-md) var(--space-lg) !important;
+    color: var(--color-white) !important;
+    font-family: var(--font-body) !important;
+    font-size: var(--text-base) !important;
+    transition: all var(--transition-base) !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    line-height: 1.8 !important;
+}
+.wpforms-cafee-wrap .wpforms-field textarea {
+    resize: vertical !important;
+    min-height: 120px !important;
+}
+.wpforms-cafee-wrap .wpforms-field input:focus,
+.wpforms-cafee-wrap .wpforms-field textarea:focus {
+    outline: none !important;
+    border-color: var(--color-primary-light) !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 0 0 4px rgba(212, 162, 118, 0.1) !important;
+}
+.wpforms-cafee-wrap .wpforms-field input::placeholder,
+.wpforms-cafee-wrap .wpforms-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+.wpforms-cafee-wrap .wpforms-field-description {
+    display: none !important;
+}
+.wpforms-cafee-wrap .wpforms-submit-container {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wpforms-cafee-wrap .wpforms-submit-container button,
+.wpforms-cafee-wrap button[type="submit"].wpforms-submit {
+    width: 100% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--space-sm) !important;
+    padding: var(--space-md) var(--space-2xl) !important;
+    font-family: var(--font-display) !important;
+    font-size: var(--text-base) !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    color: var(--color-white) !important;
+    background: var(--gradient-primary) !important;
+    border: none !important;
+    border-radius: var(--radius-full) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all var(--transition-base) !important;
+    box-shadow: var(--shadow-warm) !important;
+}
+.wpforms-cafee-wrap button[type="submit"].wpforms-submit:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-glow) !important;
+}
+.wpforms-cafee-wrap .wpforms-confirmation-container-full {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: var(--color-white) !important;
+}
+.wpforms-cafee-wrap .wpforms-confirmation-container-full .contact-form-success {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+}
+/* WPForms Fehler */
+.wpforms-cafee-wrap .wpforms-error,
+.wpforms-cafee-wrap label.wpforms-error {
+    color: #f8d7da !important;
+    font-size: var(--text-xs) !important;
+    margin-top: var(--space-xs) !important;
+    background: transparent !important;
+    border: none !important;
+}
+.wpforms-cafee-wrap .wpforms-field.wpforms-has-error input,
+.wpforms-cafee-wrap .wpforms-field.wpforms-has-error textarea {
+    border-color: rgba(220, 53, 69, 0.6) !important;
 }
 
 /* ----------------------------------------

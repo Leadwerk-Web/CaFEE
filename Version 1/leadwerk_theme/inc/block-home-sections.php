@@ -423,11 +423,11 @@ function leadwerk_render_reservation( $f ) {
 	$line2   = isset( $f['title_line_2_accent'] ) ? $f['title_line_2_accent'] : 'unserer Geschichte';
 	$intro   = isset( $f['intro_text'] ) ? $f['intro_text'] : '';
 	$address = isset( $f['address_block'] ) ? $f['address_block'] : array();
-	$street  = is_array( $address ) && isset( $address['street'] ) ? $address['street'] : 'Brückenstraße 12';
-	$city    = is_array( $address ) && isset( $address['city'] ) ? $address['city'] : '12345 Musterstadt';
+	$street  = is_array( $address ) && isset( $address['street'] ) ? $address['street'] : 'Hofstätte 2';
+	$city    = is_array( $address ) && isset( $address['city'] ) ? $address['city'] : '76593 Gernsbach';
 	$hours   = isset( $f['opening_hours'] ) ? $f['opening_hours'] : 'Di – Fr: 8 – 18 Uhr | Sa – So: 9 – 18 Uhr';
-	$phone   = isset( $f['phone'] ) ? $f['phone'] : '+49 123 456 789';
-	$email   = isset( $f['email'] ) ? $f['email'] : 'hallo@cafee-brueckenmuehle.de';
+	$phone   = isset( $f['phone'] ) ? $f['phone'] : '+49 151/103 100 59';
+	$email   = isset( $f['email'] ) ? $f['email'] : 'Cafee.brueckenmuehle@gmail.com';
 	$btn_phone = isset( $f['button_phone_label'] ) ? $f['button_phone_label'] : 'Jetzt anrufen';
 	$btn_email = isset( $f['button_email_label'] ) ? $f['button_email_label'] : 'E-Mail schreiben';
 	$form_alias = isset( $f['form_alias'] ) ? $f['form_alias'] : '';
@@ -462,44 +462,71 @@ function leadwerk_render_reservation( $f ) {
 					<a href="mailto:<?php echo esc_attr( $email ); ?>" class="btn btn-secondary-light"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2"/><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span><?php echo esc_html( $btn_email ); ?></span></a>
 				</div>
 			</div>
-			<div class="contact-form-wrapper scroll-animate">
-				<?php
-				if ( $form_alias && function_exists( 'wpforms_display' ) ) {
-					// WPForms: Form-ID über Option oder Mapping ermitteln; hier Platzhalter.
-					$form_id = get_option( 'leadwerk_form_' . $form_alias, 0 );
-					if ( (int) $form_id > 0 ) {
-						echo do_shortcode( '[wpforms id="' . (int) $form_id . '"]' );
-					} else {
-						// Fallback: einfaches Formular wie im Original (ohne Backend-Versand)
-						leadwerk_render_contact_form_placeholder();
-					}
-				} else {
-					leadwerk_render_contact_form_placeholder();
-				}
-				?>
-			</div>
+		<div class="contact-form-wrapper scroll-animate">
+			<?php
+			$wpforms_id = 0;
+			if ( function_exists( 'get_field' ) ) {
+				$wpforms_id = (int) get_field( 'wpforms_reservation_id', 'option' );
+			}
+			if ( $wpforms_id && function_exists( 'wpforms_display' ) ) {
+				echo '<div class="wpforms-cafee-wrap">';
+				wpforms_display( $wpforms_id );
+				echo '</div>';
+			} else {
+				leadwerk_render_contact_form_fallback();
+			}
+			?>
+		</div>
 		</div>
 	</section>
 	<?php
 }
 
-function leadwerk_render_contact_form_placeholder() {
+function leadwerk_render_contact_form_fallback() {
+	$sent    = false;
+	$error   = false;
+	if ( isset( $_POST['leadwerk_contact_nonce'] ) && wp_verify_nonce( $_POST['leadwerk_contact_nonce'], 'leadwerk_contact' ) ) {
+		$name    = sanitize_text_field( $_POST['leadwerk_name'] ?? '' );
+		$email   = sanitize_email( $_POST['leadwerk_email'] ?? '' );
+		$message = sanitize_textarea_field( $_POST['leadwerk_message'] ?? '' );
+		if ( $name && is_email( $email ) && $message ) {
+			$to      = function_exists( 'get_field' ) ? get_field( 'email', 'option' ) : get_option( 'admin_email' );
+			$to      = $to ?: get_option( 'admin_email' );
+			$subject = 'Neue Nachricht von ' . $name . ' – CaFEE Brückenmühle';
+			$body    = "Name: $name\nE-Mail: $email\n\nNachricht:\n$message";
+			$headers = array( 'Reply-To: ' . $name . ' <' . $email . '>' );
+			$sent    = wp_mail( $to, $subject, $body, $headers );
+		} else {
+			$error = true;
+		}
+	}
 	?>
-	<form class="contact-form" method="post" action="">
-		<?php wp_nonce_field( 'leadwerk_contact', 'leadwerk_contact_nonce' ); ?>
-		<div class="form-group">
-			<label for="leadwerk-name" class="sr-only">Name</label>
-			<input type="text" id="leadwerk-name" name="name" placeholder="Ihr Name" required>
+	<?php if ( $sent ) : ?>
+		<div class="contact-form-success">
+			<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+			<h3>Vielen Dank!</h3>
+			<p>Deine Nachricht wurde gesendet. Wir melden uns bei dir.</p>
 		</div>
-		<div class="form-group">
-			<label for="leadwerk-email" class="sr-only">E-Mail</label>
-			<input type="email" id="leadwerk-email" name="email" placeholder="Ihre E-Mail" required>
-		</div>
-		<div class="form-group">
-			<label for="leadwerk-message" class="sr-only">Nachricht</label>
-			<textarea id="leadwerk-message" name="message" rows="4" placeholder="Ihre Nachricht an uns..." required></textarea>
-		</div>
-		<button type="submit" class="btn btn-primary btn-full"><span>Nachricht senden</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-	</form>
+	<?php else : ?>
+		<?php if ( $error ) : ?>
+			<p class="contact-form-error">Bitte fülle alle Felder korrekt aus.</p>
+		<?php endif; ?>
+		<form class="contact-form" method="post" action="#reservation">
+			<?php wp_nonce_field( 'leadwerk_contact', 'leadwerk_contact_nonce' ); ?>
+			<div class="form-group">
+				<label for="leadwerk-name" class="sr-only">Name</label>
+				<input type="text" id="leadwerk-name" name="leadwerk_name" placeholder="Dein Name" required>
+			</div>
+			<div class="form-group">
+				<label for="leadwerk-email" class="sr-only">E-Mail</label>
+				<input type="email" id="leadwerk-email" name="leadwerk_email" placeholder="Deine E-Mail" required>
+			</div>
+			<div class="form-group">
+				<label for="leadwerk-message" class="sr-only">Nachricht</label>
+				<textarea id="leadwerk-message" name="leadwerk_message" rows="4" placeholder="Deine Nachricht an uns..." required></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary btn-full"><span>Nachricht senden</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+		</form>
+	<?php endif; ?>
 	<?php
 }

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="CaFEE Brückenmühle - Ein magischer Ort für Kaffeeliebhaber. Entdecken Sie handgemachte Kaffeespezialitäten, hausgemachte Kuchen und die herzliche Atmosphäre unseres Cafés.">
-    <meta name="keywords" content="Café, Brückenmühle, Kaffee, Frühstück, Kuchen, Gemütlichkeit, Fee">
+        content="CaFEE Brückenmühle - Ein magischer Ort für Kaffeeliebhaber. Entdecke handgemachte Kaffeespezialitäten, hausgemachte Kuchen und die herzliche Atmosphäre unseres CaFEEs.">
+    <meta name="keywords" content="CaFEE, Brückenmühle, Kaffee, Frühstück, Kuchen, Gemütlichkeit, Fee">
     <title>CaFEE Brückenmühle – Wo Magie auf Kaffee trifft</title>
 
     <!-- Favicon -->
@@ -20,6 +20,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
 </head>
 
 <body>
@@ -54,7 +55,11 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-parallax-bg"></div>
+        <div class="hero-parallax-bg">
+            <video autoplay muted loop playsinline class="hero-bg-video" aria-hidden="true">
+                <source src="images/Imagevideo_CaFEE kurz.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="hero-overlay"></div>
         <div class="hero-fairy-element"></div>
         <div class="hero-content">
@@ -66,9 +71,9 @@
                 <span class="title-line accent">auf Kaffee trifft</span>
             </h1>
             <p class="hero-subtitle animate-fade-in-delay">
-                Treten Sie ein in eine Welt, in der jede Tasse Kaffee mit Liebe und einem Hauch von Zauber zubereitet
+                Tritt ein in eine Welt, in der jede Tasse Kaffee mit Liebe und einem Hauch von Zauber zubereitet
                 wird.
-                Hier, wo die Fee Fee über Ihr Wohlbefinden wacht.
+                Hier, wo die Fee Fee über dein Wohlbefinden wacht.
             </p>
             <div class="hero-buttons animate-fade-in-delay-2">
                 <a href="#reservation" class="btn btn-primary">
@@ -116,28 +121,31 @@
                 </h2>
                 <div class="story-text scroll-animate">
                     <p>
-                        <span class="drop-cap">I</span>n einer alten Mühle an der Brücke, wo einst das Wasser die
-                        schweren Mühlsteine antrieb,
-                        begann vor nicht allzu langer Zeit ein neues Kapitel. Fee, unsere Namensgeberin und gute Seele
-                        des Hauses,
-                        träumte von einem Ort, an dem Menschen zusammenkommen, um innezuhalten und zu genießen.
+                        <span class="drop-cap">I</span>n einer alten Mühle an der Brücke, wo einst das Wasser die schweren Mühlsteine antrieb und das Rauschen der Murg den Takt vorgab, verzaubert heute das CaFEE seine Gäste.
                     </p>
                     <p>
-                        So entstand das <strong>CaFEE Brückenmühle</strong> — ein Ort, an dem die Zeit langsamer zu
-                        fließen scheint.
-                        Wo der Duft von frisch geröstetem Kaffee sich mit dem Aroma hausgemachter Kuchen vermischt.
-                        Wo jeder Gast nicht nur Kunde ist, sondern Teil unserer kleinen, magischen Familie wird.
+                        Heute mahlen hier keine Mühlsteine mehr, sondern feinste Kaffeebohnen. Und ihr Duft erzählt Geschichten von kleinen Pausen, guten Gesprächen und großen Genussmomenten.
                     </p>
                     <p>
-                        Unser Logo zeigt eine Fee, die liebevoll eine Tasse Kaffee hält — ein Symbol für die Wärme,
-                        Fürsorge und den Zauber, den wir in jede Begegnung legen. Denn bei uns ist Kaffee mehr als ein
-                        Getränk.
-                        Er ist ein kleines Wunder, das Menschen verbindet.
+                        Unsere Namensgeberin Fee träumte von einem Ort für genau diese kleinen Auszeiten.
+                        Ein Ort, an dem Kaffee nicht nur wach macht, sondern einen Moment zum Innehalten und Entschleunigen. Ein bisschen wie Magie.
+                    </p>
+                    <p>
+                        So entstand das <strong>CaFEE Brückenmühle</strong> –
+                        ein Ort, an dem Tradition auf moderne Kaffeehauskultur trifft.
+                    </p>
+                    <p>
+                        Wo der Klang der Espressomaschine klingt wie der Lieblingssong auf dem Weg zu Freunden und ein Cappuccino sich anfühlt wie das Zurücklehnen auf dem Sofa nach einem langen Tag.
+                        Wir machen das Leben zu einer Schachtel Pralinen. Und bei uns ist jede einzelne ein Genuss.
+                        Hier wird gebacken, gebrüht, angerichtet und serviert.
+                    </p>
+                    <p>
+                        Hinter dem CaFEE steht ein Team aus Bäckern, Baristas, Gastgebern und echten Menschen, die ihr Handwerk lieben. Menschen, die wissen: Ein gutes CaFEE macht nicht nur wach – es verbindet.
                     </p>
                 </div>
                 <div class="story-cta scroll-animate">
                     <a href="#experience" class="inline-link">
-                        Mehr über unser Café erfahren
+                        Mehr über unser CaFEE erfahren
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
@@ -160,34 +168,107 @@
                 <span class="title-script">Speisekarte</span>
             </h2>
             <p class="section-subtitle scroll-animate">
-                Von handverlesenen Kaffeebohnen bis zu hausgemachten Köstlichkeiten —
-                entdecken Sie unsere Auswahl mit Liebe zubereiteter Spezialitäten.
+                Von handverlesenen Kaffeebohnen bis zu hausgemachten Köstlichkeiten. Freut euch auf feine Kaffeespezialitäten, knusprige Brote, kleine Sattmacher für zwischendurch sowie regionale Spezialitäten mit ganz eigenem Zauber.
             </p>
         </div>
 
-        <!-- Interactive Menu Book -->
-        <div class="menu-book-container scroll-animate">
-            <div class="menu-book" id="menuBook">
-                <!-- Book Cover -->
-                <div class="book-cover active" id="bookCover">
-                    <div class="cover-content">
-                        <img src="images/Fee CaFEE_favicon_ohne Dampf.svg" alt="CaFEE – Fee" class="cover-logo">
-                        <h3>Speisekarte</h3>
-                        <p>Blättern Sie durch unsere Köstlichkeiten</p>
-                        <button class="open-book-btn" id="openBookBtn">
-                            <span>Karte öffnen</span>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
+        <!-- Menu Highlights -->
+        <div class="menu-highlights scroll-animate">
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/kaffee-1.svg" alt="" class="menu-highlight-icon-img">
                 </div>
+                <h3 class="menu-highlight-title">Kaffee &amp; Co.</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">Espresso</span><span class="item-dots"></span><span
+                            class="item-price">2,80 €</span></li>
+                    <li><span class="item-name">Cappuccino</span><span class="item-dots"></span><span
+                            class="item-price">3,90 €</span></li>
+                    <li><span class="item-name">Fee's Zauber-Latte</span><span class="item-dots"></span><span
+                            class="item-price">4,50 €</span></li>
+                    <li><span class="item-name">Flat White</span><span class="item-dots"></span><span
+                            class="item-price">4,20 €</span></li>
+                </ul>
+            </div>
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/breakfast-1.svg" alt="" class="menu-highlight-icon-img">
+                </div>
+                <h3 class="menu-highlight-title">Frühstück</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">Das Große Fee-Frühstück</span><span class="item-dots"></span><span
+                            class="item-price">14,90 €</span></li>
+                    <li><span class="item-name">Avocado-Ei-Toast</span><span class="item-dots"></span><span
+                            class="item-price">9,80 €</span></li>
+                    <li><span class="item-name">Granola Bowl</span><span class="item-dots"></span><span
+                            class="item-price">8,50 €</span></li>
+                </ul>
+            </div>
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/sweets-1.svg" alt="" class="menu-highlight-icon-img">
+                </div>
+                <h3 class="menu-highlight-title">Süßes</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">Hausgemachter Kuchen</span><span class="item-dots"></span><span
+                            class="item-price">4,50 €</span></li>
+                    <li><span class="item-name">Warmer Apfelstrudel</span><span class="item-dots"></span><span
+                            class="item-price">5,90 €</span></li>
+                    <li><span class="item-name">Belgische Waffeln</span><span class="item-dots"></span><span
+                            class="item-price">6,90 €</span></li>
+                    <li><span class="item-name">Tiramisu</span><span class="item-dots"></span><span
+                            class="item-price">5,50 €</span></li>
+                </ul>
+            </div>
+        </div>
 
-                <!-- Book Pages -->
-                <div class="book-pages" id="bookPages">
-                    <!-- Page 1-2: Kaffee -->
-                    <div class="book-spread" data-page="1">
+        <div class="menu-highlights-actions">
+            <button type="button" class="btn btn-menu-browse" id="openMenuModalBtn" aria-label="Karte durchblättern">
+                <span>Karte durchblättern</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <path d="M8 7h8" />
+                    <path d="M8 11h8" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Interactive Menu Book Modal -->
+        <div class="menu-book-modal" id="menuBookModal" role="dialog" aria-modal="true"
+            aria-labelledby="menuBookModalTitle" aria-hidden="true">
+            <div class="menu-book-container" role="document">
+                <div class="menu-book-toolbar">
+                    <h2 class="sr-only" id="menuBookModalTitle">Interaktive Speisekarte</h2>
+                    <button type="button" class="btn-close-modal" id="closeMenuModalBtn"
+                    aria-label="Schließen">&times;</button>
+                </div>
+                <div class="menu-book" id="menuBook">
+                    <div class="menu-book-stage">
+                        <!-- Book Cover -->
+                        <div class="book-cover active" id="bookCover">
+                        <div class="cover-content">
+                            <img src="images/Fee CaFEE_favicon_ohne Dampf.svg" alt="CaFEE – Fee" class="cover-logo">
+                            <h3>Speisekarte</h3>
+                            <p>Blättere durch unsere Köstlichkeiten</p>
+                            <button type="button" class="open-book-btn" id="openBookBtn"
+                                aria-controls="bookPagesContainer" aria-expanded="false">
+                                <span>Karte öffnen</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Book Pages Container for PageFlip -->
+                    <div id="bookPagesContainer">
+                        <!-- Page 1 (Left) -->
                         <div class="book-page left-page">
                             <div class="page-header">
                                 <h3>Kaffeespezialitäten</h3>
@@ -198,55 +279,109 @@
                                     <div class="item-header">
                                         <span class="item-name">Espresso</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">2,80 €</span>
+                                        <span class="item-price">1,50 €</span>
                                     </div>
                                     <p class="item-desc">Kräftig und aromatisch — die pure Essenz</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Cappuccino</span>
+                                        <span class="item-name">Espresso Doppio</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">3,90 €</span>
+                                        <span class="item-price">3,50 €</span>
                                     </div>
-                                    <p class="item-desc">Samtiger Milchschaum auf perfektem Espresso</p>
+                                    <p class="item-desc">Doppelter Espresso</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Fee's Zauber-Latte</span>
+                                        <span class="item-name">Americano</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">4,50 €</span>
+                                        <span class="item-price">3,00 €</span>
                                     </div>
-                                    <p class="item-desc">Unser Signature Drink mit Vanille & Karamell-Magie</p>
+                                    <p class="item-desc">Espresso mit heißem Wasser</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
                                         <span class="item-name">Flat White</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
+                                        <span class="item-price">4,00 €</span>
                                     </div>
                                     <p class="item-desc">Doppelter Ristretto mit seidiger Milch</p>
                                 </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Cappuccino</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Samtiger Milchschaum auf perfektem Espresso</p>
+                                </div>
                             </div>
+                            <div class="page-number">1</div>
                         </div>
+
+                        <!-- Page 2 (Right) -->
                         <div class="book-page right-page">
                             <div class="page-header">
-                                <h3>Heiße Getränke</h3>
+                                <h3>Kaffeespezialitäten</h3>
                                 <div class="page-divider"></div>
                             </div>
                             <div class="menu-items">
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Heiße Schokolade</span>
+                                        <span class="item-name">Latte Macchiato</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">3,80 €</span>
+                                        <span class="item-price">4,00 €</span>
                                     </div>
-                                    <p class="item-desc">Cremig, schokoladig, himmlisch</p>
+                                    <p class="item-desc">Espresso über aufgeschäumter Milch</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Matcha Latte</span>
+                                        <span class="item-name">Extra Shot Espresso</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
+                                        <span class="item-price">1,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Zusätzlicher Espresso zu deinem Getränk</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Hafer-, Soja- oder Mandelmilch</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">+ 0,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Pflanzenmilch statt Kuhmilch</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Kännchen Filterkaffee / CaFEE Crema</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Frisch aufgebrühter Filterkaffee</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Espresso Macchiato / Milchkaffee / Haselzauber</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Espresso mit Milchschaum oder Haselnuss-Zauber</p>
+                                </div>
+                            </div>
+                            <div class="page-number">2</div>
+                        </div>
+
+                        <!-- Page 3 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-header">
+                                <h3>Heiße Getränke & Pimp Your Drink</h3>
+                                <div class="page-divider"></div>
+                            </div>
+                            <div class="menu-items">
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Match Latte</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">4,00 €</span>
                                     </div>
                                     <p class="item-desc">Japanischer Matcha mit aufgeschäumter Milch</p>
                                 </div>
@@ -254,135 +389,460 @@
                                     <div class="item-header">
                                         <span class="item-name">Chai Latte</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">4,00 €</span>
+                                        <span class="item-price">4,50 €</span>
                                     </div>
                                     <p class="item-desc">Würzige Gewürze in cremiger Milch</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Goldene Milch</span>
+                                        <span class="item-name">Heiße Schoki</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">4,20 €</span>
+                                        <span class="item-price">3,80 €</span>
                                     </div>
-                                    <p class="item-desc">Kurkuma, Ingwer & ein Hauch Zimt</p>
+                                    <p class="item-desc">Cremig, schokoladig, himmlisch</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Flavor — Vanille, Schoko, Haselnuss, Salted
+                                            Caramel</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">+ 0,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Sirup zu deinem Getränk</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Iced</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">+ 0,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Dein Getränk eisgekühlt</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Espresso Martini / Aperol Spritz / Sarti Spritz</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">6,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Daydrinking — alkoholische Longdrinks</p>
                                 </div>
                             </div>
-                            <div class="page-number">1</div>
+                            <div class="page-number">3</div>
                         </div>
-                    </div>
 
-                    <!-- Page 3-4: Frühstück -->
-                    <div class="book-spread" data-page="2">
+                        <!-- Page 4 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-header">
+                                <h3>Ohne Feenstaub & Teeträume</h3>
+                                <div class="page-divider"></div>
+                            </div>
+                            <div class="menu-items">
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Hugo / Lillet Wildberry / Limoncello Spritz</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">6,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Prosecco-Cocktails mit frischen Aromen</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Kir Royal / Mimosa / Morning Mule</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">6,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Klassiker für den feinen Genuss</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Teinacher Naturell / Medium</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Mineralwasser</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Cola, Fanta, Sprite</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,00 – 3,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Classic & Zero</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Genuss Limonade</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">3,50 €</span>
+                                    </div>
+                                    <p class="item-desc">Orange, Ingwer, Apfel, Sellerie, Banane, Zitrone, Karotte,
+                                        Spinat
+                                    </p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Tee im Beutel</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">4,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Ingwer, Pfefferminz, Zitronengras, Schwarztee, Jasmin</p>
+                                </div>
+                            </div>
+                            <div class="page-number">4</div>
+                        </div>
+
+                        <!-- Page 5 (Left) -->
                         <div class="book-page left-page">
                             <div class="page-header">
-                                <h3>Frühstück</h3>
+                                <h3>Vesperzeit</h3>
                                 <div class="page-divider"></div>
                             </div>
                             <div class="menu-items">
                                 <div class="menu-item featured">
                                     <div class="item-header">
-                                        <span class="item-name">Das Große Fee-Frühstück</span>
+                                        <span class="item-name">Brückenmühle</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">14,90 €</span>
+                                        <span class="item-price">12,00 €</span>
                                     </div>
-                                    <p class="item-desc">Brötchen, Croissant, Aufschnitt, Käse, Konfitüren, Ei, frisches
-                                        Obst</p>
+                                    <p class="item-desc">Geräucherter Lachs & Tunfischcreme, Meerrettich, Frischkäse,
+                                        Brotkorb</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Avocado-Ei-Toast</span>
+                                        <span class="item-name">Sonnenstulle</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">9,80 €</span>
+                                        <span class="item-price">10,00 €</span>
                                     </div>
-                                    <p class="item-desc">Pochiertes Ei auf cremiger Avocado mit Sauerteigbrot</p>
+                                    <p class="item-desc">Wurst- & Käseauswahl, Marmelade, Butter, Brotkorb</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Granola Bowl</span>
+                                        <span class="item-name">Wie bei Mama</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">8,50 €</span>
+                                        <span class="item-price">10,00 €</span>
                                     </div>
-                                    <p class="item-desc">Hausgemachtes Granola mit Joghurt & saisonalem Obst</p>
+                                    <p class="item-desc">Müsli, Joghurt, Honig, Marmelade, Butter, Croissant</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Fee-Nomenal</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">10,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Wir zaubern dazu: Ei nach Wahl, Avocado, Speck, Croissant</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Eierzauber</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">+ 4,00 € / + 3,00 €</span>
+                                    </div>
+                                    <p class="item-desc">3 Eier & 3 Wunschzutaten — Sauerteigbrot oder Brioche</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Hafer Beeren Traum</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">11,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Beerenmix, Haferflocken, Naturjoghurt, Granola, Nussmix</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Knusprige Banane</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">11,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Bananen, Haferflocken, Naturjoghurt, Granola, Nussmix</p>
                                 </div>
                             </div>
+                            <div class="page-number">5</div>
                         </div>
+
+                        <!-- Page 6 (Right) -->
                         <div class="book-page right-page">
                             <div class="page-header">
-                                <h3>Süße Versuchungen</h3>
+                                <h3>Vesperzeit</h3>
                                 <div class="page-divider"></div>
                             </div>
                             <div class="menu-items">
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Hausgemachter Kuchen</span>
+                                        <span class="item-name">Adams Apfel</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">11,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Apfel, Apfelkompott, Haferflocken, Zimt, Granola, Nussmix</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Fernöstlicher Zauber</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">12,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Curry-Dattel-Dip, Tomaten, Artischocken, Pinienkerne</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Burrata Traum</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">12,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Pesto, Prosciutto, Burrata, Cherrytomaten, Basilikum, Trüffelöl
+                                    </p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Farmerstraum</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">13,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Ital. Schinken, Parmesan, Bacon, Philadelphia, Hollandaise</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Avocado Hex Hex</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">12,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Guacamole, Datteltomaten, Balsamico-Zwiebeln, wahlweise mit
+                                        Lachs
+                                    </p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Croissant Royal</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">12,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Croissant, Smoked Lachs, Cheddar, pochiertes Ei, Hollandaise
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page-number">6</div>
+                        </div>
+
+                        <!-- Page 7 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-header">
+                                <h3>Zucker für die Seele</h3>
+                                <div class="page-divider"></div>
+                            </div>
+                            <div class="menu-items">
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Stück Torte</span>
                                         <span class="item-dots"></span>
                                         <span class="item-price">4,50 €</span>
                                     </div>
-                                    <p class="item-desc">Wechselnde Sorten — fragen Sie nach unserer Tagesauswahl</p>
+                                    <p class="item-desc">Wechselnde hausgemachte Torten</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Warmer Apfelstrudel</span>
+                                        <span class="item-name">Stück Kuchen</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">5,90 €</span>
+                                        <span class="item-price">3,50 €</span>
                                     </div>
-                                    <p class="item-desc">Mit Vanillesauce und gerösteten Mandeln</p>
+                                    <p class="item-desc">Hausgemachte Kuchen — Tagesauswahl</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Belgische Waffeln</span>
+                                        <span class="item-name">Affogato</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">6,90 €</span>
+                                        <span class="item-price">4,50 €</span>
                                     </div>
-                                    <p class="item-desc">Mit Sahne, Früchten & Ahornsirup</p>
+                                    <p class="item-desc">Espresso über Vanilleeis</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Tiramisu</span>
+                                        <span class="item-name">Apfelplotzer / Blaubeerplotzer</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">5,50 €</span>
+                                        <span class="item-price">4,00 €</span>
                                     </div>
-                                    <p class="item-desc">Nach Originalrezept — luftig und verführerisch</p>
+                                    <p class="item-desc">Flambiert mit Vanilleeis</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Homemade Kräuterbutter</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">+ 2,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Zu Brot oder Frühstück</p>
                                 </div>
                             </div>
-                            <div class="page-number">2</div>
+                            <div class="page-number">7</div>
                         </div>
-                    </div>
 
-                    <!-- Page 5-6: Snacks & Specials -->
-                    <div class="book-spread" data-page="3">
-                        <div class="book-page left-page">
+                        <!-- Page 8 (Right) -->
+                        <div class="book-page right-page">
                             <div class="page-header">
-                                <h3>Herzhafte Snacks</h3>
+                                <h3>Salate & Kleiner Hunger</h3>
                                 <div class="page-divider"></div>
                             </div>
                             <div class="menu-items">
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Quiche Lorraine</span>
+                                        <span class="item-name">Gegrillte Pepperoni</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">7,90 €</span>
+                                        <span class="item-price">10,00 €</span>
                                     </div>
-                                    <p class="item-desc">Mit frischem Blattsalat</p>
+                                    <p class="item-desc">Mit Knoblauch & Olivenöl</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Focaccia Mediterran</span>
+                                        <span class="item-name">Knoblauch Garnelen</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">8,50 €</span>
+                                        <span class="item-price">14,00 €</span>
                                     </div>
-                                    <p class="item-desc">Mit getrockneten Tomaten, Mozzarella & Basilikum</p>
+                                    <p class="item-desc">Mit Knoblauch & Olivenöl</p>
                                 </div>
                                 <div class="menu-item">
                                     <div class="item-header">
-                                        <span class="item-name">Suppe des Tages</span>
+                                        <span class="item-name">Tagessuppe</span>
                                         <span class="item-dots"></span>
-                                        <span class="item-price">6,50 €</span>
+                                        <span class="item-price">7,00 €</span>
                                     </div>
-                                    <p class="item-desc">Hausgemacht & saisonal — mit frischem Brot</p>
+                                    <p class="item-desc">Wechselnde Suppen — hausgemacht</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Markklößchensuppe</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">9,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Wechselnde Suppen</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Salat Ziegenkäse</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">12,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Bunter Salat mit Ziegenkäse, Honig & Walnüssen</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Salat Gambas</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">14,00 €</span>
+                                    </div>
+                                    <p class="item-desc">King Gambas, Parmesan, Tomaten</p>
                                 </div>
                             </div>
+                            <div class="page-number">8</div>
                         </div>
+
+                        <!-- Page 9 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-header">
+                                <h3>Für den kleinen Hunger</h3>
+                                <div class="page-divider"></div>
+                            </div>
+                            <div class="menu-items">
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Wurstsalat</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">10,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Essiggurken, Zwiebeln, Beilagensalat, Baguette</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Fleischbällchen</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">10,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Schwein in Tomatencreme</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Datteln im Speckmantel</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">10,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Datteln in Speck</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Tapas Platte</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">18,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Datteln, Käseauswahl, Oliven, Sardinen, Fleischbällchen</p>
+                                </div>
+                            </div>
+                            <div class="page-number">9</div>
+                        </div>
+
+                        <!-- Page 10 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-header">
+                                <h3>Sattmacher</h3>
+                                <div class="page-divider"></div>
+                            </div>
+                            <div class="menu-items">
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Rinderbäckchen an getrüffeltem Kartoffelbrei</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">18,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Geschmort mit Brokkoliherzen & Kräuterbutter</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Maishähnchen mit Wurzelgemüse</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">17,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Im Weißwein-Jus</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Salbei-Käse-Gnocchi</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">16,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Gnocchi in brauner Butter mit Bergkäse</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Lachsfilet mit Kartoffelbrei</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">17,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Gebratenes Lachsfilet, Zitronenrahm, Blattspinat</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Kräuterseitling mit Kartoffelstampf</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">16,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Mit Béchamel-Sauce</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Pesto Spaghetti mit Pulpo</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">19,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Pesto, Spaghetti, gebratener Pulpo</p>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="item-header">
+                                        <span class="item-name">Mediterrane Spaghetti mit Gambas</span>
+                                        <span class="item-dots"></span>
+                                        <span class="item-price">17,00 €</span>
+                                    </div>
+                                    <p class="item-desc">Tomatensugo, Gambas, Spaghetti, Kirschtomaten</p>
+                                </div>
+                            </div>
+                            <div class="page-number">10</div>
+                        </div>
+
+                        <!-- Page 11 (Right) -->
                         <div class="book-page right-page">
                             <div class="page-image">
                                 <img src="images/Capuccino.png" alt="Unsere Kaffeespezialitäten">
@@ -391,42 +851,33 @@
                                 "Ein guter Kaffee ist wie ein Zauberspruch —
                                 er verwandelt den Morgen in etwas Besonderes."
                             </p>
-                            <div class="page-number">3</div>
+                            <div class="page-number">11</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Navigation -->
-                <div class="book-navigation" id="bookNav">
-                    <button class="nav-btn prev-btn" id="prevPage" disabled>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                        <span>Zurück</span>
-                    </button>
-                    <div class="page-indicator">
-                        <span id="currentPage">1</span> / <span id="totalPages">3</span>
                     </div>
-                    <button class="nav-btn next-btn" id="nextPage">
-                        <span>Weiter</span>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </button>
+
+                    <!-- Book Navigation -->
+                    <div class="book-navigation" id="bookNav">
+                        <button class="nav-btn prev-btn" id="prevPage" aria-label="Vorherige Seite" disabled>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div class="page-indicator" aria-live="polite" aria-atomic="true">
+                            <span id="currentPage">1</span> / <span id="totalPages">11</span>
+                        </div>
+                        <button class="nav-btn next-btn" id="nextPage" aria-label="Nächste Seite">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="menu-download scroll-animate">
-            <a href="Speisekarte.pdf" download class="download-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span>Komplette Speisekarte als PDF</span>
-            </a>
         </div>
     </section>
 
@@ -435,7 +886,7 @@
         <div class="experience-bg-parallax"></div>
         <div class="experience-container">
             <div class="experience-header">
-                <div class="section-badge scroll-animate">Das Café Erlebnis</div>
+                <div class="section-badge scroll-animate">Das CaFEE Erlebnis</div>
                 <h2 class="section-title scroll-animate">
                     <span class="title-display">Mehr als</span>
                     <span class="title-script">nur Kaffee</span>
@@ -466,7 +917,7 @@
                     <h3>Herzliche Atmosphäre</h3>
                     <p>
                         Von der warmen Begrüßung bis zum letzten Schluck —
-                        bei uns sind Sie nicht Gast, sondern Teil unserer Café-Familie.
+                        bei uns bist du nicht Gast, sondern Teil unserer CaFEE-Familie.
                     </p>
                 </div>
 
@@ -481,20 +932,21 @@
                     </div>
                     <h3>Ein besonderer Ort</h3>
                     <p>
-                        Die historische Brückenmühle mit ihrem einzigartigen Charme
-                        bietet den perfekten Rahmen für unvergessliche Momente.
+                        Die Brückenmühle wurde erstmals im Jahr 1300 erwähnt. Seit Jahrhunderten lebt hier Geschichte
+                        weiter, und der besondere Charme vergangener Zeiten ist bis heute spürbar.
                     </p>
                 </div>
 
                 <!-- Card 4 -->
                 <div class="experience-card scroll-animate" data-delay="300">
                     <div class="card-icon">
-                        <img src="images/Kaffee Icon.png" alt="" class="card-icon-img card-icon-tint" aria-hidden="true">
+                        <img src="images/Kaffee Icon.png" alt="" class="card-icon-img card-icon-tint"
+                            aria-hidden="true">
                     </div>
                     <h3>Handwerkskunst</h3>
                     <p>
-                        Jede Tasse Kaffee wird mit meisterhafter Präzision zubereitet.
-                        Jeder Kuchen nach traditionellen Rezepten gebacken.
+                        Jeder Kaffee und jede Mahlzeit wird genau so zubereitet, wie es im Team abgestimmt und mit
+                        Sorgfalt abgeschmeckt wurde. Persönlichkeit spürbar in jedem Detail.
                     </p>
                 </div>
             </div>
@@ -547,7 +999,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
@@ -577,7 +1030,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
@@ -605,7 +1059,8 @@
                                 </video>
                             </div>
                             <div class="interview-play-wrapper">
-                                <button type="button" class="play-button interview-play-btn" aria-label="Interview mit Ton in Lightbox ansehen">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
@@ -614,7 +1069,7 @@
                         </div>
                         <div class="interview-text-side">
                             <div class="interview-quote-mark">&ldquo;</div>
-                            <p class="interview-quote">Als Fotograf habe ich schon viele Cafés gesehen, aber die
+                            <p class="interview-quote">Als Fotograf habe ich schon viele CaFEEs gesehen, aber die
                                 Brückenmühle hat etwas Magisches. Die alten Mauern, das warme Licht — hier stimmt
                                 einfach alles.</p>
                             <div class="interview-author">
@@ -660,8 +1115,7 @@
                     <span class="title-script">Team</span>
                 </h2>
                 <p class="section-subtitle scroll-animate">
-                    Mit Leidenschaft, Liebe und einem Lächeln — lernen Sie die Menschen kennen,
-                    die das CaFEE Brückenmühle zu dem machen, was es ist.
+                    Lerne die Menschen kennen, die das CaFEE Brückenmühle zu dem machen, was es ist.
                 </p>
             </div>
 
@@ -669,7 +1123,7 @@
                 <!-- Team Member 1 - Fee -->
                 <div class="team-card scroll-animate" data-delay="0">
                     <div class="card-image">
-                        <img src="images/Team/Fee.jpg" alt="Fee">
+                        <img src="images/Team/Fee.png" alt="Fee">
 
                     </div>
                     <div class="card-content">
@@ -681,7 +1135,7 @@
                 <!-- Team Member 2 -->
                 <div class="team-card scroll-animate" data-delay="100">
                     <div class="card-image">
-                        <img src="images/Team/Fabian.jpg" alt="Fabian">
+                        <img src="images/Team/Fabian.png" alt="Fabian">
                     </div>
                     <div class="card-content">
                         <h3>Fabian</h3>
@@ -692,7 +1146,7 @@
                 <!-- Team Member 3 -->
                 <div class="team-card scroll-animate" data-delay="200">
                     <div class="card-image">
-                        <img src="images/Team/Vanessa.jpg" alt="Vanessa">
+                        <img src="images/Team/Vanessa.png" alt="Vanessa">
                     </div>
                     <div class="card-content">
                         <h3>Vanessa</h3>
@@ -716,13 +1170,17 @@
             <div class="reservation-content scroll-animate">
                 <div class="section-badge light">Reservierung</div>
                 <h2 class="reservation-title">
-                    <span>Werden Sie Teil</span>
+                    <span>Werde Teil</span>
                     <span class="title-accent">unserer Geschichte</span>
                 </h2>
                 <p class="reservation-text">
                     Ob gemütliches Frühstück, entspannter Nachmittagskaffee oder ein besonderer Anlass —
-                    wir freuen uns darauf, Sie bei uns zu begrüßen. Reservieren Sie Ihren Platz in der Brückenmühle.
+                    wir freuen uns darauf, dich bei uns zu begrüßen. Reserviere deinen Platz in der Brückenmühle.
                 </p>
+                <div class="reservation-widget">
+                    <script type='text/javascript'
+                        src='https://www.opentable.de/widget/reservation/loader?rid=457257&type=standard&theme=wide&color=8&dark=false&iframe=false&domain=de&lang=de-DE&newtab=false&ot_source=Restaurant%20website&font=garamond&ot_logo=subtle&primary_color=c18b71&primary_font_color=333333&button_color=000000&button_font_color=ffffff&cfe=true'></script>
+                </div>
 
                 <div class="reservation-info">
                     <div class="info-item">
@@ -734,7 +1192,7 @@
                         </svg>
                         <div>
                             <strong>Adresse</strong>
-                            <span>Brückenstraße 12,<br>12345 Musterstadt</span>
+                            <span>Hofstätte 2,<br>76593 Gernsbach</span>
                         </div>
                     </div>
                     <div class="info-item">
@@ -756,13 +1214,13 @@
                         </svg>
                         <div>
                             <strong>Telefon</strong>
-                            <span>+49 123 456 789</span>
+                            <span><a href="tel:+4915110310059">+49 151/103 100 59</a></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="reservation-buttons">
-                    <a href="tel:+49123456789" class="btn btn-primary">
+                    <a href="tel:+4915110310059" class="btn btn-primary">
                         <span class="btn-glow"></span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path
@@ -771,7 +1229,7 @@
                         </svg>
                         <span class="btn-text">Jetzt anrufen</span>
                     </a>
-                    <a href="mailto:hallo@cafee-brueckenmuehle.de" class="btn btn-secondary-light">
+                    <a href="mailto:Cafee.brueckenmuehle@gmail.com" class="btn btn-secondary-light">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                                 stroke="currentColor" stroke-width="2" />
@@ -787,15 +1245,15 @@
                 <form class="contact-form">
                     <div class="form-group">
                         <label for="name" class="sr-only">Name</label>
-                        <input type="text" id="name" placeholder="Ihr Name" required>
+                        <input type="text" id="name" placeholder="Dein Name" required>
                     </div>
                     <div class="form-group">
                         <label for="email" class="sr-only">E-Mail</label>
-                        <input type="email" id="email" placeholder="Ihre E-Mail" required>
+                        <input type="email" id="email" placeholder="Deine E-Mail" required>
                     </div>
                     <div class="form-group">
                         <label for="message" class="sr-only">Nachricht</label>
-                        <textarea id="message" rows="4" placeholder="Ihre Nachricht an uns..." required></textarea>
+                        <textarea id="message" rows="4" placeholder="Deine Nachricht an uns..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary btn-full">
                         <span>Nachricht senden</span>
@@ -819,7 +1277,7 @@
                     <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE Brückenmühle Logo" class="footer-logo">
                     <p>
                         Ein magischer Ort für Kaffeeliebhaber.
-                        Wo jede Tasse eine Geschichte erzählt.
+                        Wo Genuss Flügel hat.
                     </p>
                 </div>
                 <div class="footer-links">
@@ -835,10 +1293,10 @@
                     <div class="footer-column">
                         <h4>Kontakt</h4>
                         <ul>
-                            <li>Brückenstraße 12</li>
-                            <li>12345 Musterstadt</li>
-                            <li><a href="tel:+49123456789">+49 123 456 789</a></li>
-                            <li><a href="mailto:hallo@cafee-brueckenmuehle.de">hallo@cafee-brueckenmuehle.de</a></li>
+                            <li>Hofstätte 2</li>
+                            <li>76593 Gernsbach</li>
+                            <li><a href="tel:+4915110310059">+49 151/103 100 59</a></li>
+                            <li><a href="mailto:Cafee.brueckenmuehle@gmail.com">Cafee.brueckenmuehle@gmail.com</a></li>
                         </ul>
                     </div>
                     <div class="footer-column">
@@ -896,6 +1354,12 @@
                 <source src="" type="video/mp4">
             </video>
         </div>
+    </div>
+
+    <!-- OpenTable Fallback Overlay -->
+    <div class="ot-fallback-modal" id="otFallbackModal" aria-hidden="true">
+        <button class="ot-fallback-close" id="otFallbackClose" aria-label="Schließen">&times;</button>
+        <iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="lazy"></iframe>
     </div>
 
     <script src="script.js"></script>

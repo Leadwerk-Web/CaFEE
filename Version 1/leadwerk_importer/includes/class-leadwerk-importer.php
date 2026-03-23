@@ -53,12 +53,19 @@ class Leadwerk_Importer {
 			@set_time_limit( 300 );
 		}
 		Leadwerk_Logger::log( $this->dry_run ? '--- Dry-Run ---' : '--- Import (Apply) ---' );
+		if ( ! $this->dry_run ) {
+			$this->apply_site_identity();
+		}
 		$pages = $this->manifest['pages'] ?? array();
 		foreach ( $pages as $page_config ) {
 			$this->process_page( $page_config );
 		}
 		// Medien aus source_assets auflisten (Dry-Run) bzw. in Mediathek importieren (Apply).
 		$this->run_media_import();
+		// Favicon (site_icon) setzen.
+		if ( ! $this->dry_run && $this->media_importer ) {
+			$this->set_site_icon();
+		}
 		// Startseite: ACF home_sections aus index.html befüllen (nur bei Apply).
 		if ( ! $this->dry_run && $this->source_root !== '' ) {
 			$front_page_id = $this->find_page_by_source_key( 'cafee-home-v1' );
@@ -66,6 +73,11 @@ class Leadwerk_Importer {
 				$filler = new Leadwerk_ACF_Filler();
 				$filler->fill_front_page( $front_page_id, $this->source_root );
 			}
+		}
+		// ACF-Optionsseite befüllen (Logo, Kontakt, Social, Footer etc.).
+		if ( ! $this->dry_run ) {
+			$this->fill_acf_options();
+			$this->create_wpforms_contact();
 		}
 		Leadwerk_Logger::save();
 	}
@@ -179,6 +191,286 @@ class Leadwerk_Importer {
 			update_option( 'show_on_front', 'page' );
 			update_option( 'page_on_front', (int) $existing );
 			Leadwerk_Logger::log( "Startseite gesetzt: ID $existing" );
+		}
+		if ( $existing && ! $this->dry_run && ! empty( $config['seo'] ) ) {
+			$this->apply_seo_meta( $existing, $config['seo'], $config );
+		}
+	}
+
+	/**
+	 * Yoast SEO Meta-Felder auf eine Seite schreiben.
+	 * Funktioniert auch ohne Yoast (reines Post-Meta) – Yoast liest diese Felder automatisch.
+	 */
+	protected function apply_seo_meta( $post_id, $seo, $config = array() ) {
+		$fields_written = array();
+
+		if ( ! empty( $seo['title'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_title', sanitize_text_field( $seo['title'] ) );
+			$fields_written[] = 'title';
+		}
+
+		if ( ! empty( $seo['meta_description'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_metadesc', sanitize_text_field( $seo['meta_description'] ) );
+			$fields_written[] = 'metadesc';
+		}
+
+		if ( ! empty( $seo['focus_keyphrase'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_focuskw', sanitize_text_field( $seo['focus_keyphrase'] ) );
+			$fields_written[] = 'focuskw';
+		}
+
+		if ( ! empty( $seo['meta_robots'] ) ) {
+			$robots = sanitize_text_field( $seo['meta_robots'] );
+			if ( strpos( $robots, 'noindex' ) !== false ) {
+				update_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex', '1' );
+				$fields_written[] = 'noindex';
+			}
+			if ( strpos( $robots, 'nofollow' ) !== false ) {
+				update_post_meta( $post_id, '_yoast_wpseo_meta-robots-nofollow', '1' );
+				$fields_written[] = 'nofollow';
+			}
+		}
+
+		// Open Graph
+		if ( ! empty( $seo['og_title'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_opengraph-title', sanitize_text_field( $seo['og_title'] ) );
+			$fields_written[] = 'og:title';
+		}
+		if ( ! empty( $seo['og_description'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_opengraph-description', sanitize_text_field( $seo['og_description'] ) );
+			$fields_written[] = 'og:description';
+		}
+		if ( ! empty( $seo['og_image_source'] ) && $this->media_importer ) {
+			$og_img_id = $this->media_importer->get_attachment_id_by_source( $seo['og_image_source'] );
+			if ( ! $og_img_id ) {
+				$filler = new Leadwerk_ACF_Filler();
+				$og_img_id = $filler->get_attachment_id_by_source( $seo['og_image_source'] );
+			}
+			if ( $og_img_id ) {
+				$og_url = wp_get_attachment_url( $og_img_id );
+				if ( $og_url ) {
+					update_post_meta( $post_id, '_yoast_wpseo_opengraph-image', $og_url );
+					update_post_meta( $post_id, '_yoast_wpseo_opengraph-image-id', $og_img_id );
+					$fields_written[] = 'og:image';
+				}
+			}
+		}
+
+		// Twitter/X Cards (gleiche Werte wie OG falls nicht separat definiert)
+		$tw_title = ! empty( $seo['twitter_title'] ) ? $seo['twitter_title'] : ( $seo['og_title'] ?? '' );
+		$tw_desc  = ! empty( $seo['twitter_description'] ) ? $seo['twitter_description'] : ( $seo['og_description'] ?? '' );
+		if ( $tw_title ) {
+			update_post_meta( $post_id, '_yoast_wpseo_twitter-title', sanitize_text_field( $tw_title ) );
+			$fields_written[] = 'twitter:title';
+		}
+		if ( $tw_desc ) {
+			update_post_meta( $post_id, '_yoast_wpseo_twitter-description', sanitize_text_field( $tw_desc ) );
+			$fields_written[] = 'twitter:description';
+		}
+
+		// Schema-Typ (Yoast Schema: page_type / article_type)
+		if ( ! empty( $seo['schema_type'] ) ) {
+			update_post_meta( $post_id, '_yoast_wpseo_schema_page_type', sanitize_text_field( $seo['schema_type'] ) );
+			$fields_written[] = 'schema:' . $seo['schema_type'];
+		}
+
+		if ( ! empty( $fields_written ) ) {
+			Leadwerk_Logger::log( "SEO-Meta für ID $post_id: " . implode( ', ', $fields_written ) );
+		}
+	}
+
+	/**
+	 * ACF-Optionsseite befüllen: Logo, Kontakt, Öffnungszeiten, Social, Footer.
+	 */
+	protected function fill_acf_options() {
+		if ( ! function_exists( 'update_field' ) ) {
+			Leadwerk_Logger::log( 'ACF-Optionen übersprungen (ACF nicht aktiv).' );
+			return;
+		}
+		$fields_set = array();
+
+		// Logo (Header) – aus Mediathek per Quellpfad
+		$logo_path = 'images/Logo CaFEE vektorisiert.svg';
+		$logo_id   = $this->resolve_attachment( $logo_path );
+		if ( $logo_id ) {
+			update_field( 'logo', $logo_id, 'option' );
+			$fields_set[] = 'logo=' . $logo_id;
+		}
+
+		// Footer-Logo (gleich wie Header-Logo, wenn nicht separat)
+		if ( $logo_id ) {
+			update_field( 'footer_logo', $logo_id, 'option' );
+			$fields_set[] = 'footer_logo=' . $logo_id;
+		}
+
+		// Footer-Text
+		update_field( 'footer_text', "Ein magischer Ort für Kaffeeliebhaber.\nWo Genuss Flügel hat.", 'option' );
+		$fields_set[] = 'footer_text';
+
+		// Copyright
+		update_field( 'copyright_text', '© ' . date( 'Y' ) . ' CaFEE Brückenmühle. Alle Rechte vorbehalten.', 'option' );
+		$fields_set[] = 'copyright_text';
+
+		// Kontakt
+		update_field( 'street', 'Hofstätte 2', 'option' );
+		update_field( 'city', '76593 Gernsbach', 'option' );
+		update_field( 'phone', '+49 151/103 100 59', 'option' );
+		update_field( 'email', 'Cafee.brueckenmuehle@gmail.com', 'option' );
+		$fields_set[] = 'kontakt';
+
+		// Öffnungszeiten
+		$hours = "Montag: Ruhetag\nDi – Fr: 8 – 18 Uhr\nSa – So: 9 – 18 Uhr";
+		update_field( 'opening_hours', $hours, 'option' );
+		$fields_set[] = 'opening_hours';
+
+		// Social Media
+		update_field( 'instagram_url', 'https://instagram.com', 'option' );
+		update_field( 'facebook_url', 'https://facebook.com', 'option' );
+		$fields_set[] = 'social';
+
+		Leadwerk_Logger::log( 'ACF-Optionen befüllt: ' . implode( ', ', $fields_set ) );
+	}
+
+	/**
+	 * Attachment-ID über Medienimporter oder ACF-Filler-Fallback auflösen.
+	 */
+	protected function resolve_attachment( $source_path ) {
+		if ( $this->media_importer ) {
+			$id = $this->media_importer->get_attachment_id_by_source( $source_path );
+			if ( $id ) {
+				return $id;
+			}
+		}
+		$filler = new Leadwerk_ACF_Filler();
+		return $filler->get_attachment_id_by_source( $source_path );
+	}
+
+	/**
+	 * WPForms-Kontaktformular erstellen (Name, E-Mail, Nachricht) und ID in ACF-Options speichern.
+	 */
+	protected function create_wpforms_contact() {
+		if ( ! function_exists( 'wpforms' ) ) {
+			Leadwerk_Logger::log( 'WPForms nicht installiert – Formular-Erstellung übersprungen.' );
+			return;
+		}
+		if ( function_exists( 'get_field' ) ) {
+			$existing_id = (int) get_field( 'wpforms_reservation_id', 'option' );
+			if ( $existing_id && get_post_status( $existing_id ) ) {
+				Leadwerk_Logger::log( "WPForms-Formular bereits vorhanden: ID $existing_id" );
+				return;
+			}
+		}
+		$form_data = array(
+			'fields' => array(
+				'1' => array(
+					'id'          => '1',
+					'type'        => 'name',
+					'label'       => 'Name',
+					'format'      => 'simple',
+					'required'    => '1',
+					'size'        => 'large',
+					'placeholder' => 'Dein Name',
+				),
+				'2' => array(
+					'id'          => '2',
+					'type'        => 'email',
+					'label'       => 'E-Mail',
+					'required'    => '1',
+					'size'        => 'large',
+					'placeholder' => 'Deine E-Mail',
+				),
+				'3' => array(
+					'id'          => '3',
+					'type'        => 'textarea',
+					'label'       => 'Nachricht',
+					'required'    => '1',
+					'size'        => 'large',
+					'placeholder' => 'Deine Nachricht an uns...',
+				),
+			),
+			'settings' => array(
+				'form_title'             => 'CaFEE Kontaktformular',
+				'submit_text'            => 'Nachricht senden',
+				'submit_text_processing' => 'Wird gesendet...',
+				'notification_enable'    => '1',
+				'notifications'          => array(
+					'1' => array(
+						'email'          => '{admin_email}',
+						'subject'        => 'Neue Nachricht von {field_id="1"} – CaFEE Brückenmühle',
+						'sender_name'    => 'CaFEE Brückenmühle',
+						'sender_address' => '{admin_email}',
+						'replyto'        => '{field_id="2"}',
+						'message'        => "Name: {field_id=\"1\"}\nE-Mail: {field_id=\"2\"}\n\nNachricht:\n{field_id=\"3\"}",
+					),
+				),
+				'confirmations' => array(
+					'1' => array(
+						'type'    => 'message',
+						'message' => '<div class="contact-form-success"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h3>Vielen Dank!</h3><p>Deine Nachricht wurde gesendet. Wir melden uns bei dir.</p></div>',
+					),
+				),
+				'antispam'    => '1',
+				'form_class'  => 'contact-form',
+			),
+		);
+		$form_id = wp_insert_post( array(
+			'post_title'   => 'CaFEE Kontaktformular',
+			'post_status'  => 'publish',
+			'post_type'    => 'wpforms',
+			'post_content' => wp_json_encode( $form_data ),
+		) );
+		if ( $form_id && ! is_wp_error( $form_id ) ) {
+			if ( function_exists( 'update_field' ) ) {
+				update_field( 'wpforms_reservation_id', $form_id, 'option' );
+			}
+			Leadwerk_Logger::log( "WPForms-Formular erstellt: ID $form_id (ACF-Option gesetzt)" );
+		} else {
+			Leadwerk_Logger::log( 'WPForms-Formular konnte nicht erstellt werden.' );
+		}
+	}
+
+	/**
+	 * WordPress Site-Titel und Tagline aus dem Manifest setzen.
+	 */
+	protected function apply_site_identity() {
+		$site_title   = $this->manifest['site_title'] ?? '';
+		$site_tagline = $this->manifest['site_tagline'] ?? '';
+		if ( $site_title ) {
+			update_option( 'blogname', $site_title );
+			Leadwerk_Logger::log( "Site-Titel gesetzt: $site_title" );
+		}
+		if ( $site_tagline ) {
+			update_option( 'blogdescription', $site_tagline );
+			Leadwerk_Logger::log( "Site-Tagline gesetzt: $site_tagline" );
+		}
+	}
+
+	/**
+	 * Favicon als WordPress site_icon setzen (Attachment-ID aus Medienimport).
+	 */
+	protected function set_site_icon() {
+		$favicon_path = 'images/Fee CaFEE_favicon_ohne Dampf.svg';
+		$id = $this->media_importer->get_attachment_id_by_source( $favicon_path );
+		if ( ! $id ) {
+			$norm = trim( str_replace( array( '\\', '//' ), '/', $favicon_path ), '/' );
+			$q = new WP_Query( array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'any',
+				'meta_key'       => 'leadwerk_source_path',
+				'meta_value'     => $norm,
+				'fields'         => 'ids',
+				'posts_per_page' => 1,
+			) );
+			$ids = $q->get_posts();
+			if ( ! empty( $ids ) ) {
+				$id = (int) $ids[0];
+			}
+		}
+		if ( $id ) {
+			update_option( 'site_icon', $id );
+			Leadwerk_Logger::log( "Favicon (site_icon) gesetzt: Attachment-ID $id" );
+		} else {
+			Leadwerk_Logger::log( 'Favicon: Attachment für Fee-SVG nicht gefunden.' );
 		}
 	}
 
