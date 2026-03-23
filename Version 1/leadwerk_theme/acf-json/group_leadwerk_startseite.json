@@ -14,6 +14,7 @@
           "label": "Hero",
           "sub_fields": [
             { "key": "f_hero_bg_video", "name": "background_video", "label": "Hintergrund-Video (MP4)", "type": "file", "mime_types": "mp4", "return_format": "array" },
+            { "key": "f_hero_poster", "name": "hero_poster", "label": "Hero-Poster (optional, bis Video startet)", "type": "image", "return_format": "array", "preview_size": "medium" },
             { "key": "f_hero_badge", "name": "badge_text", "label": "Badge-Text", "type": "text" },
             { "key": "f_hero_l1", "name": "title_line_1", "label": "Titel Zeile 1", "type": "text" },
             { "key": "f_hero_l2", "name": "title_line_2_accent", "label": "Titel Zeile 2 (Akzent)", "type": "text" },

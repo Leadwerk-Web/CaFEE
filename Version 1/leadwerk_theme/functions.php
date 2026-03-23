@@ -220,64 +220,65 @@ function leadwerk_theme_legal_pages_back_link( $content ) {
 add_filter( 'the_content', 'leadwerk_theme_legal_pages_back_link', 20 );
 
 /**
- * URL des Hero-Hintergrundvideos (erstes hero-Layout in home_sections der Startseite).
+ * Kanonische URL für ACF-Datei-Felder (Video/Audio): bevorzugt Anhang-ID → wp_get_attachment_url (identisch mit Preload).
  *
- * @return string
+ * @param mixed $vid ACF file (array|int|string).
+ * @return string Absolute URL oder leer.
  */
-function leadwerk_theme_get_hero_background_video_url() {
-	if ( ! function_exists( 'get_field' ) ) {
+function leadwerk_theme_resolve_acf_file_video_url( $vid ) {
+	if ( $vid === null || $vid === '' || ( is_array( $vid ) && $vid === array() ) ) {
 		return '';
 	}
-	$front_id = (int) get_option( 'page_on_front' );
-	if ( ! $front_id ) {
-		return '';
-	}
-	$sections = get_field( 'home_sections', $front_id );
-	if ( ! is_array( $sections ) ) {
-		return '';
-	}
-	foreach ( $sections as $section ) {
-		if ( ! is_array( $section ) || ( isset( $section['acf_fc_layout'] ) ? $section['acf_fc_layout'] : '' ) !== 'hero' ) {
-			continue;
-		}
-		$vid = isset( $section['background_video'] ) ? $section['background_video'] : null;
-		if ( is_array( $vid ) ) {
-			if ( ! empty( $vid['url'] ) ) {
-				return (string) $vid['url'];
-			}
-			$id = isset( $vid['ID'] ) ? (int) $vid['ID'] : 0;
-			if ( $id ) {
-				$u = wp_get_attachment_url( $id );
-				return $u ? $u : '';
-			}
-			return '';
-		}
-		if ( is_numeric( $vid ) ) {
-			$u = wp_get_attachment_url( (int) $vid );
+	if ( is_array( $vid ) ) {
+		$id = isset( $vid['ID'] ) ? (int) $vid['ID'] : 0;
+		if ( $id ) {
+			$u = wp_get_attachment_url( $id );
 			return $u ? $u : '';
 		}
+		if ( ! empty( $vid['url'] ) ) {
+			return esc_url_raw( (string) $vid['url'] );
+		}
 		return '';
+	}
+	if ( is_numeric( $vid ) ) {
+		$u = wp_get_attachment_url( (int) $vid );
+		return $u ? $u : '';
+	}
+	$v = trim( (string) $vid );
+	if ( $v !== '' && filter_var( $v, FILTER_VALIDATE_URL ) ) {
+		return esc_url_raw( $v );
 	}
 	return '';
 }
 
 /**
- * Hero-Video früh laden (Preload im head, damit der Download parallel zu CSS/Fonts startet).
+ * Kanonische Bild-URL für ACF-Bildfelder (Poster o. ä.).
+ *
+ * @param mixed  $img  ACF image (array|int).
+ * @param string $size Bildgröße.
+ * @return string
  */
-function leadwerk_theme_preload_hero_background_video() {
-	if ( ! is_front_page() ) {
-		return;
+function leadwerk_theme_resolve_acf_image_url( $img, $size = 'large' ) {
+	if ( $img === null || $img === '' || ( is_array( $img ) && $img === array() ) ) {
+		return '';
 	}
-	$url = leadwerk_theme_get_hero_background_video_url();
-	if ( ! $url ) {
-		return;
+	if ( ! is_array( $img ) && ! is_numeric( $img ) ) {
+		return '';
 	}
-	printf(
-		'<link rel="preload" href="%s" as="video" type="video/mp4" fetchpriority="high" />' . "\n",
-		esc_url( $url )
-	);
+	if ( is_array( $img ) ) {
+		$id = isset( $img['ID'] ) ? (int) $img['ID'] : 0;
+		if ( $id ) {
+			$u = wp_get_attachment_image_url( $id, $size );
+			return $u ? $u : '';
+		}
+		if ( ! empty( $img['url'] ) ) {
+			return esc_url_raw( (string) $img['url'] );
+		}
+		return '';
+	}
+	$u = wp_get_attachment_image_url( (int) $img, $size );
+	return $u ? $u : '';
 }
-add_action( 'wp_head', 'leadwerk_theme_preload_hero_background_video', 0 );
 
 /**
  * Favicon: SVG-Favicon aus Theme-Assets einbinden, wenn kein site_icon gesetzt.

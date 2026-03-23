@@ -53,14 +53,15 @@ function leadwerk_render_hero( $f ) {
 	$btn1_u  = isset( $f['button_1_url'] ) ? $f['button_1_url'] : '#reservation';
 	$btn2_t  = isset( $f['button_2_text'] ) ? $f['button_2_text'] : 'Speisekarte entdecken';
 	$btn2_u  = isset( $f['button_2_url'] ) ? $f['button_2_url'] : '#menu';
-	$vid     = isset( $f['background_video'] ) ? $f['background_video'] : null;
-	$vid_id  = is_array( $vid ) && isset( $vid['ID'] ) ? (int) $vid['ID'] : ( is_numeric( $vid ) ? (int) $vid : 0 );
-	$vid_url = $vid_id ? wp_get_attachment_url( $vid_id ) : '';
+	$vid        = isset( $f['background_video'] ) ? $f['background_video'] : null;
+	$vid_url    = function_exists( 'leadwerk_theme_resolve_acf_file_video_url' ) ? leadwerk_theme_resolve_acf_file_video_url( $vid ) : '';
+	$poster_raw = isset( $f['hero_poster'] ) ? $f['hero_poster'] : null;
+	$poster_url = function_exists( 'leadwerk_theme_resolve_acf_image_url' ) ? leadwerk_theme_resolve_acf_image_url( $poster_raw, 'large' ) : '';
 	?>
 	<section class="hero" id="home">
 		<div class="hero-parallax-bg">
 			<?php if ( $vid_url ) : ?>
-				<video autoplay muted loop playsinline preload="auto" fetchpriority="high" class="hero-bg-video" aria-hidden="true">
+				<video autoplay muted loop playsinline class="hero-bg-video" aria-hidden="true"<?php echo $poster_url ? ' poster="' . esc_url( $poster_url ) . '"' : ''; ?>>
 					<source src="<?php echo esc_url( $vid_url ); ?>" type="video/mp4">
 				</video>
 			<?php endif; ?>
