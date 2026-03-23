@@ -1,5 +1,6 @@
 {
   "version": "1",
+  "wpforms_reservation_form_id": 171,
   "source_root": "",
   "site_title": "CaFEE Brückenmühle – Café in Gernsbach",
   "site_tagline": "Wo Magie auf Kaffee trifft",
@@ -16,7 +17,7 @@
         "meta_description": "Willkommen im CaFEE Brückenmühle in Gernsbach – handgemachte Kaffeespezialitäten, hausgemachter Kuchen und ein verzaubertes Frühstück in historischem Ambiente. Jetzt Tisch reservieren!",
         "og_title": "CaFEE Brückenmühle – Wo Magie auf Kaffee trifft ✨",
         "og_description": "Ein magischer Ort für Kaffeeliebhaber in der historischen Brückenmühle Gernsbach. Handgemachte Spezialitäten, liebevolle Atmosphäre und Genuss, der Flügel hat.",
-        "og_image_source": "images/Frühstück.png",
+        "og_image_source": "images/Cupcake.svg",
         "focus_keyphrase": "CaFEE Brückenmühle Gernsbach",
         "schema_type": "LocalBusiness"
       }
@@ -44,6 +45,19 @@
       "seo": {
         "title": "Datenschutzerklärung – CaFEE Brückenmühle Gernsbach",
         "meta_description": "Datenschutzerklärung des CaFEE Brückenmühle. Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäß DSGVO.",
+        "meta_robots": "noindex, follow"
+      }
+    },
+    {
+      "source_key": "danke-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "danke",
+      "title": "Vielen Dank",
+      "content_file": "danke-content.html",
+      "seo": {
+        "title": "Vielen Dank – CaFEE Brückenmühle",
+        "meta_description": "Ihre Nachricht an das CaFEE Brückenmühle wurde übermittelt.",
         "meta_robots": "noindex, follow"
       }
     }

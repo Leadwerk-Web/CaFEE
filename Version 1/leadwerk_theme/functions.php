@@ -14,6 +14,57 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'LEADWERK_THEME_VERSION', '1.0.0' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
+/** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
+define( 'LEADWERK_WPFORMS_RESERVATION_DEFAULT_ID', 171 );
+
+/**
+ * WPForms-ID der Kontakt-/Reservierungs-Sektion (ACF-Option oder Theme-Konstante).
+ *
+ * @return int
+ */
+function leadwerk_theme_get_reservation_wpforms_id() {
+	$id = 0;
+	if ( function_exists( 'get_field' ) ) {
+		$id = (int) get_field( 'wpforms_reservation_id', 'option' );
+	}
+	if ( ! $id && defined( 'LEADWERK_WPFORMS_RESERVATION_DEFAULT_ID' ) ) {
+		$id = (int) LEADWERK_WPFORMS_RESERVATION_DEFAULT_ID;
+	}
+	return $id;
+}
+
+/**
+ * Nach erfolgreicher Übermittlung zur Danke-Seite weiterleiten (statt Inline-Meldung).
+ * Setzt die Bestätigung für das CaFEE-Kontaktformular per Filter, damit auch AJAX-Submit funktioniert.
+ *
+ * @param array $form_data Formular-Daten (dekodiert).
+ * @param array $entry     Roh-Eintrag.
+ * @return array
+ */
+function leadwerk_theme_wpforms_force_danke_redirect( $form_data, $entry ) {
+	if ( empty( $form_data['id'] ) ) {
+		return $form_data;
+	}
+	$target = leadwerk_theme_get_reservation_wpforms_id();
+	if ( ! $target || absint( $form_data['id'] ) !== $target ) {
+		return $form_data;
+	}
+	if ( empty( $form_data['settings']['confirmations'] ) || ! is_array( $form_data['settings']['confirmations'] ) ) {
+		return $form_data;
+	}
+	$danke = home_url( '/danke/' );
+	foreach ( $form_data['settings']['confirmations'] as $key => $conf ) {
+		if ( ! is_array( $conf ) ) {
+			continue;
+		}
+		$form_data['settings']['confirmations'][ $key ]['type']     = 'redirect';
+		$form_data['settings']['confirmations'][ $key ]['redirect'] = $danke;
+		$form_data['settings']['confirmations'][ $key ]['message']  = '';
+		break;
+	}
+	return $form_data;
+}
+add_filter( 'wpforms_process_before_form_data', 'leadwerk_theme_wpforms_force_danke_redirect', 5, 2 );
 
 /**
  * Assets enqueuen: style.css (vollständig im Theme) + JS.
@@ -27,20 +78,206 @@ function leadwerk_theme_enqueue_assets() {
 		LEADWERK_THEME_VERSION
 	);
 	wp_enqueue_script(
+		'leadwerk-page-flip',
+		'https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js',
+		array(),
+		'2.0.7',
+		true
+	);
+	wp_enqueue_script(
 		'leadwerk-theme-main',
 		LEADWERK_THEME_URI . '/assets/js/main.js',
-		array(),
+		array( 'leadwerk-page-flip' ),
 		LEADWERK_THEME_VERSION,
 		true
 	);
+	$page_turn_path = LEADWERK_THEME_DIR . '/assets/audio/page-turn.mp3';
+	$page_turn_url  = is_readable( $page_turn_path )
+		? LEADWERK_THEME_URI . '/assets/audio/page-turn.mp3'
+		: '';
+	wp_localize_script(
+		'leadwerk-theme-main',
+		'cafeeTheme',
+		array(
+			'fairySvgUrl'      => esc_url( LEADWERK_THEME_URI . '/assets/images/Fee CaFEE_favicon_ohne Dampf.svg' ),
+			'pageTurnSoundUrl' => $page_turn_url ? esc_url( $page_turn_url ) : '',
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'leadwerk_theme_enqueue_assets' );
+
+/**
+ * Theme-style.css nach WPForms-Frontend-CSS laden.
+ * Sonst setzen div.wpforms-container-full * und ähnliche Resets unsere .wpforms-cafee-wrap-Regeln außer Kraft (Reihenfolge im HTML).
+ */
+function leadwerk_theme_enqueue_style_after_wpforms() {
+	$theme_handle = 'leadwerk-theme-style';
+	if ( ! wp_style_is( $theme_handle, 'enqueued' ) ) {
+		return;
+	}
+	$wpforms_handles = array(
+		'wpforms-full',
+		'wpforms-pro-full',
+		'wpforms-modern-full',
+	);
+	$deps = array();
+	foreach ( $wpforms_handles as $h ) {
+		if ( wp_style_is( $h, 'enqueued' ) ) {
+			$deps[] = $h;
+		}
+	}
+	if ( empty( $deps ) ) {
+		return;
+	}
+	wp_dequeue_style( $theme_handle );
+	wp_enqueue_style(
+		$theme_handle,
+		get_stylesheet_uri(),
+		$deps,
+		LEADWERK_THEME_VERSION
+	);
+}
+add_action( 'wp_enqueue_scripts', 'leadwerk_theme_enqueue_style_after_wpforms', 2000 );
 
 function leadwerk_theme_dequeue_block_styles() {
 	wp_dequeue_style( 'wp-block-library' );
 	wp_dequeue_style( 'wp-block-library-theme' );
 }
 add_action( 'wp_enqueue_scripts', 'leadwerk_theme_dequeue_block_styles', 100 );
+
+/**
+ * Rechtstexte & Danke: Unterseiten-Klassen; Fee auf allen Seiten (Startseite: Kanten-Modus).
+ *
+ * @param string[] $classes Body-Klassen.
+ * @return string[]
+ */
+function leadwerk_theme_body_class_subpages( $classes ) {
+	if ( ! is_front_page() ) {
+		$classes[] = 'is-subpage';
+	}
+	if ( is_front_page() || is_page( array( 'impressum', 'datenschutz' ) ) ) {
+		$classes[] = 'has-ambient-fairy-home';
+	} else {
+		$classes[] = 'has-ambient-fairy';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'leadwerk_theme_body_class_subpages' );
+
+/**
+ * Unterseiten: Navigation nur „Home“ (zentriert per CSS), Link zur Startseite /#home.
+ *
+ * @param string $block_content Gerendertes Markup des Template-Parts.
+ * @param array  $block       Block-Payload.
+ * @return string
+ */
+function leadwerk_theme_render_navigation_subpage( $block_content, $block ) {
+	$slug = isset( $block['attrs']['slug'] ) ? (string) $block['attrs']['slug'] : '';
+	if ( $slug !== 'navigation' || is_front_page() ) {
+		return $block_content;
+	}
+	$logo_html = do_blocks( '<!-- wp:leadwerk/logo /-->' );
+	$home_href = esc_url( home_url( '/' ) ) . '#home';
+	$nav_label = esc_attr__( 'Hauptmenü', 'leadwerk-theme' );
+	$toggle_label = esc_attr__( 'Navigation öffnen', 'leadwerk-theme' );
+	return '<nav class="wp-block-group nav" id="mainNav" role="navigation" aria-label="' . $nav_label . '">' .
+		'<div class="nav-container">' .
+		$logo_html .
+		'<button type="button" class="nav-toggle" id="navToggle" aria-label="' . $toggle_label . '">' .
+		'<span></span><span></span><span></span>' .
+		'</button>' .
+		'<ul class="nav-menu" id="navMenu">' .
+		'<li><a href="' . $home_href . '">Home</a></li>' .
+		'</ul>' .
+		'</div>' .
+		'</nav>';
+}
+add_filter( 'render_block_core/template-part', 'leadwerk_theme_render_navigation_subpage', 10, 2 );
+
+/**
+ * Impressum & Datenschutz: „Zurück zur Startseite“ wie auf der Danke-Seite, falls im Inhalt noch fehlt.
+ *
+ * @param string $content Beitrags-/Seiteninhalt (gerendert).
+ * @return string
+ */
+function leadwerk_theme_legal_pages_back_link( $content ) {
+	if ( ! is_singular( 'page' ) || is_feed() || is_admin() ) {
+		return $content;
+	}
+	if ( ! is_page( array( 'impressum', 'datenschutz' ) ) ) {
+		return $content;
+	}
+	if ( ! in_the_loop() || ! is_main_query() ) {
+		return $content;
+	}
+	if ( strpos( $content, 'legal-back' ) !== false ) {
+		return $content;
+	}
+	$href  = esc_url( home_url( '/' ) ) . '#home';
+	$label = esc_html__( 'Zurück zur Startseite', 'leadwerk-theme' );
+	return $content . '<p class="legal-back"><a class="btn btn-primary" href="' . $href . '">' . $label . '</a></p>';
+}
+add_filter( 'the_content', 'leadwerk_theme_legal_pages_back_link', 20 );
+
+/**
+ * URL des Hero-Hintergrundvideos (erstes hero-Layout in home_sections der Startseite).
+ *
+ * @return string
+ */
+function leadwerk_theme_get_hero_background_video_url() {
+	if ( ! function_exists( 'get_field' ) ) {
+		return '';
+	}
+	$front_id = (int) get_option( 'page_on_front' );
+	if ( ! $front_id ) {
+		return '';
+	}
+	$sections = get_field( 'home_sections', $front_id );
+	if ( ! is_array( $sections ) ) {
+		return '';
+	}
+	foreach ( $sections as $section ) {
+		if ( ! is_array( $section ) || ( isset( $section['acf_fc_layout'] ) ? $section['acf_fc_layout'] : '' ) !== 'hero' ) {
+			continue;
+		}
+		$vid = isset( $section['background_video'] ) ? $section['background_video'] : null;
+		if ( is_array( $vid ) ) {
+			if ( ! empty( $vid['url'] ) ) {
+				return (string) $vid['url'];
+			}
+			$id = isset( $vid['ID'] ) ? (int) $vid['ID'] : 0;
+			if ( $id ) {
+				$u = wp_get_attachment_url( $id );
+				return $u ? $u : '';
+			}
+			return '';
+		}
+		if ( is_numeric( $vid ) ) {
+			$u = wp_get_attachment_url( (int) $vid );
+			return $u ? $u : '';
+		}
+		return '';
+	}
+	return '';
+}
+
+/**
+ * Hero-Video früh laden (Preload im head, damit der Download parallel zu CSS/Fonts startet).
+ */
+function leadwerk_theme_preload_hero_background_video() {
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$url = leadwerk_theme_get_hero_background_video_url();
+	if ( ! $url ) {
+		return;
+	}
+	printf(
+		'<link rel="preload" href="%s" as="video" type="video/mp4" fetchpriority="high" />' . "\n",
+		esc_url( $url )
+	);
+}
+add_action( 'wp_head', 'leadwerk_theme_preload_hero_background_video', 0 );
 
 /**
  * Favicon: SVG-Favicon aus Theme-Assets einbinden, wenn kein site_icon gesetzt.
@@ -254,6 +491,8 @@ add_filter( 'render_block', 'leadwerk_theme_dynamic_footer' );
  */
 function leadwerk_theme_setup() {
 	add_theme_support( 'title-tag' );
+	add_theme_support( 'editor-styles' );
+	add_editor_style( 'assets/css/editor-gutenberg-reset.css' );
 }
 add_action( 'after_setup_theme', 'leadwerk_theme_setup' );
 
@@ -346,6 +585,57 @@ function leadwerk_theme_document_title( $title ) {
 	return $title;
 }
 add_filter( 'pre_get_document_title', 'leadwerk_theme_document_title', 20 );
+
+/**
+ * Kanonische URL der Startseite (für Formular-Action und Redirects).
+ *
+ * @return string
+ */
+function leadwerk_theme_get_front_url() {
+	if ( get_option( 'show_on_front' ) === 'page' ) {
+		$fp = (int) get_option( 'page_on_front' );
+		if ( $fp ) {
+			return get_permalink( $fp );
+		}
+	}
+	return home_url( '/' );
+}
+
+/**
+ * Kontaktformular (PHP-Fallback): POST vor der Ausgabe verarbeiten, E-Mail senden, nach /danke/ umleiten.
+ */
+function leadwerk_theme_contact_form_template_redirect() {
+	if ( 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) {
+		return;
+	}
+	if ( ! isset( $_POST['leadwerk_contact_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['leadwerk_contact_nonce'] ), 'leadwerk_contact' ) ) {
+		return;
+	}
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$name    = isset( $_POST['leadwerk_name'] ) ? sanitize_text_field( wp_unslash( $_POST['leadwerk_name'] ) ) : '';
+	$email   = isset( $_POST['leadwerk_email'] ) ? sanitize_email( wp_unslash( $_POST['leadwerk_email'] ) ) : '';
+	$message = isset( $_POST['leadwerk_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['leadwerk_message'] ) ) : '';
+	$back    = add_query_arg( 'contact_error', '1', leadwerk_theme_get_front_url() ) . '#reservation';
+	if ( ! $name || ! is_email( $email ) || ! $message ) {
+		wp_safe_redirect( $back );
+		exit;
+	}
+	$to      = function_exists( 'get_field' ) ? get_field( 'email', 'option' ) : get_option( 'admin_email' );
+	$to      = $to ? $to : get_option( 'admin_email' );
+	$subject = 'Neue Nachricht von ' . $name . ' – CaFEE Brückenmühle';
+	$body    = "Name: $name\nE-Mail: $email\n\nNachricht:\n$message";
+	$headers = array( 'Reply-To: ' . $name . ' <' . $email . '>' );
+	$sent    = wp_mail( $to, $subject, $body, $headers );
+	if ( $sent ) {
+		wp_safe_redirect( home_url( '/danke/' ) );
+		exit;
+	}
+	wp_safe_redirect( $back );
+	exit;
+}
+add_action( 'template_redirect', 'leadwerk_theme_contact_form_template_redirect', 0 );
 
 /**
  * Render-Callback: ACF Flexible Content "home_sections" ausgeben.

@@ -304,7 +304,7 @@ class Leadwerk_Importer {
 		}
 
 		// Footer-Text
-		update_field( 'footer_text', "Ein magischer Ort für Kaffeeliebhaber.\nWo Genuss Flügel hat.", 'option' );
+		update_field( 'footer_text', 'Ein magischer Ort für Kaffeeliebhaber. Wo Genuss Flügel hat.', 'option' );
 		$fields_set[] = 'footer_text';
 
 		// Copyright
@@ -353,6 +353,18 @@ class Leadwerk_Importer {
 			Leadwerk_Logger::log( 'WPForms nicht installiert – Formular-Erstellung übersprungen.' );
 			return;
 		}
+		$manifest_form_id = isset( $this->manifest['wpforms_reservation_form_id'] ) ? (int) $this->manifest['wpforms_reservation_form_id'] : 0;
+		if ( $manifest_form_id > 0 ) {
+			$post = get_post( $manifest_form_id );
+			if ( $post && 'wpforms' === $post->post_type && in_array( $post->post_status, array( 'publish', 'draft' ), true ) ) {
+				if ( function_exists( 'update_field' ) ) {
+					update_field( 'wpforms_reservation_id', $manifest_form_id, 'option' );
+					Leadwerk_Logger::log( "WPForms-ID aus Manifest übernommen: $manifest_form_id (kein neues Formular angelegt)" );
+				}
+				return;
+			}
+			Leadwerk_Logger::log( "Manifest-WPForms-ID $manifest_form_id: kein gültiger wpforms-Eintrag – Fallback: vorhandene Option oder Neuanlage." );
+		}
 		if ( function_exists( 'get_field' ) ) {
 			$existing_id = (int) get_field( 'wpforms_reservation_id', 'option' );
 			if ( $existing_id && get_post_status( $existing_id ) ) {
@@ -363,35 +375,44 @@ class Leadwerk_Importer {
 		$form_data = array(
 			'fields' => array(
 				'1' => array(
-					'id'          => '1',
-					'type'        => 'name',
-					'label'       => 'Name',
-					'format'      => 'simple',
-					'required'    => '1',
-					'size'        => 'large',
-					'placeholder' => 'Dein Name',
+					'id'                => '1',
+					'type'              => 'name',
+					'label'             => 'Name',
+					'format'            => 'first-last',
+					'description'       => '',
+					'required'          => '1',
+					'size'              => 'large',
+					'simple_placeholder' => '',
+					'simple_default'   => '',
+					'first_placeholder' => 'Vorname',
+					'first_default'    => '',
+					'middle_placeholder' => '',
+					'middle_default'   => '',
+					'last_placeholder' => 'Nachname',
+					'last_default'     => '',
+					'css'              => '',
 				),
 				'2' => array(
 					'id'          => '2',
 					'type'        => 'email',
-					'label'       => 'E-Mail',
+					'label'       => 'E-Mail-Adresse',
 					'required'    => '1',
 					'size'        => 'large',
-					'placeholder' => 'Deine E-Mail',
+					'placeholder' => '',
 				),
 				'3' => array(
 					'id'          => '3',
 					'type'        => 'textarea',
-					'label'       => 'Nachricht',
-					'required'    => '1',
+					'label'       => 'Kommentar oder Nachricht',
+					'required'    => '0',
 					'size'        => 'large',
-					'placeholder' => 'Deine Nachricht an uns...',
+					'placeholder' => '',
 				),
 			),
 			'settings' => array(
 				'form_title'             => 'CaFEE Kontaktformular',
-				'submit_text'            => 'Nachricht senden',
-				'submit_text_processing' => 'Wird gesendet...',
+				'submit_text'            => 'Absenden',
+				'submit_text_processing' => 'Wird gesendet …',
 				'notification_enable'    => '1',
 				'notifications'          => array(
 					'1' => array(
@@ -400,13 +421,17 @@ class Leadwerk_Importer {
 						'sender_name'    => 'CaFEE Brückenmühle',
 						'sender_address' => '{admin_email}',
 						'replyto'        => '{field_id="2"}',
-						'message'        => "Name: {field_id=\"1\"}\nE-Mail: {field_id=\"2\"}\n\nNachricht:\n{field_id=\"3\"}",
+						'message'        => "Name: {field_id=\"1\"}\nE-Mail: {field_id=\"2\"}\n\nKommentar:\n{field_id=\"3\"}",
 					),
 				),
 				'confirmations' => array(
 					'1' => array(
-						'type'    => 'message',
-						'message' => '<div class="contact-form-success"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><h3>Vielen Dank!</h3><p>Deine Nachricht wurde gesendet. Wir melden uns bei dir.</p></div>',
+						'type'           => 'redirect',
+						'name'           => 'Standardbestätigung',
+						'message'        => '',
+						'message_scroll' => '1',
+						'page'           => '0',
+						'redirect'       => '/danke/',
 					),
 				),
 				'antispam'    => '1',

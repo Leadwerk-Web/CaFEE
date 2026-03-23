@@ -291,6 +291,76 @@ ol {
     }
 }
 
+/* Ambiente Fee (Danke / Impressum / Datenschutz) – unter Nav, Position per JS */
+.ambient-flying-fairy {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: calc(var(--z-fixed) + 15);
+    pointer-events: none;
+    will-change: transform;
+}
+
+.ambient-flying-fairy__img {
+    display: block;
+    width: clamp(2.4rem, 5.5vw, 3.25rem);
+    height: auto;
+    filter: drop-shadow(0 4px 14px rgba(189, 137, 113, 0.5));
+    animation: ambientFairyBob 3.4s ease-in-out infinite;
+}
+
+.ambient-flying-fairy--mobile-header .ambient-flying-fairy__img {
+    width: clamp(1.7rem, 4.8vw, 2.35rem);
+}
+
+@keyframes ambientFairyBob {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-7px) scale(1.04);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient-flying-fairy {
+        display: none !important;
+    }
+}
+
+.ambient-flying-fairy--teleporting .ambient-flying-fairy__img {
+    animation: ambientFairyTeleportMorph 0.52s ease-in-out forwards;
+}
+
+@keyframes ambientFairyTeleportMorph {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        filter: drop-shadow(0 4px 14px rgba(189, 137, 113, 0.5));
+    }
+
+    40% {
+        transform: translateY(0) scale(0.15);
+        opacity: 0.2;
+        filter: blur(5px) brightness(1.8) drop-shadow(0 0 20px rgba(201, 168, 108, 0.9));
+    }
+
+    60% {
+        transform: translateY(0) scale(0.15);
+        opacity: 0.25;
+        filter: blur(5px) brightness(1.8);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        filter: drop-shadow(0 4px 14px rgba(189, 137, 113, 0.5));
+    }
+}
+
 /* ----------------------------------------
    Navigation
    ---------------------------------------- */
@@ -2105,7 +2175,7 @@ body.modal-open .nav {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
     color: var(--color-white);
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-size: clamp(1.55rem, 3.6vw, 2.2rem);
     line-height: 1;
     cursor: pointer;
     z-index: 20;
@@ -2134,9 +2204,19 @@ body.modal-open .nav {
     min-height: 0;
     height: min(clamp(32rem, 90vh, 66rem), calc(100dvh - 4.75rem));
     display: grid;
+    grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
     gap: clamp(0.75rem, 1vw, 1.25rem);
     transform-style: preserve-3d;
+}
+
+/* Cover + PageFlip dieselbe Zelle (1fr), sonst landet #bookPagesContainer in auto-Zeile und bleibt winzig */
+.menu-book-modal .menu-book-stage {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: stretch;
+    min-width: 0;
+    min-height: 0;
 }
 
 .menu-book-stage {
@@ -2146,14 +2226,30 @@ body.modal-open .nav {
 }
 
 .menu-book-modal #bookPagesContainer {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: stretch;
+    justify-self: stretch;
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     min-width: 0;
     min-height: 0;
     z-index: 5;
     visibility: hidden;
     transform-style: preserve-3d;
+    max-width: none !important;
+}
+
+.menu-book-modal .menu-book > .book-navigation {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+/* PageFlip-Root nicht von WP/Themes max-width einengen */
+.menu-book-modal #bookPagesContainer .stf__block,
+.menu-book-modal #bookPagesContainer .stf__parent {
+    max-width: none !important;
 }
 
 .menu-book-modal #bookPagesContainer.active {
@@ -2198,7 +2294,7 @@ body.modal-open .nav {
 
 .cover-content h3 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(1.85rem, 3.65vw, 3.65rem);
     font-weight: 400;
     line-height: 1;
     margin-bottom: clamp(0.5rem, 1vw, 1rem);
@@ -2209,7 +2305,7 @@ body.modal-open .nav {
 .cover-content p {
     max-width: 24rem;
     margin: 0 auto clamp(1.25rem, 2vw, 2.5rem);
-    font-size: clamp(0.95rem, 1.35vw, 1.125rem);
+    font-size: clamp(0.88rem, 1.22vw, 1.04rem);
     color: rgba(255, 255, 255, 0.75);
     text-wrap: pretty;
 }
@@ -2224,7 +2320,7 @@ body.modal-open .nav {
     padding: clamp(0.85rem, 1.1vw, 1rem) clamp(1.1rem, 2vw, 1.75rem);
     background: var(--color-primary);
     color: var(--color-white);
-    font-size: var(--text-sm);
+    font-size: clamp(0.8rem, 0.72rem + 0.32vw, 0.92rem);
     font-weight: 600;
     border-radius: var(--radius-full);
     transition: transform var(--transition-base), background var(--transition-base);
@@ -2299,7 +2395,7 @@ body.modal-open .nav {
 
 .menu-book-modal .page-header h3 {
     font-family: var(--font-display);
-    font-size: clamp(1.15rem, 1.4vw, 1.55rem);
+    font-size: clamp(1.05rem, 1.28vw, 1.42rem);
     line-height: 1.1;
     color: var(--color-secondary);
     margin-bottom: clamp(0.4rem, 0.8vw, 0.8rem);
@@ -2356,6 +2452,7 @@ body.modal-open .nav {
 
 .menu-book-modal .item-name {
     min-width: 0;
+    font-size: clamp(0.9rem, 1.02vw, 1.02rem);
     font-weight: 600;
     line-height: 1.28;
     color: var(--color-secondary);
@@ -2369,13 +2466,14 @@ body.modal-open .nav {
 .menu-book-modal .item-dots {
     min-width: 0.5rem;
     align-self: start;
-    margin-top: 0.9rem;
+    margin-top: 0.82rem;
     border-bottom: 1px dotted rgba(var(--color-secondary-rgb), 0.35);
     transform: none;
 }
 
 .menu-book-modal .item-price {
     min-width: 0;
+    font-size: clamp(0.86rem, 0.98vw, 0.96rem);
     max-width: min(26vw, 8rem);
     justify-self: end;
     align-self: start;
@@ -2391,7 +2489,7 @@ body.modal-open .nav {
 }
 
 .menu-book-modal .item-desc {
-    font-size: clamp(0.82rem, 1vw, 0.96rem);
+    font-size: clamp(0.75rem, 0.92vw, 0.88rem);
     line-height: 1.55;
     color: var(--color-secondary-light);
     font-style: italic;
@@ -2403,7 +2501,7 @@ body.modal-open .nav {
     right: clamp(0.9rem, 2vw, 1.5rem);
     bottom: clamp(0.7rem, 1.75vw, 1.25rem);
     font-family: var(--font-display);
-    font-size: clamp(1rem, 1.2vw, 1.35rem);
+    font-size: clamp(0.9rem, 1.08vw, 1.22rem);
     color: var(--color-primary);
     opacity: 0.5;
     pointer-events: none;
@@ -2425,7 +2523,7 @@ body.modal-open .nav {
     margin-top: auto;
     padding: clamp(1rem, 1.8vw, 1.75rem);
     font-family: var(--font-display);
-    font-size: clamp(1rem, 1.2vw, 1.25rem);
+    font-size: clamp(0.92rem, 1.08vw, 1.12rem);
     font-style: italic;
     line-height: 1.45;
     color: var(--color-secondary-light);
@@ -2456,7 +2554,7 @@ body.modal-open .nav {
     justify-content: center;
     gap: var(--space-sm);
     padding: clamp(0.7rem, 1vw, 0.9rem);
-    font-size: var(--text-sm);
+    font-size: clamp(0.8rem, 0.72rem + 0.32vw, 0.92rem);
     font-weight: 600;
     color: var(--color-secondary);
     background: rgba(250, 247, 244, 0.95);
@@ -2491,7 +2589,7 @@ body.modal-open .nav {
     min-width: 5.5rem;
     padding: 0.5rem 0.9rem;
     font-family: var(--font-display);
-    font-size: clamp(1rem, 1.15vw, 1.25rem);
+    font-size: clamp(0.9rem, 1.02vw, 1.12rem);
     color: var(--color-white);
     text-align: center;
     background: rgba(20, 18, 16, 0.45);
@@ -2528,6 +2626,14 @@ body.modal-open .nav {
     .menu-book-modal .book-page {
         padding: clamp(0.95rem, 2vw, 1.5rem);
         padding-bottom: clamp(2.2rem, 5vw, 3rem);
+    }
+
+    .menu-book-modal .page-header h3 {
+        font-size: clamp(0.98rem, 2.35vw, 1.32rem);
+    }
+
+    .menu-book-modal .page-quote {
+        font-size: clamp(0.86rem, 2.1vw, 1.05rem);
     }
 }
 
@@ -2599,12 +2705,24 @@ body.modal-open .nav {
     .menu-book-modal .btn-close-modal {
         width: 2.9rem;
         height: 2.9rem;
-        font-size: 2rem;
+        font-size: 1.82rem;
     }
 
     .menu-book-modal .menu-book {
         height: calc(100dvh - max(0.5rem, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
         gap: 0.5rem;
+    }
+
+    .menu-book-modal .page-header h3 {
+        font-size: clamp(0.95rem, 3.2vw, 1.28rem);
+    }
+
+    .menu-book-modal .item-name {
+        font-size: clamp(0.84rem, 3.1vw, 0.96rem);
+    }
+
+    .menu-book-modal .item-desc {
+        font-size: clamp(0.72rem, 2.85vw, 0.84rem);
     }
 
     .menu-book-modal .item-header {
@@ -2618,7 +2736,7 @@ body.modal-open .nav {
 
     .menu-book-modal .item-price {
         max-width: min(40vw, 7.5rem);
-        font-size: clamp(0.92rem, 3.4vw, 1rem);
+        font-size: clamp(0.85rem, 3.1vw, 0.92rem);
     }
 
     .menu-book-modal .book-navigation.active {
@@ -2640,6 +2758,15 @@ body.modal-open .nav {
         justify-self: center;
         min-width: 4.75rem;
         padding: 0.4rem 0.75rem;
+        font-size: clamp(0.82rem, 2.9vw, 1.02rem);
+    }
+
+    .menu-book-modal .page-quote {
+        font-size: clamp(0.84rem, 2.95vw, 1.02rem);
+    }
+
+    .menu-book-modal .page-number {
+        font-size: clamp(0.82rem, 2.6vw, 1.1rem);
     }
 }
 
@@ -3189,6 +3316,11 @@ body.modal-open .nav {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* Statische index.html: gleiche Kartenfläche wie mit Formular (WPForms nur auf WordPress) */
+.contact-form-wrapper--static-placeholder {
+    min-height: 280px;
+}
+
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -3375,6 +3507,420 @@ body.modal-open .nav {
     color: var(--color-white);
 }
 
+.footer-legal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.footer-legal a {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-legal a:hover {
+    color: var(--color-primary-light);
+}
+
+.footer-legal-sep {
+    color: rgba(255, 255, 255, 0.35);
+    user-select: none;
+}
+
+/* Rechtstexte & Danke (Unterseiten) */
+.subpage-main {
+    background: var(--color-cream);
+    min-height: 55vh;
+}
+
+/* Feste Nav: wie „scrolled“, Inhalt nicht unter dem Header */
+body.is-subpage .nav {
+    background-color: rgba(250, 247, 244, 0.95);
+    backdrop-filter: blur(10px);
+    padding: var(--space-md) 0;
+    box-shadow: var(--shadow-md);
+}
+
+body.is-subpage .nav .nav-logo img {
+    height: 60px;
+    filter: none;
+}
+
+body.is-subpage .nav .nav-menu a {
+    color: var(--color-secondary);
+}
+
+body.is-subpage .nav .nav-cta {
+    color: var(--color-white) !important;
+}
+
+body.is-subpage .nav .nav-toggle span {
+    background-color: var(--color-secondary);
+}
+
+body.is-subpage .nav-menu {
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    body.is-subpage .nav-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: var(--space-sm);
+        flex-direction: row;
+        justify-items: stretch;
+    }
+
+    body.is-subpage .nav-toggle {
+        display: none !important;
+    }
+
+    body.is-subpage .nav .nav-logo {
+        justify-self: start;
+        grid-column: 1;
+    }
+
+    body.is-subpage .nav-menu {
+        grid-column: 2;
+        position: static;
+        right: auto;
+        top: auto;
+        width: auto;
+        max-width: none;
+        height: auto;
+        min-height: 0;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        box-shadow: none;
+        transition: none;
+    }
+
+    body.is-subpage .nav-menu.active {
+        right: auto;
+    }
+
+    body.is-subpage .nav .nav-menu a {
+        font-size: calc(var(--text-sm) + 2px);
+    }
+
+    body.is-subpage .nav .nav-logo img {
+        height: 40px;
+    }
+}
+
+.legal-page {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: calc(80px + var(--space-3xl)) var(--space-xl) var(--space-3xl);
+    color: var(--color-secondary);
+}
+
+body.is-subpage .legal-page {
+    padding-top: calc(2 * var(--space-md) + 60px + var(--space-2xl) + var(--space-2xl));
+}
+
+@media (max-width: 900px) {
+    body.is-subpage .legal-page {
+        padding-top: calc(2 * var(--space-md) + 40px + var(--space-xl) + var(--space-lg));
+    }
+}
+
+.legal-page h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--color-secondary);
+}
+
+.legal-page h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-secondary);
+}
+
+.legal-page p,
+.legal-page li {
+    font-size: var(--text-base);
+    line-height: 1.65;
+    color: rgba(30, 30, 30, 0.85);
+    margin-bottom: var(--space-md);
+}
+
+.legal-page ul {
+    margin: 0 0 var(--space-md);
+    padding-left: 1.25rem;
+}
+
+.legal-page a {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.legal-page a:hover {
+    color: var(--color-primary);
+}
+
+.legal-page .legal-back {
+    margin-top: var(--space-2xl);
+}
+
+.legal-page .btn {
+    text-decoration: none;
+}
+
+.legal-page a.btn.btn-primary {
+    color: var(--color-white);
+    text-decoration: none;
+}
+
+.legal-page a.btn.btn-primary:hover {
+    color: var(--color-white);
+}
+
+.thanks-hero {
+    text-align: center;
+    padding-top: var(--space-2xl);
+}
+
+body.is-subpage .thanks-hero {
+    padding-top: 0;
+}
+
+/* Danke-Seite: schwebende Brief- und Häkchen-Deko */
+@keyframes cafeeThanksFloatEnvelope {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(-7deg);
+    }
+    50% {
+        transform: translate3d(16px, -20px, 0) rotate(3deg);
+    }
+}
+
+@keyframes cafeeThanksFloatCheck {
+    0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(5deg);
+    }
+    50% {
+        transform: translate3d(-14px, -18px, 0) rotate(-4deg);
+    }
+}
+
+.thanks-page-deco {
+    position: relative;
+    overflow-x: hidden;
+    min-height: 48vh;
+}
+
+.thanks-float {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--color-primary-dark);
+    opacity: 0.42;
+}
+
+.thanks-float svg {
+    display: block;
+    width: clamp(2.5rem, 7vw, 4.75rem);
+    height: clamp(2.5rem, 7vw, 4.75rem);
+}
+
+.thanks-float--envelope {
+    left: clamp(0.25rem, 2vw, 2rem);
+    top: 32%;
+    animation: cafeeThanksFloatEnvelope 6.5s ease-in-out infinite alternate;
+}
+
+.thanks-float--check {
+    right: clamp(0.25rem, 2vw, 2rem);
+    top: 26%;
+    animation: cafeeThanksFloatCheck 5.8s ease-in-out infinite alternate;
+    animation-delay: -1.2s;
+}
+
+/* Danke: Papierflugzeug L→R, weiche Schleifen (Halkalar), linear zwischen vielen Stützpunkten */
+@keyframes cafeePaperPlanePath {
+    0% {
+        transform: translate3d(-40vw, 6px, 0) rotate(-8deg) scale(0.92);
+        opacity: 0;
+    }
+    2.5% {
+        opacity: 1;
+    }
+    5% {
+        transform: translate3d(-32vw, -10px, 0) rotate(-14deg) scale(0.96);
+    }
+    10% {
+        transform: translate3d(-24vw, -28px, 0) rotate(-18deg) scale(1.02);
+    }
+    15% {
+        transform: translate3d(-16vw, -36px, 0) rotate(-12deg) scale(1.04);
+    }
+    20% {
+        transform: translate3d(-8vw, -30px, 0) rotate(4deg) scale(1.03);
+    }
+    25% {
+        transform: translate3d(0vw, -14px, 0) rotate(16deg) scale(1);
+    }
+    30% {
+        transform: translate3d(8vw, 8px, 0) rotate(18deg) scale(0.98);
+    }
+    35% {
+        transform: translate3d(16vw, 26px, 0) rotate(10deg) scale(0.96);
+    }
+    40% {
+        transform: translate3d(24vw, 32px, 0) rotate(-6deg) scale(0.95);
+    }
+    45% {
+        transform: translate3d(32vw, 24px, 0) rotate(-16deg) scale(0.96);
+    }
+    50% {
+        transform: translate3d(40vw, 6px, 0) rotate(-18deg) scale(0.98);
+    }
+    55% {
+        transform: translate3d(48vw, -16px, 0) rotate(-12deg) scale(1.01);
+    }
+    60% {
+        transform: translate3d(56vw, -32px, 0) rotate(2deg) scale(1.03);
+    }
+    65% {
+        transform: translate3d(64vw, -34px, 0) rotate(14deg) scale(1.02);
+    }
+    70% {
+        transform: translate3d(72vw, -22px, 0) rotate(16deg) scale(1);
+    }
+    75% {
+        transform: translate3d(80vw, -4px, 0) rotate(12deg) scale(0.99);
+    }
+    80% {
+        transform: translate3d(88vw, 14px, 0) rotate(4deg) scale(0.97);
+    }
+    85% {
+        transform: translate3d(96vw, 24px, 0) rotate(-8deg) scale(0.95);
+    }
+    90% {
+        transform: translate3d(104vw, 20px, 0) rotate(-12deg) scale(0.93);
+    }
+    95% {
+        transform: translate3d(116vw, 8px, 0) rotate(-6deg) scale(0.91);
+        opacity: 1;
+    }
+    100% {
+        transform: translate3d(132vw, 2px, 0) rotate(4deg) scale(0.88);
+        opacity: 0;
+    }
+}
+
+.thanks-paper-plane-scene {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: min(72vh, 540px);
+    z-index: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.thanks-paper-plane-flyer {
+    position: absolute;
+    left: 0;
+    top: 46%;
+    margin-top: -2rem;
+    width: 4rem;
+    height: 4rem;
+    will-change: transform, opacity;
+    animation: cafeePaperPlanePath 5s linear infinite;
+}
+
+.thanks-paper-plane-icon {
+    position: relative;
+    z-index: 2;
+    display: block;
+}
+
+.thanks-paper-plane-icon svg {
+    width: clamp(2.65rem, 7.5vw, 3.6rem);
+    height: clamp(2.65rem, 7.5vw, 3.6rem);
+    display: block;
+    color: var(--color-primary-dark);
+    transform: scaleX(-1);
+    transform-origin: center center;
+    filter: drop-shadow(0 3px 8px rgba(189, 137, 113, 0.4));
+}
+
+@media (max-width: 600px) {
+    .thanks-paper-plane-flyer {
+        top: 44%;
+        margin-top: -1.75rem;
+        animation-duration: 3.85s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thanks-paper-plane-flyer {
+        animation: none;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.thanks-page-deco .legal-page {
+    position: relative;
+    z-index: 1;
+}
+
+/* Danke: Textblock etwas tiefer unter der Nav (thanks-hero hat auf Unterseiten kein extra padding-top) */
+body.is-subpage .thanks-page-deco .legal-page {
+    padding-top: calc(2 * var(--space-md) + 60px + var(--space-2xl) + var(--space-2xl) + var(--space-xl));
+}
+
+@media (max-width: 900px) {
+    body.is-subpage .thanks-page-deco .legal-page {
+        padding-top: calc(2 * var(--space-md) + 40px + var(--space-xl) + var(--space-lg) + var(--space-md));
+    }
+}
+
+@media (max-width: 600px) {
+    .thanks-float {
+        opacity: 0.24;
+    }
+
+    .thanks-float svg {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .thanks-float--envelope {
+        left: 0.15rem;
+        top: 24%;
+    }
+
+    .thanks-float--check {
+        right: 0.15rem;
+        top: 22%;
+    }
+}
+
+.thanks-hero h2 {
+    margin-top: var(--space-sm);
+    font-weight: 500;
+    color: var(--color-primary-dark);
+}
 
 
 /* ----------------------------------------
@@ -3652,4 +4198,207 @@ body.ot-overlay-open {
 [id^="ot-widget-container"],
 #otFallbackFrame {
     display: none !important;
+}
+
+/* =================================================================
+   WPForms: CaFEE Form Özel Tasarımı & Sola Hizalama Düzeltmesi
+   ================================================================= */
+
+/* 1. Ana Kapsayıcı ve Sıfırlamalar */
+.contact-form-wrapper .wpforms-cafee-wrap {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%;
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full {
+    margin: 0 !important;
+    padding: 20px 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Form içindeki kapsayıcı boşlukları sıfırlama */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field {
+    padding: 0 !important;
+    margin: 0 !important;
+    clear: both !important;
+}
+
+/* Kapsayıcıların max-width sınırlamalarını tamamen kaldır */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-medium,
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-large {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 2. Etiketler (Labels & Sublabels) */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-label {
+    display: block !important;
+    margin: 0 0 8px 0 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding-left: 0 !important; 
+    margin-left: 0 !important;
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-required-label {
+    color: #d4a276 !important; /* Yıldız rengi (Bronz) */
+    font-weight: 400 !important;
+}
+
+/* =========================================================
+   3. İSİM ALANLARI (VORNAME / NACHNAME) SIFIR HİZALAMA
+   ========================================================= */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full fieldset {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Yan yana getirme ve WPFORMS girintilerini ezme */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name .wpforms-field-row {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    margin: 0 !important; /* Sağa kaymayı engeller */
+    padding: 0 !important; 
+    margin-left: 0 !important;
+}
+
+/* Kutuların eşit alan kaplaması ve float iptali */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name .wpforms-field-row-block {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important; 
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important; /* WPForms float'larını ezer, kaymayı durdurur */
+}
+
+/* Özel olarak wpforms-first sınıfının gizli boşluklarını yok ediyoruz */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name .wpforms-first {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Alt etiketleri (Vorname/Nachname) kutunun üstüne alma */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name .wpforms-field-sublabel {
+    order: -1 !important; 
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin: 0 0 5px 0 !important;
+    padding: 0 !important;
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name input[type="text"] {
+    order: 2 !important; 
+    margin-left: 0 !important;
+}
+
+/* Mobil görünüm için alt alta dizilim */
+@media (max-width: 520px) {
+    .contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field-name .wpforms-field-row {
+        flex-direction: column !important;
+    }
+}
+
+/* =========================================================
+   4. INPUT VE TEXTAREA TASARIMI
+   ========================================================= */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field input[type="text"],
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field input[type="email"],
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field textarea {
+    width: 100% !important;
+    max-width: 100% !important; 
+    box-sizing: border-box !important;
+    background-color: rgba(0, 0, 0, 0.45) !important; 
+    border: 1px solid rgba(212, 162, 118, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 14px 18px !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    min-height: 48px !important; 
+    box-shadow: 0 0 10px rgba(212, 162, 118, 0.05) !important;
+    transition: all 0.3s ease !important;
+    margin: 0 !important; /* Dış boşlukları sıfırlar */
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field textarea {
+    resize: vertical !important;
+    min-height: 120px !important;
+}
+
+/* Input Focus (Tıklanma) Durumu */
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field input:focus,
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full .wpforms-field textarea:focus {
+    outline: none !important;
+    border-color: rgba(212, 162, 118, 0.6) !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 0 15px rgba(212, 162, 118, 0.15) !important;
+}
+
+/* =========================================================
+   5. GÖNDER (SUBMIT) BUTONU (SOLA YASLI)
+   ========================================================= */
+.contact-form-wrapper .wpforms-cafee-wrap .wpforms-submit-container {
+    padding: 0 !important;
+    margin: 10px 0 0 0 !important;
+    text-align: left !important; /* Butonu sola yaslar */
+    clear: both !important;
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full button[type="submit"].wpforms-submit {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    background-color: #b58c6e !important; 
+    border: none !important;
+    border-radius: 50px !important;
+    color: #ffffff !important;
+    padding: 14px 40px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease, transform 0.2s ease !important;
+    margin: 0 !important; 
+}
+
+.contact-form-wrapper .wpforms-cafee-wrap div.wpforms-container-full button[type="submit"].wpforms-submit:hover {
+    background-color: #a37a5f !important;
+    transform: translateY(-2px) !important;
+}
+
+/* =========================================================
+   6. GİZLİ ANTI-SPAM (HONEYPOT) ALANLARI
+   ========================================================= */
+.contact-form-wrapper .wpforms-cafee-wrap [id*="field_4-container"], 
+.contact-form-wrapper .wpforms-cafee-wrap [id*="field_5-container"],
+.contact-form-wrapper .wpforms-cafee-wrap .wpforms-field-hp {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    z-index: -9999 !important;
 }

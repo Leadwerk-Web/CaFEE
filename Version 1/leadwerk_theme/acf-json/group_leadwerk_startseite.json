@@ -13,6 +13,7 @@
           "name": "hero",
           "label": "Hero",
           "sub_fields": [
+            { "key": "f_hero_bg_video", "name": "background_video", "label": "Hintergrund-Video (MP4)", "type": "file", "mime_types": "mp4", "return_format": "array" },
             { "key": "f_hero_badge", "name": "badge_text", "label": "Badge-Text", "type": "text" },
             { "key": "f_hero_l1", "name": "title_line_1", "label": "Titel Zeile 1", "type": "text" },
             { "key": "f_hero_l2", "name": "title_line_2_accent", "label": "Titel Zeile 2 (Akzent)", "type": "text" },
@@ -45,10 +46,31 @@
             { "key": "f_menu_title_d", "name": "section_title_display", "label": "Titel (Display)", "type": "text" },
             { "key": "f_menu_title_s", "name": "section_title_script", "label": "Titel (Script)", "type": "text" },
             { "key": "f_menu_subtitle", "name": "section_subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_menu_highlights", "name": "menu_highlights", "label": "Highlight-Karten (über dem Buch)", "type": "repeater", "sub_fields": [
+              { "key": "f_menu_hl_tag", "name": "tag", "label": "Badge (z. B. Highlight)", "type": "text" },
+              { "key": "f_menu_hl_icon", "name": "icon", "label": "Icon", "type": "image" },
+              { "key": "f_menu_hl_title", "name": "title", "label": "Titel", "type": "text" },
+              { "key": "f_menu_hl_items", "name": "list_items", "label": "Einträge", "type": "repeater", "sub_fields": [
+                { "key": "f_menu_hl_iname", "name": "name", "label": "Name", "type": "text" },
+                { "key": "f_menu_hl_iprice", "name": "price", "label": "Preis", "type": "text" }
+              ]}
+            ]},
             { "key": "f_menu_cover_logo", "name": "menu_book_cover_logo", "label": "Cover-Logo", "type": "image" },
             { "key": "f_menu_cover_title", "name": "menu_book_cover_title", "label": "Cover-Titel", "type": "text" },
             { "key": "f_menu_cover_sub", "name": "menu_book_cover_subtitle", "label": "Cover-Untertitel", "type": "text" },
-            { "key": "f_menu_categories", "name": "menu_categories", "label": "Kategorien", "type": "repeater", "sub_fields": [
+            { "key": "f_menu_book_pages", "name": "menu_book_pages", "label": "Buchseiten (PageFlip, aus Import)", "type": "repeater", "sub_fields": [
+              { "key": "f_mbp_class", "name": "page_class", "label": "Seiten-Typ", "type": "select", "choices": { "left-page": "Links", "right-page": "Rechts" }, "default_value": "left-page", "return_format": "value" },
+              { "key": "f_mbp_title", "name": "section_title", "label": "Kopfzeile (H3)", "type": "text" },
+              { "key": "f_mbp_items", "name": "row_items", "label": "Menü-Einträge", "type": "repeater", "sub_fields": [
+                { "key": "f_mbp_iname", "name": "name", "label": "Name", "type": "text" },
+                { "key": "f_mbp_iprice", "name": "price", "label": "Preis", "type": "text" },
+                { "key": "f_mbp_idesc", "name": "description", "label": "Beschreibung", "type": "textarea" },
+                { "key": "f_mbp_ifeat", "name": "featured", "label": "Hervorheben", "type": "true_false" }
+              ]},
+              { "key": "f_mbp_quote", "name": "page_quote", "label": "Zitat", "type": "textarea" },
+              { "key": "f_mbp_pimg", "name": "page_image", "label": "Seitenbild", "type": "image" }
+            ]},
+            { "key": "f_menu_categories", "name": "menu_categories", "label": "Kategorien (Legacy / Fallback)", "type": "repeater", "sub_fields": [
               { "key": "f_menu_cat_title", "name": "category_title", "label": "Kategorie-Titel", "type": "text" },
               { "key": "f_menu_items", "name": "items", "label": "Einträge", "type": "repeater", "sub_fields": [
                 { "key": "f_menu_item_name", "name": "name", "label": "Name", "type": "text" },

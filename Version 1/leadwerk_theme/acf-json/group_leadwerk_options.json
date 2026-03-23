@@ -120,7 +120,8 @@
       "label": "WPForms Formular-ID (Reservierung)",
       "name": "wpforms_reservation_id",
       "type": "number",
-      "instructions": "ID des WPForms-Kontaktformulars für die Reservierungs-Sektion."
+      "default_value": 171,
+      "instructions": "Numerische ID des WPForms-Formulars für die Sektion „Reservieren“ (Shortcode [wpforms id=\"…\"]). Wenn leer, nutzt das Theme die Konstante LEADWERK_WPFORMS_RESERVATION_DEFAULT_ID in functions.php (Standard 171). Der Leadwerk-Importer kann die ID aus mapping.json (wpforms_reservation_form_id) setzen."
     }
   ],
   "location": [

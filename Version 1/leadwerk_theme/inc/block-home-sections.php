@@ -53,9 +53,18 @@ function leadwerk_render_hero( $f ) {
 	$btn1_u  = isset( $f['button_1_url'] ) ? $f['button_1_url'] : '#reservation';
 	$btn2_t  = isset( $f['button_2_text'] ) ? $f['button_2_text'] : 'Speisekarte entdecken';
 	$btn2_u  = isset( $f['button_2_url'] ) ? $f['button_2_url'] : '#menu';
+	$vid     = isset( $f['background_video'] ) ? $f['background_video'] : null;
+	$vid_id  = is_array( $vid ) && isset( $vid['ID'] ) ? (int) $vid['ID'] : ( is_numeric( $vid ) ? (int) $vid : 0 );
+	$vid_url = $vid_id ? wp_get_attachment_url( $vid_id ) : '';
 	?>
 	<section class="hero" id="home">
-		<div class="hero-parallax-bg"></div>
+		<div class="hero-parallax-bg">
+			<?php if ( $vid_url ) : ?>
+				<video autoplay muted loop playsinline preload="auto" fetchpriority="high" class="hero-bg-video" aria-hidden="true">
+					<source src="<?php echo esc_url( $vid_url ); ?>" type="video/mp4">
+				</video>
+			<?php endif; ?>
+		</div>
 		<div class="hero-overlay"></div>
 		<div class="hero-fairy-element"></div>
 		<div class="hero-content">
@@ -130,6 +139,116 @@ function leadwerk_render_story( $f ) {
 	<?php
 }
 
+/**
+ * Buchseiten für PageFlip: menu_book_pages (Import) oder Fallback aus menu_categories + Zitat.
+ *
+ * @param array $f ACF layout menu_preview.
+ * @return array<int, array<string, mixed>>
+ */
+function leadwerk_resolve_menu_book_pages( $f ) {
+	$pages = isset( $f['menu_book_pages'] ) && is_array( $f['menu_book_pages'] ) ? $f['menu_book_pages'] : array();
+	$pages = array_values(
+		array_filter(
+			$pages,
+			function ( $row ) {
+				return is_array( $row );
+			}
+		)
+	);
+	if ( ! empty( $pages ) ) {
+		return $pages;
+	}
+	$cats  = isset( $f['menu_categories'] ) && is_array( $f['menu_categories'] ) ? $f['menu_categories'] : array();
+	$quote = isset( $f['menu_quote'] ) ? $f['menu_quote'] : '';
+	$quote_img = isset( $f['menu_quote_image'] ) ? $f['menu_quote_image'] : null;
+	$qid   = is_array( $quote_img ) && isset( $quote_img['ID'] ) ? (int) $quote_img['ID'] : ( is_numeric( $quote_img ) ? (int) $quote_img : 0 );
+	$out   = array();
+	foreach ( $cats as $cat ) {
+		$out[] = array(
+			'page_class'    => 'left-page',
+			'section_title' => isset( $cat['category_title'] ) ? $cat['category_title'] : '',
+			'row_items'     => isset( $cat['items'] ) && is_array( $cat['items'] ) ? $cat['items'] : array(),
+			'page_quote'    => '',
+			'page_image'    => 0,
+		);
+	}
+	if ( $quote !== '' || $qid ) {
+		$out[] = array(
+			'page_class'    => 'right-page',
+			'section_title' => '',
+			'row_items'     => array(),
+			'page_quote'    => $quote,
+			'page_image'    => $qid,
+		);
+	}
+	if ( empty( $out ) ) {
+		$out[] = array(
+			'page_class'    => 'left-page',
+			'section_title' => '',
+			'row_items'     => array(),
+			'page_quote'    => '',
+			'page_image'    => 0,
+		);
+	}
+	return $out;
+}
+
+/**
+ * Eine PageFlip-Seite (.book-page) aus ACF-Zeile ausgeben.
+ *
+ * @param array  $page     Zeile menu_book_pages.
+ * @param int    $page_num Anzeige 1-basiert.
+ */
+function leadwerk_render_menu_book_page_flip( $page, $page_num ) {
+	$pc    = ( isset( $page['page_class'] ) && 'right-page' === $page['page_class'] ) ? 'right-page' : 'left-page';
+	$title = isset( $page['section_title'] ) ? $page['section_title'] : '';
+	$items = isset( $page['row_items'] ) && is_array( $page['row_items'] ) ? $page['row_items'] : array();
+	$quote = isset( $page['page_quote'] ) ? $page['page_quote'] : '';
+	$pimg  = isset( $page['page_image'] ) ? $page['page_image'] : null;
+	$img_id = is_array( $pimg ) && isset( $pimg['ID'] ) ? (int) $pimg['ID'] : ( is_numeric( $pimg ) ? (int) $pimg : 0 );
+	?>
+	<div class="book-page <?php echo esc_attr( $pc ); ?>">
+		<?php if ( $title !== '' || ! empty( $items ) ) : ?>
+		<div class="page-header">
+			<?php if ( $title !== '' ) : ?>
+			<h3><?php echo esc_html( $title ); ?></h3>
+			<?php endif; ?>
+			<div class="page-divider"></div>
+		</div>
+		<div class="menu-items">
+			<?php foreach ( $items as $item ) :
+				$name  = isset( $item['name'] ) ? $item['name'] : '';
+				$price = isset( $item['price'] ) ? $item['price'] : '';
+				$desc  = isset( $item['description'] ) ? $item['description'] : '';
+				$feat  = ! empty( $item['featured'] );
+				if ( $name === '' && $price === '' && $desc === '' ) {
+					continue;
+				}
+				?>
+			<div class="menu-item<?php echo $feat ? ' featured' : ''; ?>">
+				<div class="item-header">
+					<span class="item-name"><?php echo esc_html( $name ); ?></span>
+					<span class="item-dots"></span>
+					<span class="item-price"><?php echo esc_html( $price ); ?></span>
+				</div>
+				<?php if ( $desc !== '' ) : ?><p class="item-desc"><?php echo esc_html( $desc ); ?></p><?php endif; ?>
+			</div>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+		<?php if ( $img_id ) : ?>
+		<div class="page-image">
+			<?php echo wp_get_attachment_image( $img_id, 'medium_large', false, array( 'alt' => '' ) ); ?>
+		</div>
+		<?php endif; ?>
+		<?php if ( $quote !== '' ) : ?>
+		<p class="page-quote"><?php echo esc_html( $quote ); ?></p>
+		<?php endif; ?>
+		<div class="page-number"><?php echo (int) $page_num; ?></div>
+	</div>
+	<?php
+}
+
 function leadwerk_render_menu_preview( $f ) {
 	$badge    = isset( $f['section_badge'] ) ? $f['section_badge'] : 'Genuss erleben';
 	$title_d  = isset( $f['section_title_display'] ) ? $f['section_title_display'] : 'Unsere';
@@ -140,9 +259,9 @@ function leadwerk_render_menu_preview( $f ) {
 	$cover_sub  = isset( $f['menu_book_cover_subtitle'] ) ? $f['menu_book_cover_subtitle'] : 'Blättern Sie durch unsere Köstlichkeiten';
 	$pdf_id   = isset( $f['pdf_download'] ) && is_array( $f['pdf_download'] ) ? (int) $f['pdf_download']['ID'] : ( isset( $f['pdf_download'] ) ? (int) $f['pdf_download'] : 0 );
 	$pdf_url  = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
-	$menu_categories = isset( $f['menu_categories'] ) && is_array( $f['menu_categories'] ) ? $f['menu_categories'] : array();
-	$quote    = isset( $f['menu_quote'] ) ? $f['menu_quote'] : '';
-	$quote_img = isset( $f['menu_quote_image'] ) ? $f['menu_quote_image'] : null;
+	$menu_highlights = isset( $f['menu_highlights'] ) && is_array( $f['menu_highlights'] ) ? $f['menu_highlights'] : array();
+	$book_pages      = leadwerk_resolve_menu_book_pages( $f );
+	$total_flip      = count( $book_pages );
 	?>
 	<section class="menu-preview" id="menu">
 		<div class="menu-header">
@@ -155,69 +274,96 @@ function leadwerk_render_menu_preview( $f ) {
 				<p class="section-subtitle scroll-animate"><?php echo esc_html( $sub ); ?></p>
 			<?php endif; ?>
 		</div>
-		<div class="menu-book-container scroll-animate">
-			<div class="menu-book" id="menuBook">
-				<div class="book-cover active" id="bookCover">
-					<div class="cover-content">
-						<?php if ( $cover_logo && ( is_array( $cover_logo ) ? ! empty( $cover_logo['ID'] ) : $cover_logo ) ) :
-							$logo_id = is_array( $cover_logo ) ? (int) $cover_logo['ID'] : (int) $cover_logo;
-							echo wp_get_attachment_image( $logo_id, 'medium', false, array( 'class' => 'cover-logo', 'alt' => 'CaFEE' ) );
-						endif; ?>
-						<h3><?php echo esc_html( $cover_title ); ?></h3>
-						<p><?php echo esc_html( $cover_sub ); ?></p>
-						<button class="open-book-btn" id="openBookBtn">
-							<span>Karte öffnen</span>
+		<?php if ( ! empty( $menu_highlights ) ) : ?>
+		<div class="menu-highlights scroll-animate">
+			<?php foreach ( $menu_highlights as $hl ) :
+				$hl_tag   = isset( $hl['tag'] ) ? $hl['tag'] : 'Highlight';
+				$hl_title = isset( $hl['title'] ) ? $hl['title'] : '';
+				$hl_icon  = isset( $hl['icon'] ) ? $hl['icon'] : null;
+				$hl_icon_id = is_array( $hl_icon ) && isset( $hl_icon['ID'] ) ? (int) $hl_icon['ID'] : ( is_numeric( $hl_icon ) ? (int) $hl_icon : 0 );
+				$hl_items = isset( $hl['list_items'] ) && is_array( $hl['list_items'] ) ? $hl['list_items'] : array();
+				?>
+			<div class="menu-highlight-card">
+				<?php if ( $hl_tag !== '' ) : ?>
+				<span class="menu-highlight-tag"><?php echo esc_html( $hl_tag ); ?></span>
+				<?php endif; ?>
+				<div class="menu-highlight-icon" aria-hidden="true">
+					<?php
+					if ( $hl_icon_id ) {
+						echo wp_get_attachment_image( $hl_icon_id, 'medium', false, array( 'class' => 'menu-highlight-icon-img', 'alt' => '' ) );
+					}
+					?>
+				</div>
+				<?php if ( $hl_title !== '' ) : ?>
+				<h3 class="menu-highlight-title"><?php echo esc_html( $hl_title ); ?></h3>
+				<?php endif; ?>
+				<?php if ( ! empty( $hl_items ) ) : ?>
+				<ul class="menu-highlight-list">
+					<?php foreach ( $hl_items as $row ) :
+						$iname = isset( $row['name'] ) ? $row['name'] : '';
+						$iprice = isset( $row['price'] ) ? $row['price'] : '';
+						if ( $iname === '' ) {
+							continue;
+						}
+						?>
+					<li><span class="item-name"><?php echo esc_html( $iname ); ?></span><span class="item-dots"></span><span class="item-price"><?php echo esc_html( $iprice ); ?></span></li>
+					<?php endforeach; ?>
+				</ul>
+				<?php endif; ?>
+			</div>
+			<?php endforeach; ?>
+		</div>
+		<?php endif; ?>
+		<div class="menu-highlights-actions scroll-animate">
+			<button type="button" class="btn btn-menu-browse" id="openMenuModalBtn" aria-label="Karte durchblättern">
+				<span>Karte durchblättern</span>
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h8"/></svg>
+			</button>
+		</div>
+
+		<div class="menu-book-modal" id="menuBookModal" role="dialog" aria-modal="true" aria-labelledby="menuBookModalTitle" aria-hidden="true">
+			<div class="menu-book-container" role="document">
+				<div class="menu-book-toolbar">
+					<h2 class="sr-only" id="menuBookModalTitle"><?php esc_html_e( 'Interaktive Speisekarte', 'leadwerk-theme' ); ?></h2>
+					<button type="button" class="btn-close-modal" id="closeMenuModalBtn" aria-label="<?php esc_attr_e( 'Schließen', 'leadwerk-theme' ); ?>">&times;</button>
+				</div>
+				<div class="menu-book" id="menuBook">
+					<div class="menu-book-stage">
+						<div class="book-cover active" id="bookCover">
+							<div class="cover-content">
+								<?php if ( $cover_logo && ( is_array( $cover_logo ) ? ! empty( $cover_logo['ID'] ) : $cover_logo ) ) :
+									$logo_id = is_array( $cover_logo ) ? (int) $cover_logo['ID'] : (int) $cover_logo;
+									echo wp_get_attachment_image( $logo_id, 'medium', false, array( 'class' => 'cover-logo', 'alt' => 'CaFEE' ) );
+								endif; ?>
+								<h3><?php echo esc_html( $cover_title ); ?></h3>
+								<p><?php echo esc_html( $cover_sub ); ?></p>
+								<button type="button" class="open-book-btn" id="openBookBtn" aria-controls="bookPagesContainer" aria-expanded="false">
+									<span><?php esc_html_e( 'Karte öffnen', 'leadwerk-theme' ); ?></span>
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div id="bookPagesContainer">
+						<?php
+						$n = 0;
+						foreach ( $book_pages as $row ) {
+							++$n;
+							leadwerk_render_menu_book_page_flip( $row, $n );
+						}
+						?>
+					</div>
+					<div class="book-navigation" id="bookNav">
+						<button type="button" class="nav-btn prev-btn" id="prevPage" aria-label="<?php esc_attr_e( 'Vorherige Seite', 'leadwerk-theme' ); ?>" disabled>
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</button>
+						<div class="page-indicator" aria-live="polite" aria-atomic="true">
+							<span id="currentPage">1</span> / <span id="totalPages"><?php echo (int) max( 1, $total_flip ); ?></span>
+						</div>
+						<button type="button" class="nav-btn next-btn" id="nextPage" aria-label="<?php esc_attr_e( 'Nächste Seite', 'leadwerk-theme' ); ?>">
 							<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
 						</button>
 					</div>
-				</div>
-				<div class="book-pages" id="bookPages">
-					<?php
-					$page_num = 0;
-					foreach ( $menu_categories as $cat ) :
-						$cat_title = isset( $cat['category_title'] ) ? $cat['category_title'] : '';
-						$items    = isset( $cat['items'] ) && is_array( $cat['items'] ) ? $cat['items'] : array();
-						$page_num++;
-					?>
-					<div class="book-spread" data-page="<?php echo (int) $page_num; ?>">
-						<div class="book-page left-page">
-							<div class="page-header">
-								<h3><?php echo esc_html( $cat_title ); ?></h3>
-								<div class="page-divider"></div>
-							</div>
-							<div class="menu-items">
-								<?php foreach ( $items as $item ) :
-									$name = isset( $item['name'] ) ? $item['name'] : '';
-									$price = isset( $item['price'] ) ? $item['price'] : '';
-									$desc = isset( $item['description'] ) ? $item['description'] : '';
-									$feat = ! empty( $item['featured'] );
-								?>
-								<div class="menu-item<?php echo $feat ? ' featured' : ''; ?>">
-									<div class="item-header">
-										<span class="item-name"><?php echo esc_html( $name ); ?></span>
-										<span class="item-dots"></span>
-										<span class="item-price"><?php echo esc_html( $price ); ?></span>
-									</div>
-									<?php if ( $desc ) : ?><p class="item-desc"><?php echo esc_html( $desc ); ?></p><?php endif; ?>
-								</div>
-								<?php endforeach; ?>
-							</div>
-						</div>
-						<div class="book-page right-page">
-							<?php if ( $quote_img && ( is_array( $quote_img ) ? ! empty( $quote_img['ID'] ) : $quote_img ) ) :
-								$qi = is_array( $quote_img ) ? (int) $quote_img['ID'] : (int) $quote_img;
-								echo '<div class="page-image">' . wp_get_attachment_image( $qi, 'medium_large', false, array( 'alt' => '' ) ) . '</div>';
-							endif; ?>
-							<?php if ( $quote ) : ?><p class="page-quote"><?php echo esc_html( $quote ); ?></p><?php endif; ?>
-							<div class="page-number"><?php echo (int) $page_num; ?></div>
-						</div>
-					</div>
-					<?php endforeach; ?>
-				</div>
-				<div class="book-navigation" id="bookNav">
-					<button class="nav-btn prev-btn" id="prevPage" disabled><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Zurück</span></button>
-					<div class="page-indicator"><span id="currentPage">1</span> / <span id="totalPages"><?php echo max( 1, count( $menu_categories ) ); ?></span></div>
-					<button class="nav-btn next-btn" id="nextPage"><span>Weiter</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 				</div>
 			</div>
 		</div>
@@ -464,13 +610,10 @@ function leadwerk_render_reservation( $f ) {
 			</div>
 		<div class="contact-form-wrapper scroll-animate">
 			<?php
-			$wpforms_id = 0;
-			if ( function_exists( 'get_field' ) ) {
-				$wpforms_id = (int) get_field( 'wpforms_reservation_id', 'option' );
-			}
-			if ( $wpforms_id && function_exists( 'wpforms_display' ) ) {
+			$wpforms_id = function_exists( 'leadwerk_theme_get_reservation_wpforms_id' ) ? leadwerk_theme_get_reservation_wpforms_id() : 0;
+			if ( $wpforms_id && shortcode_exists( 'wpforms' ) ) {
 				echo '<div class="wpforms-cafee-wrap">';
-				wpforms_display( $wpforms_id );
+				echo do_shortcode( '[wpforms id="' . absint( $wpforms_id ) . '"]' );
 				echo '</div>';
 			} else {
 				leadwerk_render_contact_form_fallback();
@@ -483,50 +626,27 @@ function leadwerk_render_reservation( $f ) {
 }
 
 function leadwerk_render_contact_form_fallback() {
-	$sent    = false;
-	$error   = false;
-	if ( isset( $_POST['leadwerk_contact_nonce'] ) && wp_verify_nonce( $_POST['leadwerk_contact_nonce'], 'leadwerk_contact' ) ) {
-		$name    = sanitize_text_field( $_POST['leadwerk_name'] ?? '' );
-		$email   = sanitize_email( $_POST['leadwerk_email'] ?? '' );
-		$message = sanitize_textarea_field( $_POST['leadwerk_message'] ?? '' );
-		if ( $name && is_email( $email ) && $message ) {
-			$to      = function_exists( 'get_field' ) ? get_field( 'email', 'option' ) : get_option( 'admin_email' );
-			$to      = $to ?: get_option( 'admin_email' );
-			$subject = 'Neue Nachricht von ' . $name . ' – CaFEE Brückenmühle';
-			$body    = "Name: $name\nE-Mail: $email\n\nNachricht:\n$message";
-			$headers = array( 'Reply-To: ' . $name . ' <' . $email . '>' );
-			$sent    = wp_mail( $to, $subject, $body, $headers );
-		} else {
-			$error = true;
-		}
-	}
+	$error                = isset( $_GET['contact_error'] ) && '1' === $_GET['contact_error'];
+	$leadwerk_form_action = function_exists( 'leadwerk_theme_get_front_url' ) ? leadwerk_theme_get_front_url() : home_url( '/' );
 	?>
-	<?php if ( $sent ) : ?>
-		<div class="contact-form-success">
-			<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-			<h3>Vielen Dank!</h3>
-			<p>Deine Nachricht wurde gesendet. Wir melden uns bei dir.</p>
-		</div>
-	<?php else : ?>
-		<?php if ( $error ) : ?>
-			<p class="contact-form-error">Bitte fülle alle Felder korrekt aus.</p>
-		<?php endif; ?>
-		<form class="contact-form" method="post" action="#reservation">
-			<?php wp_nonce_field( 'leadwerk_contact', 'leadwerk_contact_nonce' ); ?>
-			<div class="form-group">
-				<label for="leadwerk-name" class="sr-only">Name</label>
-				<input type="text" id="leadwerk-name" name="leadwerk_name" placeholder="Dein Name" required>
-			</div>
-			<div class="form-group">
-				<label for="leadwerk-email" class="sr-only">E-Mail</label>
-				<input type="email" id="leadwerk-email" name="leadwerk_email" placeholder="Deine E-Mail" required>
-			</div>
-			<div class="form-group">
-				<label for="leadwerk-message" class="sr-only">Nachricht</label>
-				<textarea id="leadwerk-message" name="leadwerk_message" rows="4" placeholder="Deine Nachricht an uns..." required></textarea>
-			</div>
-			<button type="submit" class="btn btn-primary btn-full"><span>Nachricht senden</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-		</form>
+	<?php if ( $error ) : ?>
+		<p class="contact-form-error">Bitte fülle alle Felder korrekt aus.</p>
 	<?php endif; ?>
+	<form class="contact-form" method="post" action="<?php echo esc_url( $leadwerk_form_action ); ?>#reservation">
+		<?php wp_nonce_field( 'leadwerk_contact', 'leadwerk_contact_nonce' ); ?>
+		<div class="form-group">
+			<label for="leadwerk-name" class="sr-only">Name</label>
+			<input type="text" id="leadwerk-name" name="leadwerk_name" placeholder="Dein Name" required>
+		</div>
+		<div class="form-group">
+			<label for="leadwerk-email" class="sr-only">E-Mail</label>
+			<input type="email" id="leadwerk-email" name="leadwerk_email" placeholder="Deine E-Mail" required>
+		</div>
+		<div class="form-group">
+			<label for="leadwerk-message" class="sr-only">Nachricht</label>
+			<textarea id="leadwerk-message" name="leadwerk_message" rows="4" placeholder="Deine Nachricht an uns..." required></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary btn-full"><span>Nachricht senden</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+	</form>
 	<?php
 }

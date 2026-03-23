@@ -80,11 +80,16 @@ function initCursor() {
 function handleMouseMove(e) {
     state.mouseX = e.clientX;
     state.mouseY = e.clientY;
+}
 
-    // Create fairy dust particles more frequently for better sparkle effect
+/**
+ * Feenstaub an der Mausposition – unabhängig vom Custom Cursor (gleiche Logik auf allen Seiten mit #fairyDust).
+ */
+function maybeSpawnFairyParticlesAtPointer(e) {
+    if (!dom.fairyDust) return;
+    if (window.matchMedia('(hover: none)').matches) return;
     if (Math.random() < 0.5) {
         createFairyParticle(e.clientX, e.clientY);
-        // Create additional sparkles for more magical effect
         if (Math.random() < 0.4) {
             setTimeout(() => createFairyParticle(e.clientX, e.clientY), 50);
         }
@@ -92,6 +97,381 @@ function handleMouseMove(e) {
             setTimeout(() => createFairyParticle(e.clientX, e.clientY), 100);
         }
     }
+}
+
+function initFairyDustFollowMouse() {
+    if (!dom.fairyDust) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (window.__cafeeFairyPointerBound) return;
+    window.__cafeeFairyPointerBound = true;
+    document.addEventListener('mousemove', maybeSpawnFairyParticlesAtPointer);
+}
+
+function initThanksPlaneFairyTrail() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const flyer = document.querySelector('.thanks-paper-plane-flyer');
+    if (!flyer || !dom.fairyDust) return;
+    if (window.__cafeeThanksPlaneFairyRaf) return;
+    window.__cafeeThanksPlaneFairyRaf = true;
+
+    let lastTick = 0;
+    function loop(t) {
+        if (t - lastTick >= 72) {
+            lastTick = t;
+            const r = flyer.getBoundingClientRect();
+            if (r.width > 0 && r.bottom > -80 && r.top < window.innerHeight + 80) {
+                const x = r.left + r.width * 0.14 + (Math.random() - 0.5) * 18;
+                const y = r.top + r.height * 0.48 + (Math.random() - 0.5) * 20;
+                if (Math.random() < 0.46) {
+                    createFairyParticle(x, y);
+                    if (Math.random() < 0.38) {
+                        setTimeout(() => createFairyParticle(x + (Math.random() - 0.5) * 22, y + (Math.random() - 0.5) * 22), 42);
+                    }
+                }
+            }
+        }
+        requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+}
+
+function initAmbientFlyingFairy() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const body = document.body;
+    if (body.getAttribute('data-ambient-fairy') === 'off' || body.classList.contains('no-ambient-fairy')) {
+        return;
+    }
+    if (!dom.fairyDust || window.getComputedStyle(dom.fairyDust).display === 'none') return;
+    const fairyAttr = body.getAttribute('data-ambient-fairy');
+    const homeEdgeMode =
+        fairyAttr === 'home' || body.classList.contains('has-ambient-fairy-home');
+    if (window.__cafeeAmbientFairyStarted) return;
+    window.__cafeeAmbientFairyStarted = true;
+
+    const MOBILE_HEADER_FAIRY_MAX_W = 900;
+
+    function isMobileHeaderFairyMode() {
+        return window.innerWidth <= MOBILE_HEADER_FAIRY_MAX_W;
+    }
+
+    function getHeaderFairyBounds() {
+        const nav = dom.nav;
+        if (nav) {
+            const r = nav.getBoundingClientRect();
+            const padX = 26;
+            const padY = 10;
+            return {
+                minX: r.left + padX,
+                maxX: r.right - padX,
+                minY: r.top + padY,
+                maxY: r.bottom - padY,
+            };
+        }
+        const h = Math.min(130, window.innerHeight * 0.16);
+        return {
+            minX: window.innerWidth * 0.08,
+            maxX: window.innerWidth * 0.92,
+            minY: 10,
+            maxY: h,
+        };
+    }
+
+    function clampToHeaderBounds() {
+        const b = getHeaderFairyBounds();
+        let minX = b.minX;
+        let maxX = b.maxX;
+        let minY = b.minY;
+        let maxY = b.maxY;
+        if (maxX < minX + 16) {
+            const c = (minX + maxX) / 2;
+            minX = c - 14;
+            maxX = c + 14;
+        }
+        if (maxY < minY + 12) {
+            const c = (minY + maxY) / 2;
+            minY = c - 8;
+            maxY = c + 8;
+        }
+        x = Math.min(Math.max(x, minX), maxX);
+        y = Math.min(Math.max(y, minY), maxY);
+        targetX = Math.min(Math.max(targetX, minX), maxX);
+        targetY = Math.min(Math.max(targetY, minY), maxY);
+    }
+
+    function pickTargetHeaderStrip() {
+        const b = getHeaderFairyBounds();
+        const wBand = b.maxX - b.minX;
+        const hBand = b.maxY - b.minY;
+        if (wBand < 20 || hBand < 16) {
+            targetX = window.innerWidth * 0.5;
+            targetY = Math.max(24, b.minY);
+            return;
+        }
+        targetX = b.minX + Math.random() * wBand;
+        targetY = b.minY + Math.random() * hBand;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'ambient-flying-fairy';
+    if (homeEdgeMode && !isMobileHeaderFairyMode()) {
+        wrap.classList.add('ambient-flying-fairy--home-edges');
+    }
+    if (isMobileHeaderFairyMode()) {
+        wrap.classList.add('ambient-flying-fairy--mobile-header');
+    }
+    wrap.setAttribute('aria-hidden', 'true');
+
+    const img = document.createElement('img');
+    img.className = 'ambient-flying-fairy__img';
+    img.alt = '';
+    img.setAttribute('aria-hidden', 'true');
+    const themeFairy = typeof window !== 'undefined' ? window.cafeeTheme : null;
+    const fairySrc =
+        themeFairy && themeFairy.fairySvgUrl
+            ? themeFairy.fairySvgUrl
+            : 'images/Fee CaFEE_favicon_ohne Dampf.svg';
+    img.src = fairySrc;
+    wrap.appendChild(img);
+    document.body.appendChild(wrap);
+
+    let x;
+    let y;
+    let targetX;
+    let targetY;
+    let nextTargetTime;
+    let nextTeleportTime;
+    let side;
+    let teleportBusy = false;
+
+    function randomXInBand(s) {
+        const w = window.innerWidth;
+        if (s === 'left') {
+            return (0.032 + Math.random() * 0.1) * w;
+        }
+        return (0.868 + Math.random() * 0.1) * w;
+    }
+
+    function pickTargetY() {
+        const my = window.innerHeight * 0.1;
+        return my + Math.random() * Math.max(80, window.innerHeight - 2 * my);
+    }
+
+    function pickTargetFull() {
+        const mx = window.innerWidth * 0.1;
+        const my = window.innerHeight * 0.1;
+        targetX = mx + Math.random() * Math.max(40, window.innerWidth - 2 * mx);
+        targetY = my + Math.random() * Math.max(40, window.innerHeight - 2 * my);
+    }
+
+    function clampToViewport() {
+        const mx = window.innerWidth * 0.08;
+        const my = window.innerHeight * 0.08;
+        const maxX = window.innerWidth - mx;
+        const maxY = window.innerHeight - my;
+        targetX = Math.min(Math.max(targetX, mx), maxX);
+        targetY = Math.min(Math.max(targetY, my), maxY);
+        x = Math.min(Math.max(x, mx), maxX);
+        y = Math.min(Math.max(y, my), maxY);
+    }
+
+    function clampHomeResize() {
+        const my = window.innerHeight * 0.08;
+        const maxY = window.innerHeight - my;
+        targetY = Math.min(Math.max(targetY, my), maxY);
+        y = Math.min(Math.max(y, my), maxY);
+        x = randomXInBand(side);
+        targetX = randomXInBand(side);
+    }
+
+    function clampHomeToBands() {
+        const w = window.innerWidth;
+        const my = window.innerHeight * 0.08;
+        const maxY = window.innerHeight - my;
+        y = Math.min(Math.max(y, my), maxY);
+        targetY = Math.min(Math.max(targetY, my), maxY);
+        const leftLo = 0.025 * w;
+        const leftHi = 0.142 * w;
+        const rightLo = 0.858 * w;
+        const rightHi = 0.975 * w;
+        if (side === 'left') {
+            x = Math.min(Math.max(x, leftLo), leftHi);
+            targetX = Math.min(Math.max(targetX, leftLo), leftHi);
+        } else {
+            x = Math.min(Math.max(x, rightLo), rightHi);
+            targetX = Math.min(Math.max(targetX, rightLo), rightHi);
+        }
+    }
+
+    const fairyFleeFromPointer = window.matchMedia('(hover: hover)').matches;
+    let fleePointerX = -1e6;
+    let fleePointerY = -1e6;
+    if (fairyFleeFromPointer) {
+        window.addEventListener(
+            'pointermove',
+            (e) => {
+                fleePointerX = e.clientX;
+                fleePointerY = e.clientY;
+            },
+            { passive: true }
+        );
+    }
+
+    function applyMouseFlee() {
+        if (!fairyFleeFromPointer || teleportBusy) return;
+        const dx = x - fleePointerX;
+        const dy = y - fleePointerY;
+        const dist = Math.hypot(dx, dy);
+        const fleeRadius = 108;
+        if (dist >= fleeRadius || dist < 0.5) return;
+        const urgency = (fleeRadius - dist) / fleeRadius;
+        const push = 6 * urgency * urgency;
+        const ux = dx / dist;
+        const uy = dy / dist;
+        x += ux * push;
+        y += uy * push;
+        targetX += ux * push * 2.2;
+        targetY += uy * push * 2.2;
+        if (isMobileHeaderFairyMode()) {
+            clampToHeaderBounds();
+        } else if (homeEdgeMode) {
+            clampHomeToBands();
+        } else {
+            clampToViewport();
+        }
+    }
+
+    if (isMobileHeaderFairyMode()) {
+        side = 'left';
+        pickTargetHeaderStrip();
+        x = targetX;
+        y = targetY;
+        pickTargetHeaderStrip();
+        nextTargetTime = performance.now() + 800 + Math.random() * 1000;
+        nextTeleportTime = Infinity;
+    } else if (homeEdgeMode) {
+        side = Math.random() < 0.5 ? 'left' : 'right';
+        x = randomXInBand(side);
+        y = pickTargetY();
+        targetX = randomXInBand(side);
+        targetY = pickTargetY();
+        nextTargetTime = performance.now() + 1200 + Math.random() * 1600;
+        nextTeleportTime = performance.now() + 5000 + Math.random() * 9000;
+    } else {
+        x = window.innerWidth * 0.28;
+        y = window.innerHeight * 0.38;
+        pickTargetFull();
+        nextTargetTime = performance.now() + 1800 + Math.random() * 1800;
+        nextTeleportTime = Infinity;
+    }
+
+    let lastDust = 0;
+    const lerpK = 0.032;
+
+    function doTeleport() {
+        if (isMobileHeaderFairyMode()) return;
+        if (teleportBusy) return;
+        teleportBusy = true;
+        const burst = 10;
+        for (let i = 0; i < burst; i++) {
+            createFairyParticle(x + (Math.random() - 0.5) * 36, y + (Math.random() - 0.5) * 36);
+        }
+        wrap.classList.add('ambient-flying-fairy--teleporting');
+
+        setTimeout(() => {
+            side = side === 'left' ? 'right' : 'left';
+            x = randomXInBand(side);
+            y = pickTargetY();
+            targetX = randomXInBand(side);
+            targetY = pickTargetY();
+            for (let i = 0; i < burst; i++) {
+                createFairyParticle(x + (Math.random() - 0.5) * 40, y + (Math.random() - 0.5) * 40);
+            }
+        }, 260);
+
+        setTimeout(() => {
+            wrap.classList.remove('ambient-flying-fairy--teleporting');
+            teleportBusy = false;
+            nextTeleportTime = performance.now() + 5500 + Math.random() * 9500;
+        }, 540);
+    }
+
+    function loop(t) {
+        const headerStrip = isMobileHeaderFairyMode();
+
+        if (headerStrip) {
+            if (t >= nextTargetTime) {
+                pickTargetHeaderStrip();
+                nextTargetTime = t + 900 + Math.random() * 1400;
+            }
+            x += (targetX - x) * lerpK;
+            y += (targetY - y) * lerpK;
+            clampToHeaderBounds();
+        } else if (homeEdgeMode) {
+            if (!teleportBusy && t >= nextTeleportTime) {
+                doTeleport();
+            }
+            if (!teleportBusy) {
+                if (t >= nextTargetTime) {
+                    targetX = randomXInBand(side);
+                    targetY = pickTargetY();
+                    nextTargetTime = t + 1300 + Math.random() * 2200;
+                }
+                x += (targetX - x) * lerpK;
+                y += (targetY - y) * lerpK;
+            }
+        } else {
+            if (t >= nextTargetTime) {
+                pickTargetFull();
+                nextTargetTime = t + 2000 + Math.random() * 2000;
+            }
+            x += (targetX - x) * lerpK;
+            y += (targetY - y) * lerpK;
+        }
+
+        applyMouseFlee();
+
+        wrap.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0) translate(-50%, -50%)`;
+
+        if (t - lastDust >= 78) {
+            lastDust = t;
+            if (Math.random() < 0.45) {
+                createFairyParticle(x, y);
+                if (Math.random() < 0.36) {
+                    setTimeout(
+                        () =>
+                            createFairyParticle(
+                                x + (Math.random() - 0.5) * 24,
+                                y + (Math.random() - 0.5) * 24
+                            ),
+                        44
+                    );
+                }
+            }
+        }
+        requestAnimationFrame(loop);
+    }
+
+    window.addEventListener(
+        'resize',
+        () => {
+            if (window.innerWidth <= MOBILE_HEADER_FAIRY_MAX_W) {
+                clampToHeaderBounds();
+                wrap.classList.add('ambient-flying-fairy--mobile-header');
+                wrap.classList.remove('ambient-flying-fairy--home-edges');
+            } else {
+                wrap.classList.remove('ambient-flying-fairy--mobile-header');
+                if (homeEdgeMode) {
+                    wrap.classList.add('ambient-flying-fairy--home-edges');
+                    clampHomeResize();
+                } else {
+                    clampToViewport();
+                }
+            }
+        },
+        { passive: true }
+    );
+
+    requestAnimationFrame(loop);
 }
 
 function animateCursor() {
@@ -777,6 +1157,9 @@ function init() {
 
 function initAll() {
     optimizePerformance();
+    initFairyDustFollowMouse();
+    initThanksPlaneFairyTrail();
+    initAmbientFlyingFairy();
     initCursor();
     initNavigation();
     initMenuBook();
@@ -790,6 +1173,7 @@ function initAll() {
     initVideoLightbox();
     initInterviewSlider();
     initInterviewLightbox();
+    initContactFormRedirect();
     initOpenTableOverlayFallback();
 
     // Trigger initial animations
@@ -811,14 +1195,38 @@ function initVideoLightbox() {
 
     if (!lightbox || !openBtn || !closeBtn || !video) return;
 
+    function getStoryVideoSrc() {
+        const storySource = document.querySelector('#story .story-visual video source');
+        if (!storySource) {
+            return '';
+        }
+        return storySource.src || storySource.getAttribute('src') || '';
+    }
+
     function openLightbox() {
+        const srcUrl = getStoryVideoSrc();
+        const lbSource = video.querySelector('source');
+        if (lbSource && srcUrl) {
+            const next = new URL(srcUrl, document.baseURI).href;
+            const cur = lbSource.src || '';
+            if (!cur || cur !== next) {
+                lbSource.src = srcUrl;
+                video.load();
+            }
+        }
+
         lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-        video.play();
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        const p = video.play();
+        if (p !== undefined) {
+            p.catch(() => {});
+        }
     }
 
     function closeLightbox() {
         lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         video.pause();
         video.currentTime = 0;

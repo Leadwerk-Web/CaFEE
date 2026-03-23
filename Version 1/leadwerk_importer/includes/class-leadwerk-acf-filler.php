@@ -98,12 +98,15 @@ class Leadwerk_ACF_Filler {
 		// Hero
 		$hero = $this->xpath_section( $xpath, 'home' );
 		if ( $hero ) {
+			$hero_video_src = $this->attr( $xpath, './/video[contains(@class,"hero-bg-video")]//source', 'src', $hero );
+			$hero_video_id  = $hero_video_src ? $this->get_attachment_id_by_source( $hero_video_src ) : 0;
 			$sections[] = array(
 				'acf_fc_layout'   => 'hero',
 				'badge_text'      => $this->text( $xpath, './/div[contains(@class,"hero-badge")]/span', $hero ),
 				'title_line_1'    => $this->text( $xpath, './/h1[contains(@class,"hero-title")]/span[contains(@class,"title-line")][1]', $hero ),
 				'title_line_2_accent' => $this->text( $xpath, './/h1[contains(@class,"hero-title")]/span[contains(@class,"accent")]', $hero ),
 				'subtitle'        => $this->text( $xpath, './/p[contains(@class,"hero-subtitle")]', $hero ),
+				'background_video' => $hero_video_id,
 				'button_1_text'   => $this->text( $xpath, './/div[contains(@class,"hero-buttons")]/a[1]//span[contains(@class,"btn-text")]', $hero ) ?: 'Tisch reservieren',
 				'button_1_url'    => $this->attr( $xpath, './/div[contains(@class,"hero-buttons")]/a[1]', 'href', $hero ) ?: '#reservation',
 				'button_2_text'   => $this->text( $xpath, './/div[contains(@class,"hero-buttons")]/a[2]', $hero ) ?: 'Speisekarte entdecken',
@@ -138,35 +141,96 @@ class Leadwerk_ACF_Filler {
 		// Menu Preview
 		$menu = $this->xpath_section( $xpath, 'menu' );
 		if ( $menu ) {
-			$menu_categories = array();
-			$menu_quote = '';
-			$menu_quote_image = 0;
-			$spreads = $xpath->query( './/div[contains(@class,"book-spread")]', $menu );
-			foreach ( $spreads as $spread ) {
-				$pages = $xpath->query( './/div[contains(@class,"book-page")]', $spread );
-				foreach ( $pages as $page ) {
-					$quote_el = $xpath->query( './/p[contains(@class,"page-quote")]', $page )->item( 0 );
-					if ( $quote_el ) {
-						$menu_quote = trim( $quote_el->textContent );
-						$quote_img_src = $this->attr( $xpath, './/div[contains(@class,"page-image")]//img', 'src', $page );
-						$menu_quote_image = $quote_img_src ? $this->get_attachment_id_by_source( $quote_img_src ) : 0;
+			$menu_highlights = array();
+			$hl_nodes = $xpath->query( './/div[contains(@class,"menu-highlight-card")]', $menu );
+			foreach ( $hl_nodes as $hl ) {
+				$list_items = array();
+				$li_nodes = $xpath->query( './/ul[contains(@class,"menu-highlight-list")]//li', $hl );
+				foreach ( $li_nodes as $li ) {
+					$iname = $this->text( $xpath, './/span[contains(@class,"item-name")]', $li );
+					if ( $iname === '' ) {
 						continue;
 					}
-					$cat_title = $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page );
-					$items = array();
-					$menu_items = $xpath->query( './/div[contains(@class,"menu-item")]', $page );
+					$list_items[] = array(
+						'name'  => $iname,
+						'price' => $this->text( $xpath, './/span[contains(@class,"item-price")]', $li ),
+					);
+				}
+				$icon_src = $this->attr( $xpath, './/img[contains(@class,"menu-highlight-icon-img")]', 'src', $hl );
+				$menu_highlights[] = array(
+					'tag'         => $this->text( $xpath, './/span[contains(@class,"menu-highlight-tag")]', $hl ),
+					'icon'        => $icon_src ? $this->get_attachment_id_by_source( $icon_src ) : 0,
+					'title'       => $this->text( $xpath, './/h3[contains(@class,"menu-highlight-title")]', $hl ),
+					'list_items'  => $list_items,
+				);
+			}
+
+			$menu_book_pages = array();
+			$book_container  = $xpath->query( './/*[@id="bookPagesContainer"]', $menu )->item( 0 );
+			if ( $book_container ) {
+				$flat_pages = $xpath->query( './div[contains(@class,"book-page")]', $book_container );
+				foreach ( $flat_pages as $page_el ) {
+					$cls        = $page_el instanceof DOMElement ? $page_el->getAttribute( 'class' ) : '';
+					$page_class = ( strpos( $cls, 'right-page' ) !== false ) ? 'right-page' : 'left-page';
+					$row_items  = array();
+					$menu_items = $xpath->query( './/div[contains(@class,"menu-item")]', $page_el );
 					foreach ( $menu_items as $item ) {
 						$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
-						if ( $name === '' ) continue;
-						$items[] = array(
+						if ( $name === '' ) {
+							continue;
+						}
+						$row_items[] = array(
 							'name'        => $name,
 							'price'       => $this->text( $xpath, './/span[contains(@class,"item-price")]', $item ),
 							'description' => $this->text( $xpath, './/p[contains(@class,"item-desc")]', $item ),
 							'featured'    => false,
 						);
 					}
-					if ( $cat_title || ! empty( $items ) ) {
-						$menu_categories[] = array( 'category_title' => $cat_title, 'items' => $items );
+					$page_quote_raw = $this->text( $xpath, './/p[contains(@class,"page-quote")]', $page_el );
+					$img_src        = $this->attr( $xpath, './/div[contains(@class,"page-image")]//img', 'src', $page_el );
+					$menu_book_pages[] = array(
+						'page_class'     => $page_class,
+						'section_title'  => $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page_el ),
+						'row_items'      => $row_items,
+						'page_quote'     => $page_quote_raw,
+						'page_image'     => $img_src ? $this->get_attachment_id_by_source( $img_src ) : 0,
+					);
+				}
+			}
+
+			$menu_categories = array();
+			$menu_quote      = '';
+			$menu_quote_image = 0;
+			if ( empty( $menu_book_pages ) ) {
+				$spreads = $xpath->query( './/div[contains(@class,"book-spread")]', $menu );
+				foreach ( $spreads as $spread ) {
+					$pages = $xpath->query( './/div[contains(@class,"book-page")]', $spread );
+					foreach ( $pages as $page ) {
+						$quote_el = $xpath->query( './/p[contains(@class,"page-quote")]', $page )->item( 0 );
+						if ( $quote_el ) {
+							$menu_quote = trim( $quote_el->textContent );
+							$quote_img_src = $this->attr( $xpath, './/div[contains(@class,"page-image")]//img', 'src', $page );
+							$menu_quote_image = $quote_img_src ? $this->get_attachment_id_by_source( $quote_img_src ) : 0;
+							continue;
+						}
+						$cat_title = $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page );
+						$items     = array();
+						$menu_items = $xpath->query( './/div[contains(@class,"menu-item")]', $page );
+						foreach ( $menu_items as $item ) {
+							$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
+							if ( $name === '' ) {
+								continue;
+							}
+							$items[] = array(
+								'name'        => $name,
+								'price'       => $this->text( $xpath, './/span[contains(@class,"item-price")]', $item ),
+								'description' => $this->text( $xpath, './/p[contains(@class,"item-desc")]', $item ),
+								'featured'    => false,
+							);
+						}
+						if ( $cat_title || ! empty( $items ) ) {
+							$menu_categories[] = array( 'category_title' => $cat_title, 'items' => $items );
+						}
 					}
 				}
 			}
@@ -179,9 +243,11 @@ class Leadwerk_ACF_Filler {
 				'section_title_display'    => $this->text( $xpath, './/div[contains(@class,"menu-header")]//span[contains(@class,"title-display")]', $menu ),
 				'section_title_script'     => $this->text( $xpath, './/div[contains(@class,"menu-header")]//span[contains(@class,"title-script")]', $menu ),
 				'section_subtitle'         => $this->text( $xpath, './/div[contains(@class,"menu-header")]//p[contains(@class,"section-subtitle")]', $menu ),
+				'menu_highlights'          => $menu_highlights,
 				'menu_book_cover_logo'     => $cover_logo_src ? $this->get_attachment_id_by_source( $cover_logo_src ) : 0,
 				'menu_book_cover_title'    => $this->text( $xpath, './/div[contains(@class,"book-cover")]//h3', $menu ),
 				'menu_book_cover_subtitle' => $this->text( $xpath, './/div[contains(@class,"book-cover")]//p', $menu ),
+				'menu_book_pages'          => $menu_book_pages,
 				'menu_categories'         => $menu_categories,
 				'menu_quote'               => $menu_quote,
 				'menu_quote_image'         => $menu_quote_image,
@@ -287,8 +353,8 @@ class Leadwerk_ACF_Filler {
 			$addr_node = $xpath->query( './/div[contains(@class,"reservation-info")]//div[.//strong[contains(text(),"Adresse")]]/span', $res )->item( 0 );
 			$addr_raw  = $addr_node ? $addr_node->textContent : '';
 			$addr_parts = preg_split( '/,\s*|\n/', $addr_raw, 2 );
-		$street = isset( $addr_parts[0] ) ? trim( $addr_parts[0] ) : 'Hofstätte 2';
-		$city   = isset( $addr_parts[1] ) ? trim( $addr_parts[1] ) : '76593 Gernsbach';
+			$street = isset( $addr_parts[0] ) ? trim( $addr_parts[0] ) : 'Hofstätte 2';
+			$city   = isset( $addr_parts[1] ) ? trim( $addr_parts[1] ) : '76593 Gernsbach';
 			$sections[] = array(
 				'acf_fc_layout'           => 'reservation',
 				'section_badge'           => $this->text( $xpath, './/div[contains(@class,"section-badge")]', $res ),
