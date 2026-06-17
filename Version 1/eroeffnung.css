@@ -724,7 +724,9 @@
 .ero-taste-card h3 {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: var(--space-sm);
     color: var(--color-secondary);
 }
