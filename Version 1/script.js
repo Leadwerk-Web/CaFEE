@@ -25,6 +25,251 @@ const dom = {
     experienceBgParallax: document.querySelector('.experience-bg-parallax'),
 };
 
+const scrollLockState = {
+    sources: new Set(),
+    scrollY: 0,
+    restoreFrame: null,
+    failSafeTimer: null,
+};
+
+const mobileOverlayScrollBypassSources = new Set(['menu-modal', 'video-lightbox', 'interview-lightbox']);
+
+function isMobileNavViewport() {
+    return window.matchMedia('(max-width: 900px)').matches;
+}
+
+function isTouchPhoneViewport() {
+    return window.matchMedia('(max-width: 767.98px)').matches &&
+        window.matchMedia('(pointer: coarse)').matches;
+}
+
+function shouldUseDropdownMobileNav() {
+    return isMobileNavViewport() && !document.body.classList.contains('is-subpage');
+}
+
+function shouldUsePageScrollLock(source) {
+    if (!source) {
+        return true;
+    }
+
+    if (source === 'mobile-nav') {
+        return !isMobileNavViewport();
+    }
+
+    if (mobileOverlayScrollBypassSources.has(source)) {
+        return !isTouchPhoneViewport();
+    }
+
+    return true;
+}
+
+function getEffectiveScrollLockSources() {
+    return Array.from(scrollLockState.sources).filter(source => shouldUsePageScrollLock(source));
+}
+
+function hasActivePageScrollLock() {
+    return getEffectiveScrollLockSources().length > 0;
+}
+
+function cancelPendingScrollRestore() {
+    if (scrollLockState.restoreFrame !== null) {
+        window.cancelAnimationFrame(scrollLockState.restoreFrame);
+        scrollLockState.restoreFrame = null;
+    }
+
+    if (scrollLockState.failSafeTimer !== null) {
+        clearTimeout(scrollLockState.failSafeTimer);
+        scrollLockState.failSafeTimer = null;
+    }
+}
+
+function restoreScrollPositionInstantly(targetY) {
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, targetY);
+
+    window.requestAnimationFrame(() => {
+        document.documentElement.style.scrollBehavior = previousBehavior;
+    });
+}
+
+/**
+ * Liest die korrekte scrollY-Position – auch wenn body position:fixed hat.
+ * iOS Safari liefert window.scrollY === 0, während body.style.top den Wert hält.
+ */
+function readCurrentScrollY() {
+    if (document.body.classList.contains('scroll-locked')) {
+        const top = parseFloat(document.body.style.top);
+        return isFinite(top) ? Math.abs(top) : scrollLockState.scrollY;
+    }
+    return window.scrollY;
+}
+
+function setPageScrollLocked(isLocked) {
+    document.body.classList.toggle('scroll-locked', isLocked);
+}
+
+function applyPageScrollLock() {
+    const shouldLock = hasActivePageScrollLock();
+    const isLocked = document.body.classList.contains('scroll-locked');
+
+    if (shouldLock) {
+        cancelPendingScrollRestore();
+
+        if (!isLocked) {
+            const scrollbarCompensation = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+
+            document.documentElement.style.setProperty('--scrollbar-compensation', `${scrollbarCompensation}px`);
+            document.body.style.top = `-${scrollLockState.scrollY}px`;
+        }
+
+        setPageScrollLocked(true);
+        return;
+    }
+
+    if (!isLocked) {
+        cancelPendingScrollRestore();
+        document.body.style.top = '';
+        document.documentElement.style.removeProperty('--scrollbar-compensation');
+        return;
+    }
+
+    const restoreY = scrollLockState.scrollY;
+
+    setPageScrollLocked(false);
+    document.body.style.top = '';
+    document.documentElement.style.removeProperty('--scrollbar-compensation');
+
+    cancelPendingScrollRestore();
+
+    /* Einzelner rAF statt verschachtelter Kette – eliminiert die Race-Condition,
+       bei der das innere rAF nicht rechtzeitig abgebrochen werden konnte. */
+    scrollLockState.restoreFrame = window.requestAnimationFrame(() => {
+        scrollLockState.restoreFrame = null;
+
+        if (hasActivePageScrollLock()) {
+            return;
+        }
+
+        restoreScrollPositionInstantly(restoreY);
+    });
+
+    /* Fail-safe: Falls nach 350 ms noch scroll-locked Klasse am Body klebt,
+       obwohl keine Source mehr aktiv ist → hart aufräumen.  */
+    scrollLockState.failSafeTimer = setTimeout(() => {
+        scrollLockState.failSafeTimer = null;
+
+        if (hasActivePageScrollLock()) {
+            return;
+        }
+
+        if (document.body.classList.contains('scroll-locked')) {
+            const safeY = scrollLockState.scrollY;
+            document.body.classList.remove('scroll-locked');
+            document.body.style.top = '';
+            document.documentElement.style.removeProperty('--scrollbar-compensation');
+            restoreScrollPositionInstantly(safeY);
+        }
+    }, 350);
+}
+
+function lockPageScroll(source) {
+    if (!source) {
+        return;
+    }
+
+    const hadLocks = hasActivePageScrollLock();
+    const hasPendingRestore = scrollLockState.restoreFrame !== null;
+    scrollLockState.sources.add(source);
+    const hasLocksNow = hasActivePageScrollLock();
+
+    if (!hadLocks && hasLocksNow) {
+        scrollLockState.scrollY = hasPendingRestore
+            ? scrollLockState.scrollY
+            : readCurrentScrollY();
+    }
+
+    applyPageScrollLock();
+}
+
+function unlockPageScroll(source) {
+    if (!source || !scrollLockState.sources.has(source)) {
+        return;
+    }
+
+    scrollLockState.sources.delete(source);
+    applyPageScrollLock();
+}
+
+function reconcilePageScrollLock() {
+    const shouldLock = hasActivePageScrollLock();
+    const isLocked = document.body.classList.contains('scroll-locked');
+
+    if (shouldLock !== isLocked) {
+        applyPageScrollLock();
+    }
+}
+
+function clearStaleScrollLockIfSafe() {
+    if (hasActivePageScrollLock()) {
+        return;
+    }
+
+    cancelPendingScrollRestore();
+    document.body.classList.remove('scroll-locked');
+    document.body.style.top = '';
+    document.documentElement.style.removeProperty('--scrollbar-compensation');
+}
+
+/** Synchronisiert den zentralen Scroll-Lock mit dem Zustand des mobilen Menüs. */
+function syncBodyOverflowWithNavMenu() {
+    if (!dom.navMenu) {
+        return;
+    }
+
+    document.body.style.overflow = dom.navMenu.classList.contains('active') ? 'hidden' : '';
+}
+
+function syncMobileNavA11y() {
+    if (!dom.navToggle || !dom.navMenu) {
+        return;
+    }
+
+    const isOpen = dom.navMenu.classList.contains('active');
+
+    dom.navToggle.setAttribute('aria-controls', dom.navMenu.id || 'navMenu');
+    dom.navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    dom.navMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+}
+
+function syncVideoLightboxBodyState() {
+    document.body.classList.toggle(
+        'video-lightbox-open',
+        Boolean(document.querySelector('.video-lightbox.active'))
+    );
+}
+
+function closeMobileNavIfOpen(nextSource) {
+    if (!dom.navToggle || !dom.navMenu) {
+        return;
+    }
+
+    dom.navToggle.classList.remove('active');
+    dom.navMenu.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+/** Schmale Viewports: weniger scroll-/CPU-Last (Parallax, RAF, Dust aus). */
+function isMobileScrollLite() {
+    return window.matchMedia('(max-width: 767.98px)').matches;
+}
+
+window.addEventListener('resize', reconcilePageScrollLock, { passive: true });
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', reconcilePageScrollLock);
+}
+
 // ============================================
 // State
 // ============================================
@@ -80,16 +325,12 @@ function initCursor() {
 function handleMouseMove(e) {
     state.mouseX = e.clientX;
     state.mouseY = e.clientY;
-}
 
-/**
- * Feenstaub an der Mausposition – unabhängig vom Custom Cursor (gleiche Logik auf allen Seiten mit #fairyDust).
- */
-function maybeSpawnFairyParticlesAtPointer(e) {
-    if (!dom.fairyDust) return;
-    if (window.matchMedia('(hover: none)').matches) return;
+    // Create fairy dust particles more frequently for better sparkle effect
     if (Math.random() < 0.5) {
         createFairyParticle(e.clientX, e.clientY);
+
+        // Create additional sparkles for more magical effect
         if (Math.random() < 0.4) {
             setTimeout(() => createFairyParticle(e.clientX, e.clientY), 50);
         }
@@ -99,381 +340,9 @@ function maybeSpawnFairyParticlesAtPointer(e) {
     }
 }
 
-function initFairyDustFollowMouse() {
-    if (!dom.fairyDust) return;
-    if (window.matchMedia('(hover: none)').matches) return;
-    if (window.__cafeeFairyPointerBound) return;
-    window.__cafeeFairyPointerBound = true;
-    document.addEventListener('mousemove', maybeSpawnFairyParticlesAtPointer);
-}
-
-function initThanksPlaneFairyTrail() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const flyer = document.querySelector('.thanks-paper-plane-flyer');
-    if (!flyer || !dom.fairyDust) return;
-    if (window.__cafeeThanksPlaneFairyRaf) return;
-    window.__cafeeThanksPlaneFairyRaf = true;
-
-    let lastTick = 0;
-    function loop(t) {
-        if (t - lastTick >= 72) {
-            lastTick = t;
-            const r = flyer.getBoundingClientRect();
-            if (r.width > 0 && r.bottom > -80 && r.top < window.innerHeight + 80) {
-                const x = r.left + r.width * 0.14 + (Math.random() - 0.5) * 18;
-                const y = r.top + r.height * 0.48 + (Math.random() - 0.5) * 20;
-                if (Math.random() < 0.46) {
-                    createFairyParticle(x, y);
-                    if (Math.random() < 0.38) {
-                        setTimeout(() => createFairyParticle(x + (Math.random() - 0.5) * 22, y + (Math.random() - 0.5) * 22), 42);
-                    }
-                }
-            }
-        }
-        requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-}
-
-function initAmbientFlyingFairy() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const body = document.body;
-    if (body.getAttribute('data-ambient-fairy') === 'off' || body.classList.contains('no-ambient-fairy')) {
-        return;
-    }
-    if (!dom.fairyDust || window.getComputedStyle(dom.fairyDust).display === 'none') return;
-    const fairyAttr = body.getAttribute('data-ambient-fairy');
-    const homeEdgeMode =
-        fairyAttr === 'home' || body.classList.contains('has-ambient-fairy-home');
-    if (window.__cafeeAmbientFairyStarted) return;
-    window.__cafeeAmbientFairyStarted = true;
-
-    const MOBILE_HEADER_FAIRY_MAX_W = 900;
-
-    function isMobileHeaderFairyMode() {
-        return window.innerWidth <= MOBILE_HEADER_FAIRY_MAX_W;
-    }
-
-    function getHeaderFairyBounds() {
-        const nav = dom.nav;
-        if (nav) {
-            const r = nav.getBoundingClientRect();
-            const padX = 26;
-            const padY = 10;
-            return {
-                minX: r.left + padX,
-                maxX: r.right - padX,
-                minY: r.top + padY,
-                maxY: r.bottom - padY,
-            };
-        }
-        const h = Math.min(130, window.innerHeight * 0.16);
-        return {
-            minX: window.innerWidth * 0.08,
-            maxX: window.innerWidth * 0.92,
-            minY: 10,
-            maxY: h,
-        };
-    }
-
-    function clampToHeaderBounds() {
-        const b = getHeaderFairyBounds();
-        let minX = b.minX;
-        let maxX = b.maxX;
-        let minY = b.minY;
-        let maxY = b.maxY;
-        if (maxX < minX + 16) {
-            const c = (minX + maxX) / 2;
-            minX = c - 14;
-            maxX = c + 14;
-        }
-        if (maxY < minY + 12) {
-            const c = (minY + maxY) / 2;
-            minY = c - 8;
-            maxY = c + 8;
-        }
-        x = Math.min(Math.max(x, minX), maxX);
-        y = Math.min(Math.max(y, minY), maxY);
-        targetX = Math.min(Math.max(targetX, minX), maxX);
-        targetY = Math.min(Math.max(targetY, minY), maxY);
-    }
-
-    function pickTargetHeaderStrip() {
-        const b = getHeaderFairyBounds();
-        const wBand = b.maxX - b.minX;
-        const hBand = b.maxY - b.minY;
-        if (wBand < 20 || hBand < 16) {
-            targetX = window.innerWidth * 0.5;
-            targetY = Math.max(24, b.minY);
-            return;
-        }
-        targetX = b.minX + Math.random() * wBand;
-        targetY = b.minY + Math.random() * hBand;
-    }
-
-    const wrap = document.createElement('div');
-    wrap.className = 'ambient-flying-fairy';
-    if (homeEdgeMode && !isMobileHeaderFairyMode()) {
-        wrap.classList.add('ambient-flying-fairy--home-edges');
-    }
-    if (isMobileHeaderFairyMode()) {
-        wrap.classList.add('ambient-flying-fairy--mobile-header');
-    }
-    wrap.setAttribute('aria-hidden', 'true');
-
-    const img = document.createElement('img');
-    img.className = 'ambient-flying-fairy__img';
-    img.alt = '';
-    img.setAttribute('aria-hidden', 'true');
-    const themeFairy = typeof window !== 'undefined' ? window.cafeeTheme : null;
-    const fairySrc =
-        themeFairy && themeFairy.fairySvgUrl
-            ? themeFairy.fairySvgUrl
-            : 'images/Fee CaFEE_favicon_ohne Dampf.svg';
-    img.src = fairySrc;
-    wrap.appendChild(img);
-    document.body.appendChild(wrap);
-
-    let x;
-    let y;
-    let targetX;
-    let targetY;
-    let nextTargetTime;
-    let nextTeleportTime;
-    let side;
-    let teleportBusy = false;
-
-    function randomXInBand(s) {
-        const w = window.innerWidth;
-        if (s === 'left') {
-            return (0.032 + Math.random() * 0.1) * w;
-        }
-        return (0.868 + Math.random() * 0.1) * w;
-    }
-
-    function pickTargetY() {
-        const my = window.innerHeight * 0.1;
-        return my + Math.random() * Math.max(80, window.innerHeight - 2 * my);
-    }
-
-    function pickTargetFull() {
-        const mx = window.innerWidth * 0.1;
-        const my = window.innerHeight * 0.1;
-        targetX = mx + Math.random() * Math.max(40, window.innerWidth - 2 * mx);
-        targetY = my + Math.random() * Math.max(40, window.innerHeight - 2 * my);
-    }
-
-    function clampToViewport() {
-        const mx = window.innerWidth * 0.08;
-        const my = window.innerHeight * 0.08;
-        const maxX = window.innerWidth - mx;
-        const maxY = window.innerHeight - my;
-        targetX = Math.min(Math.max(targetX, mx), maxX);
-        targetY = Math.min(Math.max(targetY, my), maxY);
-        x = Math.min(Math.max(x, mx), maxX);
-        y = Math.min(Math.max(y, my), maxY);
-    }
-
-    function clampHomeResize() {
-        const my = window.innerHeight * 0.08;
-        const maxY = window.innerHeight - my;
-        targetY = Math.min(Math.max(targetY, my), maxY);
-        y = Math.min(Math.max(y, my), maxY);
-        x = randomXInBand(side);
-        targetX = randomXInBand(side);
-    }
-
-    function clampHomeToBands() {
-        const w = window.innerWidth;
-        const my = window.innerHeight * 0.08;
-        const maxY = window.innerHeight - my;
-        y = Math.min(Math.max(y, my), maxY);
-        targetY = Math.min(Math.max(targetY, my), maxY);
-        const leftLo = 0.025 * w;
-        const leftHi = 0.142 * w;
-        const rightLo = 0.858 * w;
-        const rightHi = 0.975 * w;
-        if (side === 'left') {
-            x = Math.min(Math.max(x, leftLo), leftHi);
-            targetX = Math.min(Math.max(targetX, leftLo), leftHi);
-        } else {
-            x = Math.min(Math.max(x, rightLo), rightHi);
-            targetX = Math.min(Math.max(targetX, rightLo), rightHi);
-        }
-    }
-
-    const fairyFleeFromPointer = window.matchMedia('(hover: hover)').matches;
-    let fleePointerX = -1e6;
-    let fleePointerY = -1e6;
-    if (fairyFleeFromPointer) {
-        window.addEventListener(
-            'pointermove',
-            (e) => {
-                fleePointerX = e.clientX;
-                fleePointerY = e.clientY;
-            },
-            { passive: true }
-        );
-    }
-
-    function applyMouseFlee() {
-        if (!fairyFleeFromPointer || teleportBusy) return;
-        const dx = x - fleePointerX;
-        const dy = y - fleePointerY;
-        const dist = Math.hypot(dx, dy);
-        const fleeRadius = 108;
-        if (dist >= fleeRadius || dist < 0.5) return;
-        const urgency = (fleeRadius - dist) / fleeRadius;
-        const push = 6 * urgency * urgency;
-        const ux = dx / dist;
-        const uy = dy / dist;
-        x += ux * push;
-        y += uy * push;
-        targetX += ux * push * 2.2;
-        targetY += uy * push * 2.2;
-        if (isMobileHeaderFairyMode()) {
-            clampToHeaderBounds();
-        } else if (homeEdgeMode) {
-            clampHomeToBands();
-        } else {
-            clampToViewport();
-        }
-    }
-
-    if (isMobileHeaderFairyMode()) {
-        side = 'left';
-        pickTargetHeaderStrip();
-        x = targetX;
-        y = targetY;
-        pickTargetHeaderStrip();
-        nextTargetTime = performance.now() + 800 + Math.random() * 1000;
-        nextTeleportTime = Infinity;
-    } else if (homeEdgeMode) {
-        side = Math.random() < 0.5 ? 'left' : 'right';
-        x = randomXInBand(side);
-        y = pickTargetY();
-        targetX = randomXInBand(side);
-        targetY = pickTargetY();
-        nextTargetTime = performance.now() + 1200 + Math.random() * 1600;
-        nextTeleportTime = performance.now() + 5000 + Math.random() * 9000;
-    } else {
-        x = window.innerWidth * 0.28;
-        y = window.innerHeight * 0.38;
-        pickTargetFull();
-        nextTargetTime = performance.now() + 1800 + Math.random() * 1800;
-        nextTeleportTime = Infinity;
-    }
-
-    let lastDust = 0;
-    const lerpK = 0.032;
-
-    function doTeleport() {
-        if (isMobileHeaderFairyMode()) return;
-        if (teleportBusy) return;
-        teleportBusy = true;
-        const burst = 10;
-        for (let i = 0; i < burst; i++) {
-            createFairyParticle(x + (Math.random() - 0.5) * 36, y + (Math.random() - 0.5) * 36);
-        }
-        wrap.classList.add('ambient-flying-fairy--teleporting');
-
-        setTimeout(() => {
-            side = side === 'left' ? 'right' : 'left';
-            x = randomXInBand(side);
-            y = pickTargetY();
-            targetX = randomXInBand(side);
-            targetY = pickTargetY();
-            for (let i = 0; i < burst; i++) {
-                createFairyParticle(x + (Math.random() - 0.5) * 40, y + (Math.random() - 0.5) * 40);
-            }
-        }, 260);
-
-        setTimeout(() => {
-            wrap.classList.remove('ambient-flying-fairy--teleporting');
-            teleportBusy = false;
-            nextTeleportTime = performance.now() + 5500 + Math.random() * 9500;
-        }, 540);
-    }
-
-    function loop(t) {
-        const headerStrip = isMobileHeaderFairyMode();
-
-        if (headerStrip) {
-            if (t >= nextTargetTime) {
-                pickTargetHeaderStrip();
-                nextTargetTime = t + 900 + Math.random() * 1400;
-            }
-            x += (targetX - x) * lerpK;
-            y += (targetY - y) * lerpK;
-            clampToHeaderBounds();
-        } else if (homeEdgeMode) {
-            if (!teleportBusy && t >= nextTeleportTime) {
-                doTeleport();
-            }
-            if (!teleportBusy) {
-                if (t >= nextTargetTime) {
-                    targetX = randomXInBand(side);
-                    targetY = pickTargetY();
-                    nextTargetTime = t + 1300 + Math.random() * 2200;
-                }
-                x += (targetX - x) * lerpK;
-                y += (targetY - y) * lerpK;
-            }
-        } else {
-            if (t >= nextTargetTime) {
-                pickTargetFull();
-                nextTargetTime = t + 2000 + Math.random() * 2000;
-            }
-            x += (targetX - x) * lerpK;
-            y += (targetY - y) * lerpK;
-        }
-
-        applyMouseFlee();
-
-        wrap.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0) translate(-50%, -50%)`;
-
-        if (t - lastDust >= 78) {
-            lastDust = t;
-            if (Math.random() < 0.45) {
-                createFairyParticle(x, y);
-                if (Math.random() < 0.36) {
-                    setTimeout(
-                        () =>
-                            createFairyParticle(
-                                x + (Math.random() - 0.5) * 24,
-                                y + (Math.random() - 0.5) * 24
-                            ),
-                        44
-                    );
-                }
-            }
-        }
-        requestAnimationFrame(loop);
-    }
-
-    window.addEventListener(
-        'resize',
-        () => {
-            if (window.innerWidth <= MOBILE_HEADER_FAIRY_MAX_W) {
-                clampToHeaderBounds();
-                wrap.classList.add('ambient-flying-fairy--mobile-header');
-                wrap.classList.remove('ambient-flying-fairy--home-edges');
-            } else {
-                wrap.classList.remove('ambient-flying-fairy--mobile-header');
-                if (homeEdgeMode) {
-                    wrap.classList.add('ambient-flying-fairy--home-edges');
-                    clampHomeResize();
-                } else {
-                    clampToViewport();
-                }
-            }
-        },
-        { passive: true }
-    );
-
-    requestAnimationFrame(loop);
-}
-
+/**
+ * Feenstaub an der Mausposition – unabhängig vom Custom Cursor (gleiche Logik auf allen Seiten mit #fairyDust).
+ */
 function animateCursor() {
     // Smooth trailing effect
     state.trailX += (state.mouseX - state.trailX) * 0.15;
@@ -527,15 +396,18 @@ function createFairyParticle(x, y) {
 // ============================================
 function initNavigation() {
     if (!dom.nav) return;
+    const forceScrolledNav = dom.nav.hasAttribute('data-force-scrolled-header') || document.body.classList.contains('header-scrolled') || document.body.classList.contains('page-404') || document.body.classList.contains('error404');
 
     // Scroll effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+    const updateNavScrolled = () => {
+        if (forceScrolledNav || window.scrollY > 50) {
             dom.nav.classList.add('scrolled');
         } else {
             dom.nav.classList.remove('scrolled');
         }
-    });
+    };
+    window.addEventListener('scroll', updateNavScrolled);
+    updateNavScrolled();
 
     // Mobile toggle
     if (dom.navToggle && dom.navMenu) {
@@ -604,13 +476,14 @@ function initMenuBook() {
     ].join(', ');
 
     let lastActiveElement = null;
-    let lockedScrollY = 0;
     let resizeFrame = null;
 
     const bookPageWidth = 720;
     const desktopBookPageHeight = 980;
+    const compactDesktopBookPageHeight = 920;
     const tabletBookPageHeight = 1180;
     const mobileBookPageHeight = 1280;
+    const bookStage = menuBookModal.querySelector('.menu-book-stage');
     let pageFlip = null;
     let bookPageLayout = 'default';
 
@@ -623,8 +496,21 @@ function initMenuBook() {
         dom.totalPagesEl.textContent = String(state.totalPages);
     }
 
+    function getBookStageMetrics() {
+        if (!bookStage) {
+            return { width: 0, height: 0 };
+        }
+
+        const rect = bookStage.getBoundingClientRect();
+        return {
+            width: rect.width,
+            height: rect.height
+        };
+    }
+
     function getBookPageLayout() {
         const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
         const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
         if (viewportWidth <= 767.98) {
@@ -635,15 +521,26 @@ function initMenuBook() {
             return 'tablet';
         }
 
+        const { width: stageWidth, height: stageHeight } = getBookStageMetrics();
+        const effectiveWidth = stageWidth > 0 ? stageWidth : viewportWidth;
+        const effectiveHeight = stageHeight > 0 ? stageHeight : viewportHeight;
+
+        if (effectiveWidth < 1600 || effectiveHeight < 920) {
+            return 'compact-desktop';
+        }
+
         return 'default';
     }
 
     function buildPageFlip(startPage = 0) {
         const pageLayout = getBookPageLayout();
+        const disableFlipShadow = pageLayout === 'mobile';
         const bookPageHeight = pageLayout === 'mobile'
             ? mobileBookPageHeight
             : pageLayout === 'tablet'
                 ? tabletBookPageHeight
+                : pageLayout === 'compact-desktop'
+                    ? compactDesktopBookPageHeight
                 : desktopBookPageHeight;
         const safeStartPage = Math.max(0, Math.min(startPage, pageElements.length - 1));
 
@@ -652,6 +549,7 @@ function initMenuBook() {
             pageElement.style.height = `${bookPageHeight}px`;
         });
 
+        menuBookModal.dataset.bookLayout = pageLayout;
         dom.bookPages.dataset.bookLayout = pageLayout;
         dom.bookPages.replaceChildren(...pageElements);
 
@@ -661,12 +559,13 @@ function initMenuBook() {
             size: 'stretch',
             minWidth: 260,
             maxWidth: bookPageWidth,
-            minHeight: pageLayout === 'default' ? 380 : 420,
+            minHeight: pageLayout === 'default' || pageLayout === 'compact-desktop' ? 380 : 420,
             maxHeight: bookPageHeight,
             autoSize: false,
+            drawShadow: !disableFlipShadow,
             showCover: false,
             mobileScrollSupport: true,
-            maxShadowOpacity: 0.35,
+            maxShadowOpacity: disableFlipShadow ? 0 : 0.35,
             usePortrait: true,
             startPage: safeStartPage
         });
@@ -756,19 +655,13 @@ function initMenuBook() {
     }
 
     function lockBackgroundScroll() {
-        lockedScrollY = window.scrollY;
-        const scrollbarCompensation = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
-
-        document.documentElement.style.setProperty('--scrollbar-compensation', `${scrollbarCompensation}px`);
-        document.body.style.top = `-${lockedScrollY}px`;
         document.body.classList.add('modal-open');
+        lockPageScroll('menu-modal');
     }
 
     function unlockBackgroundScroll() {
         document.body.classList.remove('modal-open');
-        document.body.style.top = '';
-        document.documentElement.style.removeProperty('--scrollbar-compensation');
-        window.scrollTo(0, lockedScrollY);
+        unlockPageScroll('menu-modal');
     }
 
     function syncBookA11y() {
@@ -810,6 +703,7 @@ function initMenuBook() {
     }
 
     function openMenuModal() {
+        closeMobileNavIfOpen('menu-modal');
         lastActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : openMenuModalBtn;
         menuBookModal.classList.add('active');
         menuBookModal.setAttribute('aria-hidden', 'false');
@@ -823,6 +717,7 @@ function initMenuBook() {
         window.requestAnimationFrame(() => {
             closeMenuModalBtn.focus({ preventScroll: true });
             window.setTimeout(() => {
+                refreshPageFlipLayoutIfNeeded();
                 pageFlip.update();
                 updateNavigation();
             }, 120);
@@ -840,7 +735,7 @@ function initMenuBook() {
         setSiblingsInert(false);
 
         if (lastActiveElement && document.contains(lastActiveElement)) {
-            lastActiveElement.focus();
+            lastActiveElement.focus({ preventScroll: true });
         }
     }
 
@@ -857,10 +752,15 @@ function initMenuBook() {
         syncBookA11y();
 
         window.setTimeout(() => {
+            refreshPageFlipLayoutIfNeeded();
             pageFlip.update();
             updateNavigation();
             closeMenuModalBtn.focus({ preventScroll: true });
         }, 160);
+
+        window.setTimeout(() => {
+            scheduleBookUpdate();
+        }, 420);
     }
 
     function handleKeydown(event) {
@@ -931,7 +831,6 @@ function initMenuBook() {
     }
 
     if (window.ResizeObserver) {
-        const bookStage = menuBookModal.querySelector('.menu-book-stage');
         const resizeObserver = new ResizeObserver(() => scheduleBookUpdate());
 
         if (bookStage) {
@@ -994,6 +893,10 @@ function handleParallax() {
 // Scroll Animations
 // ============================================
 function initScrollAnimations() {
+    if (isMobileScrollLite()) {
+        return;
+    }
+
     const observerOptions = {
         root: null,
         rootMargin: '0px 0px -100px 0px',
@@ -1055,6 +958,13 @@ function createAmbientParticle(x, y) {
 // Image Lazy Loading Enhancement
 // ============================================
 function initLazyLoading() {
+    if (isMobileScrollLite()) {
+        document.querySelectorAll('img').forEach(img => {
+            img.style.opacity = '1';
+        });
+        return;
+    }
+
     const images = document.querySelectorAll('img');
 
     const imageObserver = new IntersectionObserver((entries) => {
@@ -1110,6 +1020,16 @@ function optimizePerformance() {
             dom.fairyDust.style.display = 'none';
         }
     }
+
+    if (isMobileScrollLite()) {
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            el.style.transition = 'none';
+            el.classList.add('visible');
+        });
+        if (dom.fairyDust) {
+            dom.fairyDust.style.display = 'none';
+        }
+    }
 }
 
 // ============================================
@@ -1157,16 +1077,16 @@ function init() {
 
 function initAll() {
     optimizePerformance();
-    initFairyDustFollowMouse();
-    initThanksPlaneFairyTrail();
-    initAmbientFlyingFairy();
     initCursor();
     initNavigation();
     initMenuBook();
-    initParallax();
+    if (!isMobileScrollLite()) {
+        initParallax();
+    }
     initScrollAnimations();
-    initAmbientDust();
-    initLazyLoading();
+    if (!isMobileScrollLite()) {
+        initAmbientDust();
+    }
     initLazyLoading();
     // initTouchSwipe(); // Handled by PageFlip
     initActiveNavHighlight();
@@ -1195,38 +1115,16 @@ function initVideoLightbox() {
 
     if (!lightbox || !openBtn || !closeBtn || !video) return;
 
-    function getStoryVideoSrc() {
-        const storySource = document.querySelector('#story .story-visual video source');
-        if (!storySource) {
-            return '';
-        }
-        return storySource.src || storySource.getAttribute('src') || '';
-    }
-
     function openLightbox() {
-        const srcUrl = getStoryVideoSrc();
-        const lbSource = video.querySelector('source');
-        if (lbSource && srcUrl) {
-            const next = new URL(srcUrl, document.baseURI).href;
-            const cur = lbSource.src || '';
-            if (!cur || cur !== next) {
-                lbSource.src = srcUrl;
-                video.load();
-            }
-        }
-
         lightbox.classList.add('active');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        const p = video.play();
-        if (p !== undefined) {
-            p.catch(() => {});
-        }
+        syncVideoLightboxBodyState();
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        video.play();
     }
 
     function closeLightbox() {
         lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
+        syncVideoLightboxBodyState();
         document.body.style.overflow = '';
         video.pause();
         video.currentTime = 0;
@@ -1354,6 +1252,7 @@ function initInterviewLightbox() {
         lightboxVideo.querySelector('source').src = videoSrc;
         lightboxVideo.load();
         lightbox.classList.add('active');
+        syncVideoLightboxBodyState();
         document.body.style.overflow = 'hidden';
         lightboxVideo.muted = false;
         lightboxVideo.play();
@@ -1380,6 +1279,7 @@ function initInterviewLightbox() {
 
     function closeLightbox() {
         lightbox.classList.remove('active');
+        syncVideoLightboxBodyState();
         document.body.style.overflow = '';
         lightboxVideo.pause();
         lightboxVideo.currentTime = 0;
@@ -1416,6 +1316,7 @@ function initOpenTableOverlayFallback() {
     const closeFallback = () => {
         fallbackModal.classList.remove('active');
         document.body.classList.remove('ot-overlay-open');
+        unlockPageScroll('ot-fallback');
 
         // Keep the current content visible during fade-out, then release iframe.
         setTimeout(() => {
@@ -1429,6 +1330,7 @@ function initOpenTableOverlayFallback() {
         fallbackFrame.setAttribute('src', url);
         fallbackModal.classList.add('active');
         document.body.classList.add('ot-overlay-open');
+        lockPageScroll('ot-fallback');
     };
 
     if (!window.__otFallbackOpenPatched) {

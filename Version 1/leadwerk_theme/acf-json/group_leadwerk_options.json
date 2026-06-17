@@ -40,7 +40,7 @@
       "label": "Copyright-Text",
       "name": "copyright_text",
       "type": "text",
-      "instructions": "z. B. „© 2026 CaFEE Brückenmühle. Alle Rechte vorbehalten.""
+      "instructions": "z. B. „© 2026 CaFEE Brückenmühle. Alle Rechte vorbehalten.\""
     },
     {
       "key": "field_opt_tab_kontakt",

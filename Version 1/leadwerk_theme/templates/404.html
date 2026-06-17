@@ -1,12 +1,23 @@
 <!-- wp:template-part {"slug":"header","theme":"leadwerk_theme"} /-->
-<!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
-<main id="main" class="wp-block-group">
-	<!-- wp:heading {"textAlign":"center","level":1} -->
-	<h1 class="wp-block-heading has-text-align-center">Seite nicht gefunden</h1>
-	<!-- /wp:heading -->
-	<!-- wp:paragraph {"align":"center"} -->
-	<p class="has-text-align-center">Die angeforderte Seite existiert nicht.</p>
-	<!-- /wp:paragraph -->
+<!-- wp:group {"tagName":"main","className":"legal-page","layout":{"type":"default"}} -->
+<main id="main" class="wp-block-group legal-page" style="max-width:none;padding:0;background:linear-gradient(135deg,#fffaf4 0%,#ffffff 45%,#f4ede2 100%);">
+	<section style="min-height:calc(100vh - 120px);padding:clamp(8rem,12vw,10rem) clamp(1.25rem,4vw,4rem) clamp(4rem,7vw,6rem);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(2rem,5vw,4rem);align-items:center;max-width:1180px;margin:0 auto;">
+		<div>
+			<p style="font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#a66a34;margin-bottom:1rem;">404 / Kurz vom Weg abgekommen</p>
+			<h1 style="font-size:clamp(3rem,8vw,6.4rem);line-height:.9;margin-bottom:1.25rem;color:#3a2214;">Diese Seite ist gerade nicht auf der Karte.</h1>
+			<p style="max-width:34rem;font-size:1.05rem;line-height:1.8;color:#5f4b3f;">Vielleicht wurde der Link verschoben. Zurueck im CaFEE finden Sie Reservierung, Speisekarte und die wichtigsten Infos direkt wieder.</p>
+			<div style="display:flex;flex-wrap:wrap;gap:.85rem;margin:2rem 0;">
+				<a class="btn btn-primary" href="/#reservation">Tisch reservieren</a>
+				<a class="btn btn-primary" href="/#menu" style="background:#fff;color:#7a4a28;box-shadow:0 12px 30px rgba(122,74,40,.12);">Speisekarte ansehen</a>
+			</div>
+			<p class="legal-back" style="margin-top:1.5rem;"><a href="/#home">Zur Startseite</a></p>
+		</div>
+		<figure style="margin:0;position:relative;min-height:24rem;overflow:hidden;box-shadow:0 26px 70px rgba(90,54,30,.18);background:#3a2214;">
+			<img src="/wp-content/themes/leadwerk_theme/assets/images/Tresen.webp" alt="CaFEE Tresen" style="width:100%;height:100%;min-height:24rem;object-fit:cover;display:block;filter:saturate(.92) contrast(.96);">
+			<div aria-hidden="true" style="position:absolute;right:1rem;top:1rem;font-size:clamp(4rem,12vw,8rem);line-height:.8;color:rgba(255,255,255,.55);font-family:'Josefin Sans',sans-serif;font-weight:700;">404</div>
+			<div style="position:absolute;left:1rem;bottom:1rem;right:1rem;background:rgba(255,255,255,.9);padding:1rem;color:#3a2214;box-shadow:0 12px 30px rgba(0,0,0,.08);">Reservierung, Kuchen und Kaffee warten gleich nebenan.</div>
+		</figure>
+	</section>
 </main>
 <!-- /wp:group -->
 <!-- wp:template-part {"slug":"footer","theme":"leadwerk_theme"} /-->

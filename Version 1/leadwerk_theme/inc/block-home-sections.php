@@ -47,7 +47,7 @@ function leadwerk_esc_html( $v ) {
 function leadwerk_render_hero( $f ) {
 	$badge   = isset( $f['badge_text'] ) ? $f['badge_text'] : 'Willkommen in der Brückenmühle';
 	$line1   = isset( $f['title_line_1'] ) ? $f['title_line_1'] : 'Wo Magie';
-	$line2   = isset( $f['title_line_2_accent'] ) ? $f['title_line_2_accent'] : 'auf Kaffee trifft';
+	$line2   = isset( $f['title_line_2_accent'] ) ? $f['title_line_2_accent'] : 'auf CaFEE trifft';
 	$sub     = isset( $f['subtitle'] ) ? $f['subtitle'] : '';
 	$btn1_t  = isset( $f['button_1_text'] ) ? $f['button_1_text'] : 'Tisch reservieren';
 	$btn1_u  = isset( $f['button_1_url'] ) ? $f['button_1_url'] : '#reservation';
@@ -195,45 +195,166 @@ function leadwerk_resolve_menu_book_pages( $f ) {
 }
 
 /**
+ * Flexible Seiten-Sektionen aufbereiten; faellt auf Legacy-Felder zurueck.
+ *
+ * @param array $page Zeile aus menu_book_pages.
+ * @return array<int, array<string, mixed>>
+ */
+function leadwerk_get_menu_page_sections( $page ) {
+	$sections = isset( $page['page_sections'] ) && is_array( $page['page_sections'] ) ? $page['page_sections'] : array();
+	$sections = array_values(
+		array_filter(
+			$sections,
+			function ( $section ) {
+				return is_array( $section );
+			}
+		)
+	);
+
+	if ( ! empty( $sections ) ) {
+		$out = array();
+		foreach ( $sections as $section ) {
+			$type  = ( isset( $section['section_type'] ) && 'text' === $section['section_type'] ) ? 'text' : 'menu_items';
+			$title = isset( $section['section_title'] ) ? (string) $section['section_title'] : '';
+			$desc  = isset( $section['section_description'] ) ? (string) $section['section_description'] : '';
+			$body  = isset( $section['section_body'] ) ? (string) $section['section_body'] : '';
+			$items = isset( $section['section_items'] ) && is_array( $section['section_items'] ) ? $section['section_items'] : array();
+
+			if ( '' === trim( $title ) && '' === trim( $desc ) && '' === trim( $body ) && empty( $items ) ) {
+				continue;
+			}
+
+			$out[] = array(
+				'section_type'        => $type,
+				'section_title'       => $title,
+				'section_description' => $desc,
+				'section_body'        => $body,
+				'section_items'       => $items,
+			);
+		}
+
+		if ( ! empty( $out ) ) {
+			return $out;
+		}
+	}
+
+	$title = isset( $page['section_title'] ) ? (string) $page['section_title'] : '';
+	$items = isset( $page['row_items'] ) && is_array( $page['row_items'] ) ? $page['row_items'] : array();
+
+	if ( '' === trim( $title ) && empty( $items ) ) {
+		return array();
+	}
+
+	return array(
+		array(
+			'section_type'        => 'menu_items',
+			'section_title'       => $title,
+			'section_description' => '',
+			'section_body'        => '',
+			'section_items'       => $items,
+		),
+	);
+}
+
+/**
+ * Plaintext fuer Freitext-Bloecke als HTML ausgeben.
+ *
+ * @param string $text Text aus ACF.
+ * @return string
+ */
+function leadwerk_render_menu_text_html( $text ) {
+	$text = trim( (string) $text );
+	if ( '' === $text ) {
+		return '';
+	}
+
+	return wpautop( esc_html( $text ) );
+}
+
+/**
+ * Einzelne Seiten-Sektion rendern.
+ *
+ * @param array $section Flexible page_sections-Zeile.
+ */
+function leadwerk_render_menu_page_section( $section ) {
+	$type  = ( isset( $section['section_type'] ) && 'text' === $section['section_type'] ) ? 'text' : 'menu_items';
+	$title = isset( $section['section_title'] ) ? (string) $section['section_title'] : '';
+	$desc  = isset( $section['section_description'] ) ? (string) $section['section_description'] : '';
+	$body  = isset( $section['section_body'] ) ? (string) $section['section_body'] : '';
+	$items = isset( $section['section_items'] ) && is_array( $section['section_items'] ) ? $section['section_items'] : array();
+
+	if ( '' === trim( $title ) && '' === trim( $desc ) && '' === trim( $body ) && empty( $items ) ) {
+		return;
+	}
+	?>
+	<section class="menu-page-section" data-section-type="<?php echo esc_attr( $type ); ?>">
+		<?php if ( '' !== trim( $title ) || '' !== trim( $desc ) ) : ?>
+		<div class="page-header">
+			<?php if ( '' !== trim( $title ) ) : ?>
+			<h3 class="menu-section-title"><?php echo esc_html( $title ); ?></h3>
+			<?php endif; ?>
+			<?php if ( '' !== trim( $desc ) ) : ?>
+			<div class="page-section-description"><?php echo wp_kses_post( leadwerk_render_menu_text_html( $desc ) ); ?></div>
+			<?php endif; ?>
+			<div class="page-divider"></div>
+		</div>
+		<?php endif; ?>
+
+		<?php if ( 'text' === $type ) : ?>
+			<?php if ( '' !== trim( $body ) ) : ?>
+			<div class="page-section-body page-section-copy"><?php echo wp_kses_post( leadwerk_render_menu_text_html( $body ) ); ?></div>
+			<?php endif; ?>
+		<?php else : ?>
+			<?php if ( '' !== trim( $body ) ) : ?>
+			<div class="page-section-body page-section-copy"><?php echo wp_kses_post( leadwerk_render_menu_text_html( $body ) ); ?></div>
+			<?php endif; ?>
+			<?php if ( ! empty( $items ) ) : ?>
+			<div class="menu-items">
+				<?php foreach ( $items as $item ) :
+					$name  = isset( $item['name'] ) ? $item['name'] : '';
+					$price = isset( $item['price'] ) ? $item['price'] : '';
+					$idesc = isset( $item['description'] ) ? $item['description'] : '';
+					$feat  = ! empty( $item['featured'] );
+					if ( '' === trim( (string) $name ) && '' === trim( (string) $price ) && '' === trim( (string) $idesc ) ) {
+						continue;
+					}
+					?>
+				<div class="menu-item<?php echo $feat ? ' featured' : ''; ?>">
+					<div class="item-header">
+						<span class="item-name"><?php echo esc_html( $name ); ?></span>
+						<?php if ( '' !== trim( (string) $price ) ) : ?>
+							<span class="item-dots"></span>
+							<span class="item-price"><?php echo esc_html( $price ); ?></span>
+						<?php endif; ?>
+					</div>
+					<?php if ( '' !== trim( (string) $idesc ) ) : ?><p class="item-desc"><?php echo esc_html( $idesc ); ?></p><?php endif; ?>
+				</div>
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+		<?php endif; ?>
+	</section>
+	<?php
+}
+
+/**
  * Eine PageFlip-Seite (.book-page) aus ACF-Zeile ausgeben.
  *
  * @param array  $page     Zeile menu_book_pages.
  * @param int    $page_num Anzeige 1-basiert.
  */
 function leadwerk_render_menu_book_page_flip( $page, $page_num ) {
-	$pc    = ( isset( $page['page_class'] ) && 'right-page' === $page['page_class'] ) ? 'right-page' : 'left-page';
-	$title = isset( $page['section_title'] ) ? $page['section_title'] : '';
-	$items = isset( $page['row_items'] ) && is_array( $page['row_items'] ) ? $page['row_items'] : array();
-	$quote = isset( $page['page_quote'] ) ? $page['page_quote'] : '';
-	$pimg  = isset( $page['page_image'] ) ? $page['page_image'] : null;
+	$pc       = ( isset( $page['page_class'] ) && 'right-page' === $page['page_class'] ) ? 'right-page' : 'left-page';
+	$sections = leadwerk_get_menu_page_sections( $page );
+	$quote    = isset( $page['page_quote'] ) ? $page['page_quote'] : '';
+	$pimg     = isset( $page['page_image'] ) ? $page['page_image'] : null;
 	$img_id = is_array( $pimg ) && isset( $pimg['ID'] ) ? (int) $pimg['ID'] : ( is_numeric( $pimg ) ? (int) $pimg : 0 );
 	?>
 	<div class="book-page <?php echo esc_attr( $pc ); ?>">
-		<?php if ( $title !== '' || ! empty( $items ) ) : ?>
-		<div class="page-header">
-			<?php if ( $title !== '' ) : ?>
-			<h3><?php echo esc_html( $title ); ?></h3>
-			<?php endif; ?>
-			<div class="page-divider"></div>
-		</div>
-		<div class="menu-items">
-			<?php foreach ( $items as $item ) :
-				$name  = isset( $item['name'] ) ? $item['name'] : '';
-				$price = isset( $item['price'] ) ? $item['price'] : '';
-				$desc  = isset( $item['description'] ) ? $item['description'] : '';
-				$feat  = ! empty( $item['featured'] );
-				if ( $name === '' && $price === '' && $desc === '' ) {
-					continue;
-				}
-				?>
-			<div class="menu-item<?php echo $feat ? ' featured' : ''; ?>">
-				<div class="item-header">
-					<span class="item-name"><?php echo esc_html( $name ); ?></span>
-					<span class="item-dots"></span>
-					<span class="item-price"><?php echo esc_html( $price ); ?></span>
-				</div>
-				<?php if ( $desc !== '' ) : ?><p class="item-desc"><?php echo esc_html( $desc ); ?></p><?php endif; ?>
-			</div>
+		<?php if ( ! empty( $sections ) ) : ?>
+		<div class="page-content">
+			<?php foreach ( $sections as $section ) : ?>
+				<?php leadwerk_render_menu_page_section( $section ); ?>
 			<?php endforeach; ?>
 		</div>
 		<?php endif; ?>
@@ -307,7 +428,13 @@ function leadwerk_render_menu_preview( $f ) {
 							continue;
 						}
 						?>
-					<li><span class="item-name"><?php echo esc_html( $iname ); ?></span><span class="item-dots"></span><span class="item-price"><?php echo esc_html( $iprice ); ?></span></li>
+					<li>
+						<span class="item-name"><?php echo esc_html( $iname ); ?></span>
+						<?php if ( $iprice !== '' ) : ?>
+							<span class="item-dots"></span>
+							<span class="item-price"><?php echo esc_html( $iprice ); ?></span>
+						<?php endif; ?>
+					</li>
 					<?php endforeach; ?>
 				</ul>
 				<?php endif; ?>
@@ -496,7 +623,9 @@ function leadwerk_render_interviews( $f ) {
 							<p class="interview-quote"><?php echo esc_html( $quote ); ?></p>
 							<div class="interview-author">
 								<span class="interview-name"><?php echo esc_html( $name ); ?></span>
-								<span class="interview-detail"><?php echo esc_html( $detail ); ?></span>
+								<?php if ( $detail !== '' ) : ?>
+									<span class="interview-detail"><?php echo esc_html( $detail ); ?></span>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -572,9 +701,9 @@ function leadwerk_render_reservation( $f ) {
 	$address = isset( $f['address_block'] ) ? $f['address_block'] : array();
 	$street  = is_array( $address ) && isset( $address['street'] ) ? $address['street'] : 'Hofstätte 2';
 	$city    = is_array( $address ) && isset( $address['city'] ) ? $address['city'] : '76593 Gernsbach';
-	$hours   = isset( $f['opening_hours'] ) ? $f['opening_hours'] : 'Di – Fr: 8 – 18 Uhr | Sa – So: 9 – 18 Uhr';
+	$hours   = isset( $f['opening_hours'] ) ? $f['opening_hours'] : '9:00 – 17:00 Uhr | Mittwoch Ruhetag';
 	$phone   = isset( $f['phone'] ) ? $f['phone'] : '+49 151/103 100 59';
-	$email   = isset( $f['email'] ) ? $f['email'] : 'Cafee.brueckenmuehle@gmail.com';
+	$email   = isset( $f['email'] ) ? $f['email'] : 'hallo@cafee-gernsbach.de';
 	$btn_phone = isset( $f['button_phone_label'] ) ? $f['button_phone_label'] : 'Jetzt anrufen';
 	$btn_email = isset( $f['button_email_label'] ) ? $f['button_email_label'] : 'E-Mail schreiben';
 	$form_alias = isset( $f['form_alias'] ) ? $f['form_alias'] : '';

@@ -21,6 +21,7 @@ class Leadwerk_Media_Importer {
 		$mimes['svg']  = 'image/svg+xml';
 		$mimes['svgz'] = 'image/svg+xml';
 		$mimes['ico']  = 'image/x-icon';
+		$mimes['webp'] = 'image/webp';
 		return $mimes;
 	}
 
@@ -33,6 +34,7 @@ class Leadwerk_Media_Importer {
 			'svg'  => 'image/svg+xml',
 			'svgz' => 'image/svg+xml',
 			'ico'  => 'image/x-icon',
+			'webp' => 'image/webp',
 		);
 		if ( isset( $map[ $ext ] ) ) {
 			$data['ext']             = $ext;

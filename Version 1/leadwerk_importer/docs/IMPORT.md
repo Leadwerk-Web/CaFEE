@@ -42,6 +42,8 @@ Die Texte in `manifest/impressum-content.html`, `manifest/datenschutz-content.ht
 
 Ein erneuter Lauf aktualisiert bestehende Seiten anhand von `leadwerk_source_key` (Post-Meta). Es werden keine doppelten Seiten angelegt.
 
+Wenn Sie `source_assets` um neue Bilder oder Videos ergänzt haben, führen Sie danach **Import ausführen** (nicht nur Dry-Run) erneut aus, damit die Mediathek und die ACF-Felder der Startseite (`home_sections`) die Anhänge korrekt verknüpfen.
+
 ## Log
 
 Nach dem Lauf „Log“ aufrufen (Link auf der Import-Seite), um das Protokoll zu sehen.

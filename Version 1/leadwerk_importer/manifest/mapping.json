@@ -3,22 +3,24 @@
   "wpforms_reservation_form_id": 171,
   "source_root": "",
   "site_title": "CaFEE Brückenmühle – Café in Gernsbach",
-  "site_tagline": "Wo Magie auf Kaffee trifft",
+  "site_tagline": "Wo Magie auf CaFEE trifft",
   "pages": [
     {
       "source_key": "cafee-home-v1",
       "target_type": "page",
       "post_status": "publish",
       "is_front_page": true,
+      "content_file": "home-seo-content.html",
       "slug": "home",
       "title": "CaFEE Brückenmühle",
       "seo": {
-        "title": "CaFEE Brückenmühle Gernsbach – Café, Frühstück & Kuchen | Wo Magie auf Kaffee trifft",
-        "meta_description": "Willkommen im CaFEE Brückenmühle in Gernsbach – handgemachte Kaffeespezialitäten, hausgemachter Kuchen und ein verzaubertes Frühstück in historischem Ambiente. Jetzt Tisch reservieren!",
-        "og_title": "CaFEE Brückenmühle – Wo Magie auf Kaffee trifft ✨",
-        "og_description": "Ein magischer Ort für Kaffeeliebhaber in der historischen Brückenmühle Gernsbach. Handgemachte Spezialitäten, liebevolle Atmosphäre und Genuss, der Flügel hat.",
+        "title": "CaFEE Brückenmühle Gernsbach | Wo Magie auf CaFEE trifft",
+        "meta_description": "Willkommen im CaFEE Brückenmühle in Gernsbach – Kaffeespezialitäten, Frühstück, Mittagstisch, Kuchen und Daydrinking in besonderem Ambiente. Jetzt Tisch reservieren!",
+        "og_title": "CaFEE Brückenmühle – Wo Magie auf CaFEE trifft",
+        "og_description": "Ein magischer Ort für Kaffeeliebhaber in der historischen Brückenmühle Gernsbach – mit Frühstück, Mittagstisch, Kuchen und Daydrinking.",
         "og_image_source": "images/Cupcake.svg",
         "focus_keyphrase": "CaFEE Brückenmühle Gernsbach",
+        "meta_robots": "index, follow",
         "schema_type": "LocalBusiness"
       }
     },
@@ -58,6 +60,19 @@
       "seo": {
         "title": "Vielen Dank – CaFEE Brückenmühle",
         "meta_description": "Ihre Nachricht an das CaFEE Brückenmühle wurde übermittelt.",
+        "meta_robots": "noindex, follow"
+      }
+    },
+    {
+      "source_key": "404-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "404",
+      "title": "404",
+      "content_file": "404-content.html",
+      "seo": {
+        "title": "404 - CaFEE Brueckenmuehle",
+        "meta_description": "Die angeforderte Seite des CaFEE Brueckenmuehle wurde nicht gefunden.",
         "meta_robots": "noindex, follow"
       }
     }

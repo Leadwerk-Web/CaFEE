@@ -83,6 +83,42 @@ class Leadwerk_Importer {
 	}
 
 	/**
+	 * Import a single page from the manifest by source key.
+	 *
+	 * @param string $source_key Manifest source key.
+	 * @return array<string,string>|WP_Error
+	 */
+	public function run_page_by_source_key( $source_key ) {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		$source_key  = sanitize_key( (string) $source_key );
+		$page_config = array();
+
+		foreach ( (array) ( $this->manifest['pages'] ?? array() ) as $candidate ) {
+			$candidate = (array) $candidate;
+			if ( $source_key === sanitize_key( (string) ( $candidate['source_key'] ?? '' ) ) ) {
+				$page_config = $candidate;
+				break;
+			}
+		}
+
+		if ( empty( $page_config ) ) {
+			return new WP_Error( 'leadwerk_page_not_found', 'Manifest enthaelt keine Seite fuer source_key ' . $source_key . '.' );
+		}
+
+		Leadwerk_Logger::log( $this->dry_run ? '--- Targeted Dry-Run: ' . $source_key . ' ---' : '--- Targeted Import: ' . $source_key . ' ---' );
+		$this->process_page( $page_config );
+		Leadwerk_Logger::save();
+
+		return array(
+			'status'     => 'completed',
+			'source_key' => $source_key,
+		);
+	}
+
+	/**
 	 * Durchsucht source_assets rekursiv und listet Dateien auf (Dry-Run) bzw. importiert sie (Apply).
 	 */
 	protected function run_media_import() {
@@ -198,14 +234,98 @@ class Leadwerk_Importer {
 	}
 
 	/**
+	 * Truncate SEO title for Yoast width hints (uses theme helper when active).
+	 *
+	 * @param string $title      Title.
+	 * @param int    $max_chars  Max length.
+	 * @return string
+	 */
+	protected function truncate_seo_title_for_yoast( $title, $max_chars = 58 ) {
+		if ( function_exists( 'leadwerk_theme_truncate_seo_title_for_yoast' ) ) {
+			return leadwerk_theme_truncate_seo_title_for_yoast( $title, $max_chars );
+		}
+
+		$title = trim( (string) $title );
+		if ( '' === $title ) {
+			return '';
+		}
+		if ( $max_chars < 8 ) {
+			$max_chars = 8;
+		}
+		if ( function_exists( 'mb_strlen' ) && function_exists( 'mb_substr' ) && mb_strlen( $title ) > $max_chars ) {
+			return rtrim( mb_substr( $title, 0, $max_chars - 1 ) ) . '…';
+		}
+		if ( strlen( $title ) > $max_chars ) {
+			return rtrim( substr( $title, 0, $max_chars - 1 ) ) . '…';
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Refresh Yoast indexables after SEO meta import.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return void
+	 */
+	protected function maybe_rebuild_yoast_indexable( $post_id ) {
+		$post_id = (int) $post_id;
+		if ( $post_id <= 0 || $this->dry_run ) {
+			return;
+		}
+
+		if ( function_exists( 'leadwerk_theme_rebuild_yoast_post_indexable' ) ) {
+			leadwerk_theme_rebuild_yoast_post_indexable( $post_id );
+			return;
+		}
+
+		if ( ! function_exists( 'YoastSEO' ) || ! class_exists( '\Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher', false ) ) {
+			return;
+		}
+
+		try {
+			$yoast = YoastSEO();
+			if ( ! is_object( $yoast ) || ! isset( $yoast->classes ) || ! is_object( $yoast->classes ) || ! method_exists( $yoast->classes, 'get' ) ) {
+				return;
+			}
+			$watcher = $yoast->classes->get( \Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher::class );
+			if ( is_object( $watcher ) && method_exists( $watcher, 'build_indexable' ) ) {
+				$watcher->build_indexable( $post_id );
+			}
+		} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			return;
+		}
+	}
+
+	/**
+	 * Resolve focus keyphrase from manifest-style keys (primary + English fallback).
+	 *
+	 * @param array<string,mixed> $seo SEO config.
+	 * @return string
+	 */
+	protected function resolve_seo_focus_keyphrase( array $seo ) {
+		$kw = isset( $seo['focus_keyphrase'] ) ? trim( (string) $seo['focus_keyphrase'] ) : '';
+		if ( '' !== $kw ) {
+			return $kw;
+		}
+		if ( ! empty( $seo['focus_keyphrase_en'] ) ) {
+			return trim( (string) $seo['focus_keyphrase_en'] );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Yoast SEO Meta-Felder auf eine Seite schreiben.
 	 * Funktioniert auch ohne Yoast (reines Post-Meta) – Yoast liest diese Felder automatisch.
 	 */
 	protected function apply_seo_meta( $post_id, $seo, $config = array() ) {
+		unset( $config );
 		$fields_written = array();
 
 		if ( ! empty( $seo['title'] ) ) {
-			update_post_meta( $post_id, '_yoast_wpseo_title', sanitize_text_field( $seo['title'] ) );
+			$seo_title = $this->truncate_seo_title_for_yoast( (string) $seo['title'] );
+			update_post_meta( $post_id, '_yoast_wpseo_title', sanitize_text_field( $seo_title ) );
 			$fields_written[] = 'title';
 		}
 
@@ -214,20 +334,31 @@ class Leadwerk_Importer {
 			$fields_written[] = 'metadesc';
 		}
 
-		if ( ! empty( $seo['focus_keyphrase'] ) ) {
-			update_post_meta( $post_id, '_yoast_wpseo_focuskw', sanitize_text_field( $seo['focus_keyphrase'] ) );
+		$focus_kw = $this->resolve_seo_focus_keyphrase( $seo );
+		if ( '' !== $focus_kw ) {
+			update_post_meta( $post_id, '_yoast_wpseo_focuskw', sanitize_text_field( $focus_kw ) );
 			$fields_written[] = 'focuskw';
 		}
 
-		if ( ! empty( $seo['meta_robots'] ) ) {
-			$robots = sanitize_text_field( $seo['meta_robots'] );
-			if ( strpos( $robots, 'noindex' ) !== false ) {
+		if ( array_key_exists( 'meta_robots', $seo ) ) {
+			$robots         = sanitize_text_field( (string) $seo['meta_robots'] );
+			$should_noindex = false !== strpos( $robots, 'noindex' );
+			$should_nofollow = false !== strpos( $robots, 'nofollow' );
+
+			if ( $should_noindex ) {
 				update_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex', '1' );
 				$fields_written[] = 'noindex';
+			} else {
+				delete_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex' );
+				$fields_written[] = 'index';
 			}
-			if ( strpos( $robots, 'nofollow' ) !== false ) {
+
+			if ( $should_nofollow ) {
 				update_post_meta( $post_id, '_yoast_wpseo_meta-robots-nofollow', '1' );
 				$fields_written[] = 'nofollow';
+			} else {
+				delete_post_meta( $post_id, '_yoast_wpseo_meta-robots-nofollow' );
+				$fields_written[] = 'follow';
 			}
 		}
 
@@ -277,6 +408,8 @@ class Leadwerk_Importer {
 		if ( ! empty( $fields_written ) ) {
 			Leadwerk_Logger::log( "SEO-Meta für ID $post_id: " . implode( ', ', $fields_written ) );
 		}
+
+		$this->maybe_rebuild_yoast_indexable( (int) $post_id );
 	}
 
 	/**
@@ -315,16 +448,16 @@ class Leadwerk_Importer {
 		update_field( 'street', 'Hofstätte 2', 'option' );
 		update_field( 'city', '76593 Gernsbach', 'option' );
 		update_field( 'phone', '+49 151/103 100 59', 'option' );
-		update_field( 'email', 'Cafee.brueckenmuehle@gmail.com', 'option' );
+		update_field( 'email', 'hallo@cafee-gernsbach.de', 'option' );
 		$fields_set[] = 'kontakt';
 
 		// Öffnungszeiten
-		$hours = "Montag: Ruhetag\nDi – Fr: 8 – 18 Uhr\nSa – So: 9 – 18 Uhr";
+		$hours = "Montag, Dienstag, Donnerstag – Sonntag: 9:00 – 17:00 Uhr\nMittwoch Ruhetag";
 		update_field( 'opening_hours', $hours, 'option' );
 		$fields_set[] = 'opening_hours';
 
 		// Social Media
-		update_field( 'instagram_url', 'https://instagram.com', 'option' );
+		update_field( 'instagram_url', 'https://www.instagram.com/cafeebrueckenmuehle/', 'option' );
 		update_field( 'facebook_url', 'https://facebook.com', 'option' );
 		$fields_set[] = 'social';
 

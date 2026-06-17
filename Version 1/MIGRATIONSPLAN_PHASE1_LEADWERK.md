@@ -60,9 +60,9 @@ Eine einsprachige (deutsch), einseitige Marketing-Website für das Café „CaFE
 
 **Videos:**
 - `images/Imagefilm.mp4` – Story-Sektion + Video-Lightbox
-- `images/Interviews/Interview Bernd Frank – Mit Clipchamp erstellt.mp4`
-- `images/Interviews/Interview Kirsten Böckner – Mit Clipchamp erstellt.mp4`
-- `images/Interviews/Interview Timo Kunz – Mit Clipchamp erstellt.mp4`
+- `images/Interviews/Bernd Frank_1-1_01.mp4`
+- `images/Interviews/Kirsten Böckner-Egner_1-1_01.mp4`
+- `images/Interviews/Timo Kunz_1-1_01.mp4`
 
 **Downloads:**
 - `Speisekarte.pdf` – Download-Link im Menü-Bereich (Root, nicht in images/)

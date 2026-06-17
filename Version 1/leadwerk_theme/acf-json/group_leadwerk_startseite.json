@@ -62,6 +62,18 @@
             { "key": "f_menu_book_pages", "name": "menu_book_pages", "label": "Buchseiten (PageFlip, aus Import)", "type": "repeater", "sub_fields": [
               { "key": "f_mbp_class", "name": "page_class", "label": "Seiten-Typ", "type": "select", "choices": { "left-page": "Links", "right-page": "Rechts" }, "default_value": "left-page", "return_format": "value" },
               { "key": "f_mbp_title", "name": "section_title", "label": "Kopfzeile (H3)", "type": "text" },
+              { "key": "f_mbp_sections", "name": "page_sections", "label": "Seiten-Sektionen", "type": "repeater", "sub_fields": [
+                { "key": "f_mbps_type", "name": "section_type", "label": "Sektionstyp", "type": "select", "choices": { "menu_items": "Menü-Liste", "text": "Text" }, "default_value": "menu_items", "return_format": "value" },
+                { "key": "f_mbps_title", "name": "section_title", "label": "Titel", "type": "text" },
+                { "key": "f_mbps_desc", "name": "section_description", "label": "Beschreibung unter Titel", "type": "textarea" },
+                { "key": "f_mbps_body", "name": "section_body", "label": "Freier Text", "type": "textarea" },
+                { "key": "f_mbps_items", "name": "section_items", "label": "Menü-Einträge", "type": "repeater", "sub_fields": [
+                  { "key": "f_mbps_iname", "name": "name", "label": "Name", "type": "text" },
+                  { "key": "f_mbps_iprice", "name": "price", "label": "Preis", "type": "text" },
+                  { "key": "f_mbps_idesc", "name": "description", "label": "Beschreibung", "type": "textarea" },
+                  { "key": "f_mbps_ifeat", "name": "featured", "label": "Hervorheben", "type": "true_false" }
+                ]}
+              ]},
               { "key": "f_mbp_items", "name": "row_items", "label": "Menü-Einträge", "type": "repeater", "sub_fields": [
                 { "key": "f_mbp_iname", "name": "name", "label": "Name", "type": "text" },
                 { "key": "f_mbp_iprice", "name": "price", "label": "Preis", "type": "text" },

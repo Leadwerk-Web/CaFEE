@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_THEME_VERSION', '1.0.0' );
+define( 'LEADWERK_THEME_VERSION', '1.0.1' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
 /** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
@@ -99,12 +99,223 @@ function leadwerk_theme_enqueue_assets() {
 		'leadwerk-theme-main',
 		'cafeeTheme',
 		array(
+			'themeUri'         => esc_url( LEADWERK_THEME_URI ),
 			'fairySvgUrl'      => esc_url( LEADWERK_THEME_URI . '/assets/images/Fee CaFEE_favicon_ohne Dampf.svg' ),
 			'pageTurnSoundUrl' => $page_turn_url ? esc_url( $page_turn_url ) : '',
 		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'leadwerk_theme_enqueue_assets' );
+
+/**
+ * Truncate a human-readable SEO title for Yoast pixel/width hints (character-based heuristic).
+ *
+ * @param string $title      Raw title.
+ * @param int    $max_chars  Maximum characters before ellipsis.
+ * @return string
+ */
+function leadwerk_theme_truncate_seo_title_for_yoast( $title, $max_chars = 58 ) {
+	$title = trim( (string) $title );
+	if ( '' === $title ) {
+		return '';
+	}
+	if ( $max_chars < 8 ) {
+		$max_chars = 8;
+	}
+	if ( function_exists( 'mb_strlen' ) && function_exists( 'mb_substr' ) && mb_strlen( $title ) > $max_chars ) {
+		return rtrim( mb_substr( $title, 0, $max_chars - 1 ) ) . '…';
+	}
+	if ( strlen( $title ) > $max_chars ) {
+		return rtrim( substr( $title, 0, $max_chars - 1 ) ) . '…';
+	}
+
+	return $title;
+}
+
+/**
+ * Build rendered HTML for Yoast (CaFEE: ACF home_sections or block editor content).
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function leadwerk_theme_get_yoast_analysis_content( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return '';
+	}
+
+	$source_key = (string) get_post_meta( $post_id, 'leadwerk_source_key', true );
+
+	$post_before = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
+	$GLOBALS['post'] = get_post( $post_id );
+	if ( ! ( $GLOBALS['post'] instanceof WP_Post ) ) {
+		$GLOBALS['post'] = $post_before;
+
+		return '';
+	}
+	setup_postdata( $GLOBALS['post'] );
+
+	$html = '';
+
+	if ( 'cafee-home-v1' === $source_key && function_exists( 'get_field' ) ) {
+		$sections = get_field( 'home_sections', $post_id );
+		if ( is_array( $sections ) && ! empty( $sections ) ) {
+			ob_start();
+			include LEADWERK_THEME_DIR . '/inc/block-home-sections.php';
+			$html = (string) ob_get_clean();
+		}
+	}
+
+	if ( '' === $html ) {
+		$post_obj = get_post( $post_id );
+		if ( $post_obj instanceof WP_Post && '' !== trim( (string) $post_obj->post_content ) ) {
+			$html = (string) apply_filters( 'the_content', $post_obj->post_content );
+		}
+	}
+
+	wp_reset_postdata();
+	$GLOBALS['post'] = $post_before;
+
+	if ( '' === trim( wp_strip_all_tags( $html ) ) && false === strpos( $html, '<img' ) ) {
+		return '';
+	}
+
+	$html = (string) preg_replace( '#<script[^>]*>.*?</script>#is', '', $html );
+	$html = (string) preg_replace( '#<style[^>]*>.*?</style>#is', '', $html );
+
+	$clean = wp_kses_post( $html );
+	$clean = (string) str_replace( array( "\r", "\n", "\t" ), ' ', $clean );
+	$clean = (string) preg_replace( '/\s+/', ' ', $clean );
+
+	return trim( $clean );
+}
+
+/**
+ * Rebuild Yoast SEO Indexable for one post (admin list dots, admin bar) after meta-only changes.
+ *
+ * @param int $post_id Post ID.
+ * @return void
+ */
+function leadwerk_theme_rebuild_yoast_post_indexable( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || ! function_exists( 'YoastSEO' ) ) {
+		return;
+	}
+	if ( ! class_exists( '\Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher', false ) ) {
+		return;
+	}
+
+	try {
+		$yoast = YoastSEO();
+		if ( ! is_object( $yoast ) || ! isset( $yoast->classes ) || ! is_object( $yoast->classes ) || ! method_exists( $yoast->classes, 'get' ) ) {
+			return;
+		}
+
+		$watcher = $yoast->classes->get( \Yoast\WP\SEO\Integrations\Watchers\Indexable_Post_Watcher::class );
+		if ( is_object( $watcher ) && method_exists( $watcher, 'build_indexable' ) ) {
+			$watcher->build_indexable( $post_id );
+		}
+	} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+		return;
+	}
+}
+
+/**
+ * After saving a Leadwerk-managed page, refresh Yoast indexables.
+ *
+ * @param int     $post_id Post ID.
+ * @param WP_Post $post    Post object.
+ * @param bool    $update  Whether this is an existing post.
+ * @return void
+ */
+function leadwerk_theme_leadwerk_page_yoast_indexable_touch( $post_id, $post, $update ) {
+	unset( $update );
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
+		return;
+	}
+	if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+	if ( '' === (string) get_post_meta( $post_id, 'leadwerk_source_key', true ) ) {
+		return;
+	}
+
+	leadwerk_theme_rebuild_yoast_post_indexable( $post_id );
+}
+
+add_action( 'save_post', 'leadwerk_theme_leadwerk_page_yoast_indexable_touch', 99, 3 );
+
+/**
+ * Feed rendered page content into Yoast's content analysis (admin).
+ *
+ * @param string $hook_suffix Current admin hook.
+ * @return void
+ */
+function leadwerk_theme_enqueue_admin_yoast_analysis( $hook_suffix ) {
+	if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) || ! class_exists( 'WPSEO_Options' ) || ! function_exists( 'get_current_screen' ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen || 'post' !== $screen->base ) {
+		return;
+	}
+
+	$post_id = 0;
+	if ( isset( $_GET['post'] ) ) {
+		$post_id = (int) $_GET['post'];
+	} elseif ( isset( $_POST['post_ID'] ) ) {
+		$post_id = (int) $_POST['post_ID'];
+	}
+
+	if ( $post_id <= 0 ) {
+		return;
+	}
+
+	$analysis_content = leadwerk_theme_get_yoast_analysis_content( $post_id );
+	if ( '' === $analysis_content ) {
+		return;
+	}
+
+	$max_bytes = (int) apply_filters( 'leadwerk_yoast_analysis_inline_max_bytes', 350000 );
+	if ( $max_bytes > 0 && strlen( $analysis_content ) > $max_bytes ) {
+		$analysis_content = substr( $analysis_content, 0, $max_bytes );
+	}
+
+	$payload = array(
+		'postId'          => $post_id,
+		'renderedContent' => $analysis_content,
+	);
+	$json    = wp_json_encode(
+		$payload,
+		JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+	);
+	if ( false === $json ) {
+		$payload['renderedContent'] = substr( wp_strip_all_tags( $analysis_content ), 0, 60000 );
+		$json                       = wp_json_encode(
+			$payload,
+			JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+		);
+	}
+	if ( false === $json ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'leadwerk-admin-yoast-analysis',
+		LEADWERK_THEME_URI . '/js/admin-yoast-analysis.js',
+		array(),
+		LEADWERK_THEME_VERSION,
+		true
+	);
+
+	wp_add_inline_script(
+		'leadwerk-admin-yoast-analysis',
+		'window.leadwerkYoastAnalysis = ' . $json . ';',
+		'before'
+	);
+}
+add_action( 'admin_enqueue_scripts', 'leadwerk_theme_enqueue_admin_yoast_analysis', 100 );
 
 /**
  * Theme-style.css nach WPForms-Frontend-CSS laden.
@@ -155,6 +366,10 @@ function leadwerk_theme_body_class_subpages( $classes ) {
 	if ( ! is_front_page() ) {
 		$classes[] = 'is-subpage';
 	}
+	if ( is_404() || is_page( '404' ) ) {
+		$classes[] = 'page-404';
+		$classes[] = 'header-scrolled';
+	}
 	if ( is_front_page() || is_page( array( 'impressum', 'datenschutz' ) ) ) {
 		$classes[] = 'has-ambient-fairy-home';
 	} else {
@@ -180,16 +395,18 @@ function leadwerk_theme_render_navigation_subpage( $block_content, $block ) {
 	$home_href = esc_url( home_url( '/' ) ) . '#home';
 	$nav_label = esc_attr__( 'Hauptmenü', 'leadwerk-theme' );
 	$toggle_label = esc_attr__( 'Navigation öffnen', 'leadwerk-theme' );
+	$toggle_close_label = esc_attr__( 'Navigation schließen', 'leadwerk-theme' );
 	return '<nav class="wp-block-group nav" id="mainNav" role="navigation" aria-label="' . $nav_label . '">' .
 		'<div class="nav-container">' .
 		$logo_html .
-		'<button type="button" class="nav-toggle" id="navToggle" aria-label="' . $toggle_label . '">' .
+		'<button type="button" class="nav-toggle" id="navToggle" aria-controls="navMenu" aria-expanded="false" aria-label="' . $toggle_label . '" data-label-open="' . $toggle_label . '" data-label-close="' . $toggle_close_label . '">' .
 		'<span></span><span></span><span></span>' .
 		'</button>' .
-		'<ul class="nav-menu" id="navMenu">' .
+		'<ul class="nav-menu" id="navMenu" aria-hidden="true">' .
 		'<li><a href="' . $home_href . '">Home</a></li>' .
 		'</ul>' .
 		'</div>' .
+		'<div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>' .
 		'</nav>';
 }
 add_filter( 'render_block_core/template-part', 'leadwerk_theme_render_navigation_subpage', 10, 2 );
@@ -510,6 +727,165 @@ function leadwerk_theme_bloginfo_defaults() {
  * SEO-Fallback: Meta-Tags aus Yoast-Feldern ausgeben, wenn Yoast nicht aktiv.
  * Wenn Yoast aktiv ist, macht Yoast alles selbst – diese Funktion greift dann nicht.
  */
+/**
+ * Noindex-Status einer Seite anhand der importierten Yoast-Metadaten ermitteln.
+ *
+ * @param int $post_id Beitrag-ID.
+ * @return bool
+ */
+function leadwerk_theme_post_is_noindex( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( ! $post_id ) {
+		return false;
+	}
+	return '1' === (string) get_post_meta( $post_id, '_yoast_wpseo_meta-robots-noindex', true );
+}
+
+/**
+ * Frontpage explizit indexierbar halten und Noindex-Seiten konsistent markieren.
+ *
+ * @param array $robots Robots-Direktiven.
+ * @return array
+ */
+function leadwerk_theme_wp_robots( $robots ) {
+	if ( is_admin() || is_feed() || is_robots() ) {
+		return $robots;
+	}
+	$post_id = get_queried_object_id();
+	if ( ! $post_id ) {
+		return $robots;
+	}
+	if ( leadwerk_theme_post_is_noindex( $post_id ) ) {
+		unset( $robots['index'], $robots['nofollow'] );
+		$robots['noindex'] = true;
+		$robots['follow']  = true;
+		return $robots;
+	}
+	if ( is_front_page() && '0' !== (string) get_option( 'blog_public', '1' ) ) {
+		unset( $robots['noindex'], $robots['nofollow'] );
+		$robots['index']             = true;
+		$robots['follow']            = true;
+		$robots['max-image-preview'] = 'large';
+		$robots['max-snippet']       = -1;
+		$robots['max-video-preview'] = -1;
+	}
+	return $robots;
+}
+add_filter( 'wp_robots', 'leadwerk_theme_wp_robots' );
+
+/**
+ * Veroeffentlichte Noindex-Seiten nicht in die Core-Sitemap aufnehmen.
+ *
+ * @param array  $args      Query-Argumente.
+ * @param string $post_type Post-Type.
+ * @return array
+ */
+function leadwerk_theme_exclude_noindex_from_wp_sitemap( $args, $post_type ) {
+	if ( 'page' !== $post_type ) {
+		return $args;
+	}
+	$noindex_query = array(
+		'relation' => 'OR',
+		array(
+			'key'     => '_yoast_wpseo_meta-robots-noindex',
+			'compare' => 'NOT EXISTS',
+		),
+		array(
+			'key'     => '_yoast_wpseo_meta-robots-noindex',
+			'value'   => '1',
+			'compare' => '!=',
+		),
+	);
+	if ( empty( $args['meta_query'] ) ) {
+		$args['meta_query'] = $noindex_query;
+		return $args;
+	}
+	$args['meta_query'] = array(
+		'relation' => 'AND',
+		$args['meta_query'],
+		$noindex_query,
+	);
+	return $args;
+}
+add_filter( 'wp_sitemaps_posts_query_args', 'leadwerk_theme_exclude_noindex_from_wp_sitemap', 10, 2 );
+
+/**
+ * Yoast-Sitemap ebenfalls um Noindex-Seiten bereinigen.
+ *
+ * @param int[] $excluded Bereits ausgeschlossene IDs.
+ * @return int[]
+ */
+function leadwerk_theme_exclude_noindex_from_yoast_sitemap( $excluded ) {
+	$query = new WP_Query(
+		array(
+			'post_type'              => 'page',
+			'post_status'            => 'publish',
+			'fields'                 => 'ids',
+			'posts_per_page'         => -1,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'meta_key'               => '_yoast_wpseo_meta-robots-noindex',
+			'meta_value'             => '1',
+		)
+	);
+	if ( empty( $query->posts ) ) {
+		return $excluded;
+	}
+	return array_values( array_unique( array_merge( $excluded, array_map( 'intval', $query->posts ) ) ) );
+}
+add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', 'leadwerk_theme_exclude_noindex_from_yoast_sitemap' );
+
+/**
+ * Strukturierte Daten fuer die indexierbare Startseite ausgeben.
+ */
+function leadwerk_theme_local_business_schema() {
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$base_url = trailingslashit( home_url( '/' ) );
+	$logo_url = LEADWERK_THEME_URI . '/assets/images/Fee CaFEE_favicon_ohne Dampf.svg';
+	$phone    = function_exists( 'get_field' ) ? (string) get_field( 'phone', 'option' ) : '';
+	$email    = function_exists( 'get_field' ) ? (string) get_field( 'email', 'option' ) : '';
+	$street   = function_exists( 'get_field' ) ? (string) get_field( 'street', 'option' ) : '';
+	$city_raw = function_exists( 'get_field' ) ? (string) get_field( 'city', 'option' ) : '';
+	$city     = trim( preg_replace( '/^\d{4,5}\s+/', '', $city_raw ) );
+	$postal   = '';
+	if ( preg_match( '/(\d{4,5})/', $city_raw, $matches ) ) {
+		$postal = $matches[1];
+	}
+	$schema = array(
+		'@context' => 'https://schema.org',
+		'@type'    => 'CafeOrCoffeeShop',
+		'@id'      => $base_url . '#organization',
+		'name'     => get_bloginfo( 'name' ),
+		'url'      => $base_url,
+		'image'    => esc_url_raw( $logo_url ),
+		'telephone' => $phone ?: '+49 151/103 100 59',
+		'email'    => $email ?: 'hallo@cafee-gernsbach.de',
+		'address'  => array(
+			'@type'           => 'PostalAddress',
+			'streetAddress'   => $street ?: 'Hofstaette 2',
+			'postalCode'      => $postal ?: '76593',
+			'addressLocality' => $city ?: 'Gernsbach',
+			'addressCountry'  => 'DE',
+		),
+		'sameAs'   => array(
+			'https://www.instagram.com/cafeebrueckenmuehle/',
+		),
+		'openingHoursSpecification' => array(
+			array(
+				'@type'     => 'OpeningHoursSpecification',
+				'dayOfWeek' => array( 'Monday', 'Tuesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ),
+				'opens'     => '09:00',
+				'closes'    => '17:00',
+			),
+		),
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+add_action( 'wp_head', 'leadwerk_theme_local_business_schema', 25 );
+
 function leadwerk_theme_seo_fallback() {
 	if ( defined( 'WPSEO_VERSION' ) ) {
 		return;

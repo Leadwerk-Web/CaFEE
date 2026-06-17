@@ -41,6 +41,8 @@ add_action( 'admin_menu', 'leadwerk_importer_menu' );
 function leadwerk_importer_admin_page() {
 	$dry_run = isset( $_GET['dry_run'] ) && $_GET['dry_run'] === '1';
 	$run     = isset( $_GET['run'] ) && $_GET['run'] === '1' && current_user_can( 'manage_options' );
+	$import_404 = isset( $_GET['import_404'] ) && '1' === (string) $_GET['import_404'] && current_user_can( 'manage_options' );
+	$not_found_source_key = '404-v1';
 	if ( $run && wp_verify_nonce( $_GET['_wpnonce'] ?? '', 'leadwerk_import_run' ) ) {
 		// Zeitlimit anheben: Thumbnail-Erzeugung (Imagick) kann bei vielen/großen Bildern > 30s dauern.
 		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
@@ -50,6 +52,20 @@ function leadwerk_importer_admin_page() {
 		$importer->run();
 		echo '<div class="notice notice-success"><p>Import ausgeführt. Siehe <a href="' . esc_url( admin_url( 'admin.php?page=leadwerk-import&log=1' ) ) . '">Log</a>.</p></div>';
 	}
+	if ( $import_404 && wp_verify_nonce( $_GET['_wpnonce'] ?? '', 'leadwerk_import_404' ) ) {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		$importer = new Leadwerk_Importer( true );
+		$result   = $importer->run_page_by_source_key( $not_found_source_key );
+
+		if ( is_wp_error( $result ) ) {
+			echo '<div class="notice notice-error"><p>' . esc_html( $result->get_error_message() ) . '</p></div>';
+		} else {
+			echo '<div class="notice notice-success"><p>404 Import abgeschlossen fuer <code>' . esc_html( $not_found_source_key ) . '</code>. Siehe <a href="' . esc_url( admin_url( 'admin.php?page=leadwerk-import&log=1' ) ) . '">Log</a>.</p></div>';
+		}
+	}
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Leadwerk Import', 'leadwerk-importer' ); ?></h1>
@@ -58,6 +74,9 @@ function leadwerk_importer_admin_page() {
 			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'run' => '1', 'dry_run' => '1' ), admin_url( 'admin.php?page=leadwerk-import' ) ), 'leadwerk_import_run' ) ); ?>" class="button">Dry-Run (keine Änderungen)</a>
 			&nbsp;
 			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'run' => '1' ), admin_url( 'admin.php?page=leadwerk-import' ) ), 'leadwerk_import_run' ) ); ?>" class="button button-primary">Import ausführen</a>
+		</p>
+		<p>
+			<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( array( 'import_404' => '1' ), admin_url( 'admin.php?page=leadwerk-import' ) ), 'leadwerk_import_404' ) ); ?>" class="button">Nur 404 importieren</a>
 		</p>
 		<?php if ( isset( $_GET['log'] ) ) : ?>
 			<pre style="background:#f5f5f5;padding:1em;max-height:400px;overflow:auto;"><?php echo esc_html( get_option( 'leadwerk_import_log', '' ) ); ?></pre>

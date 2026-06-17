@@ -170,27 +170,88 @@ class Leadwerk_ACF_Filler {
 			if ( $book_container ) {
 				$flat_pages = $xpath->query( './div[contains(@class,"book-page")]', $book_container );
 				foreach ( $flat_pages as $page_el ) {
-					$cls        = $page_el instanceof DOMElement ? $page_el->getAttribute( 'class' ) : '';
-					$page_class = ( strpos( $cls, 'right-page' ) !== false ) ? 'right-page' : 'left-page';
-					$row_items  = array();
-					$menu_items = $xpath->query( './/div[contains(@class,"menu-item")]', $page_el );
-					foreach ( $menu_items as $item ) {
-						$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
-						if ( $name === '' ) {
+					$cls           = $page_el instanceof DOMElement ? $page_el->getAttribute( 'class' ) : '';
+					$page_class    = ( strpos( $cls, 'right-page' ) !== false ) ? 'right-page' : 'left-page';
+					$page_sections = array();
+					$row_items     = array();
+					$legacy_title  = '';
+					$section_nodes = $xpath->query( './/*[contains(concat(" ", normalize-space(@class), " "), " menu-page-section ")]', $page_el );
+
+					foreach ( $section_nodes as $section_el ) {
+						$section_class = $section_el instanceof DOMElement ? trim( $section_el->getAttribute( 'data-section-type' ) ) : '';
+						$section_type  = ( 'text' === $section_class ) ? 'text' : 'menu_items';
+						$section_items = array();
+
+						if ( 'menu_items' === $section_type ) {
+							$menu_items = $xpath->query( './/*[contains(concat(" ", normalize-space(@class), " "), " menu-item ")]', $section_el );
+							foreach ( $menu_items as $item ) {
+								$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
+								if ( $name === '' ) {
+									continue;
+								}
+								$item_class = $item instanceof DOMElement ? $item->getAttribute( 'class' ) : '';
+								$section_items[] = array(
+									'name'        => $name,
+									'price'       => $this->text( $xpath, './/span[contains(@class,"item-price")]', $item ),
+									'description' => $this->text( $xpath, './/p[contains(@class,"item-desc")]', $item ),
+									'featured'    => strpos( $item_class, 'featured' ) !== false,
+								);
+							}
+						}
+
+						$body_node = $xpath->query( './/*[contains(concat(" ", normalize-space(@class), " "), " page-section-body ")]', $section_el )->item( 0 );
+						$section_row = array(
+							'section_type'        => $section_type,
+							'section_title'       => $this->text( $xpath, './/*[contains(@class,"menu-section-title")]', $section_el ),
+							'section_description' => $this->text( $xpath, './/*[contains(@class,"page-section-description")]', $section_el ),
+							'section_body'        => $body_node ? $this->multiline_text_from_node( $body_node ) : '',
+							'section_items'       => $section_items,
+						);
+
+						if (
+							$section_row['section_title'] === '' &&
+							$section_row['section_description'] === '' &&
+							$section_row['section_body'] === '' &&
+							empty( $section_row['section_items'] )
+						) {
 							continue;
 						}
-						$row_items[] = array(
-							'name'        => $name,
-							'price'       => $this->text( $xpath, './/span[contains(@class,"item-price")]', $item ),
-							'description' => $this->text( $xpath, './/p[contains(@class,"item-desc")]', $item ),
-							'featured'    => false,
-						);
+
+						$page_sections[] = $section_row;
 					}
+
+					if ( ! empty( $page_sections ) ) {
+						foreach ( $page_sections as $section_row ) {
+							if ( 'menu_items' !== $section_row['section_type'] ) {
+								continue;
+							}
+							$legacy_title = $section_row['section_title'];
+							$row_items    = $section_row['section_items'];
+							break;
+						}
+					} else {
+						$legacy_title = $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page_el );
+						$menu_items = $xpath->query( './/*[contains(concat(" ", normalize-space(@class), " "), " menu-item ")]', $page_el );
+						foreach ( $menu_items as $item ) {
+							$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
+							if ( $name === '' ) {
+								continue;
+							}
+							$row_items[] = array(
+								'name'        => $name,
+								'price'       => $this->text( $xpath, './/span[contains(@class,"item-price")]', $item ),
+								'description' => $this->text( $xpath, './/p[contains(@class,"item-desc")]', $item ),
+								'featured'    => false,
+							);
+						}
+					}
+
 					$page_quote_raw = $this->text( $xpath, './/p[contains(@class,"page-quote")]', $page_el );
 					$img_src        = $this->attr( $xpath, './/div[contains(@class,"page-image")]//img', 'src', $page_el );
 					$menu_book_pages[] = array(
 						'page_class'     => $page_class,
-						'section_title'  => $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page_el ),
+						'section_title'  => $legacy_title,
+						'page_sections'  => $page_sections,
 						'row_items'      => $row_items,
 						'page_quote'     => $page_quote_raw,
 						'page_image'     => $img_src ? $this->get_attachment_id_by_source( $img_src ) : 0,
@@ -215,7 +276,7 @@ class Leadwerk_ACF_Filler {
 						}
 						$cat_title = $this->text( $xpath, './/div[contains(@class,"page-header")]/h3', $page );
 						$items     = array();
-						$menu_items = $xpath->query( './/div[contains(@class,"menu-item")]', $page );
+						$menu_items = $xpath->query( './/*[contains(concat(" ", normalize-space(@class), " "), " menu-item ")]', $page );
 						foreach ( $menu_items as $item ) {
 							$name = $this->text( $xpath, './/span[contains(@class,"item-name")]', $item );
 							if ( $name === '' ) {
@@ -386,6 +447,23 @@ class Leadwerk_ACF_Filler {
 		$nodes = $xpath->query( $expr, $context );
 		if ( $nodes->length === 0 ) return '';
 		return trim( $nodes->item( 0 )->textContent );
+	}
+
+	protected function multiline_text_from_node( DOMNode $node ) {
+		$lines = array();
+
+		foreach ( $node->childNodes as $child ) {
+			$text = trim( preg_replace( '/\s+/u', ' ', $child->textContent ) );
+			if ( '' !== $text ) {
+				$lines[] = $text;
+			}
+		}
+
+		if ( empty( $lines ) ) {
+			return trim( preg_replace( '/\s+/u', ' ', $node->textContent ) );
+		}
+
+		return implode( "\n", $lines );
 	}
 
 	protected function attr( DOMXPath $xpath, $expr, $attr, $context ) {
