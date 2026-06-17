@@ -42,32 +42,33 @@
 .ero-section-title {
     display: flex;
     flex-direction: column;
-    line-height: 1.05;
-    margin: var(--space-sm) 0 var(--space-lg);
+    margin: 0 0 var(--space-lg);
 }
 
 .ero-section-title .title-display {
     font-family: var(--font-display);
-    font-weight: 300;
-    font-size: var(--text-3xl);
+    font-weight: 600;
+    font-size: var(--text-4xl);
     color: var(--color-secondary);
-    letter-spacing: 0.02em;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    line-height: 1.2;
 }
 
 .ero-section-title .title-script {
     font-family: var(--font-script);
-    font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
+    font-weight: normal;
+    font-size: var(--text-4xl);
     color: var(--color-primary);
-    line-height: 0.9;
+    line-height: 1.2;
     margin-top: -0.1em;
 }
 
 .ero-section-sub {
-    max-width: 44rem;
+    max-width: 600px;
     margin: 0 auto;
     color: var(--color-secondary-light);
-    font-size: var(--text-lg);
+    font-size: var(--text-sm);
 }
 
 /* ========================================
@@ -627,14 +628,14 @@
     border-radius: var(--radius-lg);
     padding: var(--space-2xl) var(--space-xl) var(--space-xl);
     text-align: center;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-cream-dark);
+    box-shadow: 0 4px 20px rgba(60, 60, 59, 0.08);
+    border: 1px solid rgba(189, 137, 113, 0.15);
     transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .ero-step:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-warm);
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(189, 137, 113, 0.18);
 }
 
 .ero-step-num {
@@ -695,14 +696,14 @@
     border-radius: var(--radius-lg);
     padding: var(--space-xl);
     text-align: center;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-cream-dark);
+    box-shadow: 0 4px 20px rgba(60, 60, 59, 0.08);
+    border: 1px solid rgba(189, 137, 113, 0.15);
     transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .ero-taste-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-warm);
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(189, 137, 113, 0.18);
 }
 
 .ero-taste-icon {
