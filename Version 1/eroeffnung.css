@@ -958,17 +958,49 @@
 }
 
 /* ----------------------------------------
-   Nav-Override: globalen "letztes Element ausblenden"-Switch
-   für unseren Rabatt-CTA auf dieser Seite aufheben
+   Nav-Override für die Landingpage:
+   - globalen "letztes Element ausblenden"-Switch aufheben
+   - saubere horizontale Header-Zeile statt gestauchter Spalte
+   - mehr Luft oben & Abstand zwischen den Menüpunkten
    ---------------------------------------- */
+.eroeffnung-page .nav .nav-cta {
+    color: var(--color-white) !important;
+}
+
+/* Etwas mehr Atem im fixierten Header */
+.eroeffnung-page.is-subpage .nav {
+    padding: var(--space-lg) 0;
+}
+
 @media (min-width: 901px) {
     .eroeffnung-page .nav-menu li:last-child {
         display: list-item !important;
     }
+
+    /* Header als Zeile: Logo links, Menü rechts */
+    .eroeffnung-page .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-xl);
+    }
+
+    .eroeffnung-page .nav-menu {
+        width: auto;
+        justify-content: flex-end;
+        gap: var(--space-2xl);
+    }
+
+    .eroeffnung-page.is-subpage .nav .nav-logo img {
+        height: 56px;
+    }
 }
 
-.eroeffnung-page .nav .nav-cta {
-    color: var(--color-white) !important;
+/* Auf kleineren Screens: Logo links, Menü mittig – mit klarem Abstand */
+@media (max-width: 900px) {
+    .eroeffnung-page.is-subpage .nav-menu {
+        gap: var(--space-lg);
+    }
 }
 
 /* Reduced motion */
