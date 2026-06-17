@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CaFEE Brückenmühle – Vorschau der Website-Versionen">
+    <title>CaFEE Brückenmühle</title>
+    <link rel="icon" type="image/svg+xml" href="Version%201/images/Fee%20CaFEE_favicon_ohne%20Dampf.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #faf6f0;
+            --brown: #5c3d2e;
+            --brown-light: #8b6f5c;
+            --gold: #c9a96e;
+            --shadow: 0 8px 32px rgba(92, 61, 46, 0.12);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cream);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--brown);
+            padding: 2rem 1.5rem;
+        }
+
+        .portal {
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+            margin: 0 auto 2rem;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--brown-light);
+            margin-bottom: 2.5rem;
+        }
+
+        .versions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .version-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: #fff;
+            border: 1px solid rgba(92, 61, 46, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            text-align: left;
+        }
+
+        .version-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(92, 61, 46, 0.18);
+            border-color: var(--gold);
+        }
+
+        .version-card strong {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+
+        .version-card span {
+            font-size: 0.85rem;
+            color: var(--brown-light);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .version-card .arrow {
+            float: right;
+            font-size: 1.25rem;
+            color: var(--gold);
+            margin-top: -1.5rem;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            font-size: 0.75rem;
+            color: var(--brown-light);
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <main class="portal">
+        <img class="logo" src="Version%201/images/Logo%20CaFEE%20vektorisiert.svg" alt="CaFEE Brückenmühle Logo">
+        <h1>CaFEE Brückenmühle</h1>
+        <p class="subtitle">Wo Magie auf CaFEE trifft</p>
+
+        <nav class="versions" aria-label="Website-Versionen">
+            <a class="version-card" href="Version%201/index.html">
+                <span class="arrow" aria-hidden="true">→</span>
+                <strong>Version 1 – Klassisch</strong>
+                <span>Originale Website mit Page-Flip-Speisekarte und sanftem Design</span>
+            </a>
+            <a class="version-card" href="Version%202/index-bold.html">
+                <span class="arrow" aria-hidden="true">→</span>
+                <strong>Version 2 – Bold</strong>
+                <span>Moderne Variante mit kräftiger Typografie und Video-Hero</span>
+            </a>
+            <a class="version-card" href="Version%201/eroeffnung.html">
+                <span class="arrow" aria-hidden="true">→</span>
+                <strong>Eröffnungsseite</strong>
+                <span>Countdown und Infos zur Café-Eröffnung</span>
+            </a>
+        </nav>
+
+        <footer>Gernsbach · Hofstätte 2</footer>
+    </main>
+</body>
+</html>
