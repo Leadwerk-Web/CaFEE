@@ -6,6 +6,7 @@
 .eroeffnung-page {
     background-color: var(--color-cream);
 }
+/* ERO-PREVIEW */ .scroll-animate{opacity:1 !important;transform:none !important;} .ero-hero,.ero-rabatt,.ero-steps{display:none !important;}
 
 .ero-main {
     overflow-x: hidden;
