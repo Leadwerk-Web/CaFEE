@@ -115,6 +115,7 @@
 }
 
 .ero-hero-inner {
+    width: 100%;
     max-width: 880px;
     color: var(--color-white);
 }
@@ -153,7 +154,7 @@
 .ero-hero-title {
     display: flex;
     flex-direction: column;
-    margin: var(--space-lg) 0 var(--space-md);
+    margin: var(--space-2xl) 0 var(--space-lg);
     line-height: 1;
 }
 
@@ -164,7 +165,7 @@
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.75);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
 }
 
 .ero-hero-main {
@@ -185,7 +186,7 @@
 
 .ero-hero-sub {
     max-width: 40rem;
-    margin: var(--space-md) auto var(--space-xl);
+    margin: var(--space-lg) auto var(--space-2xl);
     font-size: var(--text-lg);
     color: rgba(255, 255, 255, 0.88);
     line-height: 1.7;
@@ -198,7 +199,7 @@
     display: inline-flex;
     align-items: flex-start;
     gap: clamp(0.4rem, 2vw, 1.1rem);
-    margin: 0 auto var(--space-xl);
+    margin: 0 auto var(--space-2xl);
     padding: var(--space-lg) var(--space-xl);
     border-radius: var(--radius-lg);
     background: rgba(255, 255, 255, 0.07);
@@ -253,9 +254,9 @@
 .ero-hero-cta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--space-lg);
     justify-content: center;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
 }
 
 .ero-hero-note {
@@ -495,6 +496,32 @@
     margin-top: var(--space-md);
     font-size: var(--text-sm);
     color: var(--color-secondary-light);
+}
+
+.ero-qr-validity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--space-sm);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    background: rgba(189, 137, 113, 0.12);
+    border: 1px solid rgba(189, 137, 113, 0.35);
+    color: var(--color-primary-dark);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 0.01em;
+}
+
+.ero-qr-validity svg {
+    flex: 0 0 auto;
+    color: var(--color-primary);
+}
+
+.ero-qr-validity strong {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    white-space: nowrap;
 }
 
 .ero-qr-actions {
@@ -947,9 +974,27 @@
 
 @media (max-width: 600px) {
     .ero-container { padding: 0 var(--space-lg); }
-    .ero-countdown { padding: var(--space-md); gap: 0.3rem; }
+    .ero-badge {
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 100%;
+        font-size: var(--text-xs);
+        letter-spacing: 0.05em;
+        text-align: center;
+    }
+    .ero-countdown {
+        display: flex;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        justify-content: space-between;
+        padding: var(--space-md) var(--space-sm);
+        gap: 0.2rem;
+    }
     .cd-sep { display: none; }
-    .cd-unit { min-width: 22vw; }
+    .cd-unit { min-width: 0; flex: 1 1 0; }
+    .cd-num { font-size: clamp(1.4rem, 0.8rem + 5vw, 2.2rem); }
+    .cd-label { font-size: 0.6rem; letter-spacing: 0.04em; margin-top: 0.3rem; }
     .ero-taste-grid { grid-template-columns: 1fr; }
     .ero-details-grid { grid-template-columns: 1fr; }
     .ero-final { background-attachment: scroll; }
@@ -996,10 +1041,57 @@
     }
 }
 
-/* Auf kleineren Screens: Logo links, Menü mittig – mit klarem Abstand */
+/* Auf kleineren Screens: Header als saubere Zeile (Logo links, Menü rechts).
+   Das globale 1fr-auto-1fr-Grid würde die Seitenspalten symmetrisch auf
+   Logobreite aufblasen und mit dem Rabatt-Button überlaufen. */
 @media (max-width: 900px) {
+    .eroeffnung-page.is-subpage .nav-container {
+        display: flex !important;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-md);
+        padding: 0 var(--space-lg);
+    }
+
+    .eroeffnung-page.is-subpage .nav .nav-logo {
+        justify-self: auto;
+        grid-column: auto;
+        flex: 0 0 auto;
+    }
+
     .eroeffnung-page.is-subpage .nav-menu {
+        width: auto;
+        grid-column: auto;
+        justify-content: flex-end;
         gap: var(--space-lg);
+        flex: 0 1 auto;
+    }
+}
+
+/* Sehr schmale Screens: Logo & Rabatt-Button kompakter, damit nichts
+   über den Viewport hinausläuft. */
+@media (max-width: 480px) {
+    .eroeffnung-page.is-subpage .nav-container {
+        padding: 0 var(--space-md);
+        gap: var(--space-sm);
+    }
+
+    .eroeffnung-page.is-subpage .nav .nav-logo img {
+        height: 46px;
+    }
+
+    .eroeffnung-page.is-subpage .nav-menu {
+        gap: var(--space-md);
+    }
+
+    .eroeffnung-page .nav-menu a:not(.nav-cta) {
+        font-size: var(--text-sm);
+    }
+
+    .eroeffnung-page .nav-menu .nav-cta {
+        padding: 0.5rem 0.9rem;
+        font-size: var(--text-xs);
     }
 }
 

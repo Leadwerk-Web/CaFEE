@@ -13,7 +13,7 @@
     var SHARE_TITLE = 'Große Eröffnung CaFEE Brückenmühle';
     var SHARE_TEXT =
         'Große Eröffnung im CaFEE Brückenmühle am 11. Juli! ' +
-        'Sichere dir 10% Eröffnungsrabatt – einfach den QR-Code im CaFEE vorzeigen:';
+        'Sichere dir 10% Eröffnungsrabatt – nur am 11. Juli gültig, einfach den QR-Code im CaFEE vorzeigen:';
 
     // ----------------------------------------
     // Toast
