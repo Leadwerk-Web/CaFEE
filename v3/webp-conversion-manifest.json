@@ -1,0 +1,857 @@
+{
+  "created_at": "2026-05-06T11:59:19",
+  "root": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1",
+  "total_images": 85,
+  "images": [
+    {
+      "filename": "Anja.png",
+      "stem": "Anja",
+      "extension": ".png",
+      "relative_path": "Anja.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Anja.png",
+      "target_webp_relative_path": "Anja.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Anja.webp",
+      "size_bytes": 1959165
+    },
+    {
+      "filename": "Brian.png",
+      "stem": "Brian",
+      "extension": ".png",
+      "relative_path": "Brian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Brian.png",
+      "target_webp_relative_path": "Brian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Brian.webp",
+      "size_bytes": 1818521
+    },
+    {
+      "filename": "Martin.png",
+      "stem": "Martin",
+      "extension": ".png",
+      "relative_path": "Martin.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Martin.png",
+      "target_webp_relative_path": "Martin.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Martin.webp",
+      "size_bytes": 1912677
+    },
+    {
+      "filename": "Sarah.png",
+      "stem": "Sarah",
+      "extension": ".png",
+      "relative_path": "Sarah.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Sarah.png",
+      "target_webp_relative_path": "Sarah.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/Sarah.webp",
+      "size_bytes": 1912137
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "images/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/2.png",
+      "target_webp_relative_path": "images/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/2.webp",
+      "size_bytes": 599805
+    },
+    {
+      "filename": "8.png",
+      "stem": "8",
+      "extension": ".png",
+      "relative_path": "images/8.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/8.png",
+      "target_webp_relative_path": "images/8.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/8.webp",
+      "size_bytes": 4305
+    },
+    {
+      "filename": "Avocado Ei.png",
+      "stem": "Avocado Ei",
+      "extension": ".png",
+      "relative_path": "images/Avocado Ei.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Avocado Ei.png",
+      "target_webp_relative_path": "images/Avocado Ei.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Avocado Ei.webp",
+      "size_bytes": 670645
+    },
+    {
+      "filename": "Cafe blurred.png",
+      "stem": "Cafe blurred",
+      "extension": ".png",
+      "relative_path": "images/Cafe blurred.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Cafe blurred.png",
+      "target_webp_relative_path": "images/Cafe blurred.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Cafe blurred.webp",
+      "size_bytes": 522002
+    },
+    {
+      "filename": "Capuccino.png",
+      "stem": "Capuccino",
+      "extension": ".png",
+      "relative_path": "images/Capuccino.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Capuccino.png",
+      "target_webp_relative_path": "images/Capuccino.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Capuccino.webp",
+      "size_bytes": 478083
+    },
+    {
+      "filename": "Fee-klein.png",
+      "stem": "Fee-klein",
+      "extension": ".png",
+      "relative_path": "images/Fee-klein.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Fee-klein.png",
+      "target_webp_relative_path": "images/Fee-klein.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Fee-klein.webp",
+      "size_bytes": 60337
+    },
+    {
+      "filename": "Fruehstueck.png",
+      "stem": "Fruehstueck",
+      "extension": ".png",
+      "relative_path": "images/Fruehstueck.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Fruehstueck.png",
+      "target_webp_relative_path": "images/Fruehstueck.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Fruehstueck.webp",
+      "size_bytes": 812384
+    },
+    {
+      "filename": "Herz Icon.png",
+      "stem": "Herz Icon",
+      "extension": ".png",
+      "relative_path": "images/Herz Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Herz Icon.png",
+      "target_webp_relative_path": "images/Herz Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Herz Icon.webp",
+      "size_bytes": 10746
+    },
+    {
+      "filename": "Kaffebohnen.png",
+      "stem": "Kaffebohnen",
+      "extension": ".png",
+      "relative_path": "images/Kaffebohnen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Kaffebohnen.png",
+      "target_webp_relative_path": "images/Kaffebohnen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Kaffebohnen.webp",
+      "size_bytes": 583893
+    },
+    {
+      "filename": "Kaffee Icon.png",
+      "stem": "Kaffee Icon",
+      "extension": ".png",
+      "relative_path": "images/Kaffee Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Kaffee Icon.png",
+      "target_webp_relative_path": "images/Kaffee Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Kaffee Icon.webp",
+      "size_bytes": 20671
+    },
+    {
+      "filename": "Logo CaFEE.png",
+      "stem": "Logo CaFEE",
+      "extension": ".png",
+      "relative_path": "images/Logo CaFEE.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Logo CaFEE.png",
+      "target_webp_relative_path": "images/Logo CaFEE.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Logo CaFEE.webp",
+      "size_bytes": 213795
+    },
+    {
+      "filename": "Speisekarte-Menu.png",
+      "stem": "Speisekarte-Menu",
+      "extension": ".png",
+      "relative_path": "images/Speisekarte-Menu.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Speisekarte-Menu.png",
+      "target_webp_relative_path": "images/Speisekarte-Menu.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Speisekarte-Menu.webp",
+      "size_bytes": 188084
+    },
+    {
+      "filename": "Tresen.png",
+      "stem": "Tresen",
+      "extension": ".png",
+      "relative_path": "images/Tresen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Tresen.png",
+      "target_webp_relative_path": "images/Tresen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Tresen.webp",
+      "size_bytes": 605379
+    },
+    {
+      "filename": "screenshot.png",
+      "stem": "screenshot",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/screenshot.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/screenshot.png",
+      "target_webp_relative_path": "leadwerk_theme/screenshot.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/screenshot.webp",
+      "size_bytes": 10821
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/2.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/2.webp",
+      "size_bytes": 599805
+    },
+    {
+      "filename": "8.png",
+      "stem": "8",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/8.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/8.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/8.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/8.webp",
+      "size_bytes": 4305
+    },
+    {
+      "filename": "Avocado Ei.png",
+      "stem": "Avocado Ei",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Avocado Ei.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Avocado Ei.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Avocado Ei.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Avocado Ei.webp",
+      "size_bytes": 670645
+    },
+    {
+      "filename": "Cafe blurred.png",
+      "stem": "Cafe blurred",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Cafe blurred.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Cafe blurred.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Cafe blurred.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Cafe blurred.webp",
+      "size_bytes": 522002
+    },
+    {
+      "filename": "Capuccino.png",
+      "stem": "Capuccino",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Capuccino.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Capuccino.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Capuccino.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Capuccino.webp",
+      "size_bytes": 478083
+    },
+    {
+      "filename": "Fruehstueck.png",
+      "stem": "Fruehstueck",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Fruehstueck.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Fruehstueck.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Fruehstueck.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Fruehstueck.webp",
+      "size_bytes": 812384
+    },
+    {
+      "filename": "Herz Icon.png",
+      "stem": "Herz Icon",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Herz Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Herz Icon.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Herz Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Herz Icon.webp",
+      "size_bytes": 10746
+    },
+    {
+      "filename": "Kaffebohnen.png",
+      "stem": "Kaffebohnen",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Kaffebohnen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Kaffebohnen.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Kaffebohnen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Kaffebohnen.webp",
+      "size_bytes": 583893
+    },
+    {
+      "filename": "Kaffee Icon.png",
+      "stem": "Kaffee Icon",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Kaffee Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Kaffee Icon.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Kaffee Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Kaffee Icon.webp",
+      "size_bytes": 20671
+    },
+    {
+      "filename": "Logo CaFEE.png",
+      "stem": "Logo CaFEE",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Logo CaFEE.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Logo CaFEE.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Logo CaFEE.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Logo CaFEE.webp",
+      "size_bytes": 213795
+    },
+    {
+      "filename": "Speisekarte-Menu.png",
+      "stem": "Speisekarte-Menu",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Speisekarte-Menu.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Speisekarte-Menu.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Speisekarte-Menu.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Speisekarte-Menu.webp",
+      "size_bytes": 188084
+    },
+    {
+      "filename": "Tresen.png",
+      "stem": "Tresen",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Tresen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Tresen.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Tresen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Tresen.webp",
+      "size_bytes": 605379
+    },
+    {
+      "filename": "1.png",
+      "stem": "1",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/1.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/1.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/1.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/1.webp",
+      "size_bytes": 385056
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/2.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/2.webp",
+      "size_bytes": 437445
+    },
+    {
+      "filename": "3.png",
+      "stem": "3",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/3.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/3.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/3.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/3.webp",
+      "size_bytes": 455347
+    },
+    {
+      "filename": "4.png",
+      "stem": "4",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/4.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/4.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/4.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/4.webp",
+      "size_bytes": 714502
+    },
+    {
+      "filename": "5.png",
+      "stem": "5",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/5.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/5.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/5.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/5.webp",
+      "size_bytes": 412582
+    },
+    {
+      "filename": "6.png",
+      "stem": "6",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/6.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/6.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/6.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/6.webp",
+      "size_bytes": 278883
+    },
+    {
+      "filename": "7.png",
+      "stem": "7",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Shirtdesigns/7.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/7.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Shirtdesigns/7.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Shirtdesigns/7.webp",
+      "size_bytes": 218598
+    },
+    {
+      "filename": "Anja.png",
+      "stem": "Anja",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Team/Anja.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Anja.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Anja.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Anja.webp",
+      "size_bytes": 1959165
+    },
+    {
+      "filename": "Brian.png",
+      "stem": "Brian",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Team/Brian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Brian.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Brian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Brian.webp",
+      "size_bytes": 1818521
+    },
+    {
+      "filename": "Fabian.jpg",
+      "stem": "Fabian",
+      "extension": ".jpg",
+      "relative_path": "leadwerk_theme/assets/images/Team/Fabian.jpg",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Fabian.jpg",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Fabian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Fabian.webp",
+      "size_bytes": 4956340
+    },
+    {
+      "filename": "Fee.jpg",
+      "stem": "Fee",
+      "extension": ".jpg",
+      "relative_path": "leadwerk_theme/assets/images/Team/Fee.jpg",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Fee.jpg",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Fee.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Fee.webp",
+      "size_bytes": 6999383
+    },
+    {
+      "filename": "Martin.png",
+      "stem": "Martin",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Team/Martin.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Martin.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Martin.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Martin.webp",
+      "size_bytes": 1912677
+    },
+    {
+      "filename": "Sarah.png",
+      "stem": "Sarah",
+      "extension": ".png",
+      "relative_path": "leadwerk_theme/assets/images/Team/Sarah.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Sarah.png",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Sarah.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Sarah.webp",
+      "size_bytes": 1912137
+    },
+    {
+      "filename": "Vanessa.jpg",
+      "stem": "Vanessa",
+      "extension": ".jpg",
+      "relative_path": "leadwerk_theme/assets/images/Team/Vanessa.jpg",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Vanessa.jpg",
+      "target_webp_relative_path": "leadwerk_theme/assets/images/Team/Vanessa.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_theme/assets/images/Team/Vanessa.webp",
+      "size_bytes": 5418654
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/2.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/2.webp",
+      "size_bytes": 599805
+    },
+    {
+      "filename": "8.png",
+      "stem": "8",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/8.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/8.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/8.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/8.webp",
+      "size_bytes": 4305
+    },
+    {
+      "filename": "Avocado Ei.png",
+      "stem": "Avocado Ei",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Avocado Ei.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Avocado Ei.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Avocado Ei.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Avocado Ei.webp",
+      "size_bytes": 670645
+    },
+    {
+      "filename": "Cafe blurred.png",
+      "stem": "Cafe blurred",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Cafe blurred.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Cafe blurred.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Cafe blurred.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Cafe blurred.webp",
+      "size_bytes": 522002
+    },
+    {
+      "filename": "Capuccino.png",
+      "stem": "Capuccino",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Capuccino.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Capuccino.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Capuccino.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Capuccino.webp",
+      "size_bytes": 478083
+    },
+    {
+      "filename": "Fee-klein.png",
+      "stem": "Fee-klein",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Fee-klein.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Fee-klein.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Fee-klein.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Fee-klein.webp",
+      "size_bytes": 60337
+    },
+    {
+      "filename": "Fruehstueck.png",
+      "stem": "Fruehstueck",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Fruehstueck.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Fruehstueck.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Fruehstueck.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Fruehstueck.webp",
+      "size_bytes": 812384
+    },
+    {
+      "filename": "Herz Icon.png",
+      "stem": "Herz Icon",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Herz Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Herz Icon.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Herz Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Herz Icon.webp",
+      "size_bytes": 10746
+    },
+    {
+      "filename": "Kaffebohnen.png",
+      "stem": "Kaffebohnen",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Kaffebohnen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Kaffebohnen.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Kaffebohnen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Kaffebohnen.webp",
+      "size_bytes": 583893
+    },
+    {
+      "filename": "Kaffee Icon.png",
+      "stem": "Kaffee Icon",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Kaffee Icon.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Kaffee Icon.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Kaffee Icon.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Kaffee Icon.webp",
+      "size_bytes": 20671
+    },
+    {
+      "filename": "Logo CaFEE.png",
+      "stem": "Logo CaFEE",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Logo CaFEE.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Logo CaFEE.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Logo CaFEE.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Logo CaFEE.webp",
+      "size_bytes": 213795
+    },
+    {
+      "filename": "Speisekarte-Menu.png",
+      "stem": "Speisekarte-Menu",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Speisekarte-Menu.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Speisekarte-Menu.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Speisekarte-Menu.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Speisekarte-Menu.webp",
+      "size_bytes": 188084
+    },
+    {
+      "filename": "Tresen.png",
+      "stem": "Tresen",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Tresen.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Tresen.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Tresen.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Tresen.webp",
+      "size_bytes": 605379
+    },
+    {
+      "filename": "1.png",
+      "stem": "1",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/1.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/1.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/1.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/1.webp",
+      "size_bytes": 385056
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/2.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/2.webp",
+      "size_bytes": 437445
+    },
+    {
+      "filename": "3.png",
+      "stem": "3",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/3.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/3.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/3.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/3.webp",
+      "size_bytes": 455347
+    },
+    {
+      "filename": "4.png",
+      "stem": "4",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/4.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/4.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/4.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/4.webp",
+      "size_bytes": 714502
+    },
+    {
+      "filename": "5.png",
+      "stem": "5",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/5.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/5.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/5.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/5.webp",
+      "size_bytes": 412582
+    },
+    {
+      "filename": "6.png",
+      "stem": "6",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/6.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/6.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/6.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/6.webp",
+      "size_bytes": 278883
+    },
+    {
+      "filename": "7.png",
+      "stem": "7",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/7.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/7.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Shirtdesigns/7.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Shirtdesigns/7.webp",
+      "size_bytes": 218598
+    },
+    {
+      "filename": "Anja.png",
+      "stem": "Anja",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Anja.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Anja.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Anja.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Anja.webp",
+      "size_bytes": 1959165
+    },
+    {
+      "filename": "Brian.png",
+      "stem": "Brian",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Brian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Brian.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Brian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Brian.webp",
+      "size_bytes": 1818521
+    },
+    {
+      "filename": "Fabian.png",
+      "stem": "Fabian",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Fabian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Fabian.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Fabian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Fabian.webp",
+      "size_bytes": 1162513
+    },
+    {
+      "filename": "Fee.png",
+      "stem": "Fee",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Fee.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Fee.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Fee.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Fee.webp",
+      "size_bytes": 1236364
+    },
+    {
+      "filename": "Martin.png",
+      "stem": "Martin",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Martin.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Martin.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Martin.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Martin.webp",
+      "size_bytes": 1912677
+    },
+    {
+      "filename": "Sarah.png",
+      "stem": "Sarah",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Sarah.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Sarah.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Sarah.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Sarah.webp",
+      "size_bytes": 1912137
+    },
+    {
+      "filename": "Vanessa.png",
+      "stem": "Vanessa",
+      "extension": ".png",
+      "relative_path": "leadwerk_importer/source_assets/images/Team/Vanessa.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Vanessa.png",
+      "target_webp_relative_path": "leadwerk_importer/source_assets/images/Team/Vanessa.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/leadwerk_importer/source_assets/images/Team/Vanessa.webp",
+      "size_bytes": 1300778
+    },
+    {
+      "filename": "1.png",
+      "stem": "1",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/1.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/1.png",
+      "target_webp_relative_path": "images/Shirtdesigns/1.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/1.webp",
+      "size_bytes": 385056
+    },
+    {
+      "filename": "2.png",
+      "stem": "2",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/2.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/2.png",
+      "target_webp_relative_path": "images/Shirtdesigns/2.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/2.webp",
+      "size_bytes": 437445
+    },
+    {
+      "filename": "3.png",
+      "stem": "3",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/3.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/3.png",
+      "target_webp_relative_path": "images/Shirtdesigns/3.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/3.webp",
+      "size_bytes": 455347
+    },
+    {
+      "filename": "4.png",
+      "stem": "4",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/4.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/4.png",
+      "target_webp_relative_path": "images/Shirtdesigns/4.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/4.webp",
+      "size_bytes": 714502
+    },
+    {
+      "filename": "5.png",
+      "stem": "5",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/5.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/5.png",
+      "target_webp_relative_path": "images/Shirtdesigns/5.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/5.webp",
+      "size_bytes": 412582
+    },
+    {
+      "filename": "6.png",
+      "stem": "6",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/6.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/6.png",
+      "target_webp_relative_path": "images/Shirtdesigns/6.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/6.webp",
+      "size_bytes": 278883
+    },
+    {
+      "filename": "7.png",
+      "stem": "7",
+      "extension": ".png",
+      "relative_path": "images/Shirtdesigns/7.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/7.png",
+      "target_webp_relative_path": "images/Shirtdesigns/7.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Shirtdesigns/7.webp",
+      "size_bytes": 218598
+    },
+    {
+      "filename": "Anja.png",
+      "stem": "Anja",
+      "extension": ".png",
+      "relative_path": "images/Team/Anja.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Anja.png",
+      "target_webp_relative_path": "images/Team/Anja.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Anja.webp",
+      "size_bytes": 1959165
+    },
+    {
+      "filename": "Brian.png",
+      "stem": "Brian",
+      "extension": ".png",
+      "relative_path": "images/Team/Brian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Brian.png",
+      "target_webp_relative_path": "images/Team/Brian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Brian.webp",
+      "size_bytes": 1818521
+    },
+    {
+      "filename": "Fabian.png",
+      "stem": "Fabian",
+      "extension": ".png",
+      "relative_path": "images/Team/Fabian.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Fabian.png",
+      "target_webp_relative_path": "images/Team/Fabian.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Fabian.webp",
+      "size_bytes": 1162513
+    },
+    {
+      "filename": "Fee.png",
+      "stem": "Fee",
+      "extension": ".png",
+      "relative_path": "images/Team/Fee.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Fee.png",
+      "target_webp_relative_path": "images/Team/Fee.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Fee.webp",
+      "size_bytes": 1236364
+    },
+    {
+      "filename": "Martin.png",
+      "stem": "Martin",
+      "extension": ".png",
+      "relative_path": "images/Team/Martin.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Martin.png",
+      "target_webp_relative_path": "images/Team/Martin.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Martin.webp",
+      "size_bytes": 1912677
+    },
+    {
+      "filename": "Sarah.png",
+      "stem": "Sarah",
+      "extension": ".png",
+      "relative_path": "images/Team/Sarah.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Sarah.png",
+      "target_webp_relative_path": "images/Team/Sarah.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Sarah.webp",
+      "size_bytes": 1912137
+    },
+    {
+      "filename": "Vanessa.png",
+      "stem": "Vanessa",
+      "extension": ".png",
+      "relative_path": "images/Team/Vanessa.png",
+      "absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Vanessa.png",
+      "target_webp_relative_path": "images/Team/Vanessa.webp",
+      "target_webp_absolute_path": "C:/Users/mars/OneDrive/Documents/GitHub/CaFEE/Version 1/images/Team/Vanessa.webp",
+      "size_bytes": 1300778
+    }
+  ]
+}

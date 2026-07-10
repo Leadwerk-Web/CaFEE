@@ -1,0 +1,10 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "leadwerk/logo",
+  "title": "Leadwerk Logo",
+  "category": "theme",
+  "description": "Logo aus ACF-Option (Header).",
+  "textdomain": "leadwerk-theme",
+  "supports": { "html": false }
+}

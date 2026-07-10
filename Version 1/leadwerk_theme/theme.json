@@ -45,6 +45,8 @@
   },
   "templateParts": [
     { "name": "header", "title": "Header", "area": "header" },
+    { "name": "header-eroeffnung", "title": "Header Eröffnung", "area": "header" },
+    { "name": "navigation-eroeffnung", "title": "Navigation Eröffnung", "area": "header" },
     { "name": "footer", "title": "Footer", "area": "footer" }
   ]
 }

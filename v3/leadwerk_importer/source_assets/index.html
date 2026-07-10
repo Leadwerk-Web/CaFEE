@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://cafee-brueckenmuehle.de/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cafee-brueckenmuehle.de/">
+    <meta property="og:title" content="CaFEE Brueckenmuehle - Wo Magie auf CaFEE trifft">
+    <meta property="og:description" content="Cafe in Gernsbach mit Kaffeespezialitaeten, Fruehstueck, Kuchen und Reservierung.">
+    <meta property="og:image" content="https://cafee-brueckenmuehle.de/images/Fee%20CaFEE_favicon_ohne%20Dampf.svg">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="CaFEE Brueckenmuehle">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CaFEE Brueckenmuehle - Wo Magie auf CaFEE trifft">
+    <meta name="twitter:description" content="Cafe in Gernsbach mit Kaffeespezialitaeten, Fruehstueck, Kuchen und Reservierung.">
+    <meta name="twitter:image" content="https://cafee-brueckenmuehle.de/images/Fee%20CaFEE_favicon_ohne%20Dampf.svg">
+    <meta name="description"
+        content="CaFEE Brückenmühle - Ein magischer Ort für Kaffeeliebhaber. Entdecke handgemachte Kaffeespezialitäten, hausgemachte Kuchen und die herzliche Atmosphäre unseres CaFEEs.">
+    <meta name="keywords" content="CaFEE, Brückenmühle, Kaffee, Frühstück, Kuchen, Gemütlichkeit, Fee">
+    <title>CaFEE Brückenmühle – Wo Magie auf CaFEE trifft</title>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CafeOrCoffeeShop",
+            "@id": "https://cafee-brueckenmuehle.de/#organization",
+            "name": "CaFEE Brueckenmuehle",
+            "url": "https://cafee-brueckenmuehle.de/",
+            "image": "https://cafee-brueckenmuehle.de/images/Fee%20CaFEE_favicon_ohne%20Dampf.svg",
+            "telephone": "+49 151 10310059",
+            "email": "hallo@cafee-gernsbach.de",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Hofstaette 2",
+                "postalCode": "76593",
+                "addressLocality": "Gernsbach",
+                "addressCountry": "DE"
+            },
+            "sameAs": [
+                "https://www.instagram.com/cafeebrueckenmuehle/"
+            ],
+            "openingHoursSpecification": [
+                {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": [
+                        "Monday",
+                        "Tuesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday"
+                    ],
+                    "opens": "09:00",
+                    "closes": "17:00"
+                }
+            ]
+        }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/Fee CaFEE_favicon_ohne Dampf.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Josefin+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+
+    <!-- Fairy Dust Particles -->
+    <div class="fairy-dust-container" id="fairyDust"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="mainNav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE Brückenmühle Logo">
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Navigation öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#story">Unsere Geschichte</a></li>
+                <li><a href="#menu">Speisekarte</a></li>
+                <li><a href="#experience">Erlebnis</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#reservation" class="nav-cta">Reservieren</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-parallax-bg">
+            <video autoplay muted loop playsinline class="hero-bg-video" aria-hidden="true">
+                <source src="images/Imagevideo_CaFEE kurz.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-fairy-element"></div>
+        <div class="hero-content">
+            <div class="hero-badge animate-fade-in">
+                <span>Willkommen in der Brückenmühle</span>
+            </div>
+            <h1 class="hero-title animate-slide-up">
+                <span class="title-line">Wo Magie</span>
+                <span class="title-line accent">auf CaFEE trifft</span>
+            </h1>
+            <p class="hero-subtitle animate-fade-in-delay">
+                Tritt ein in eine Welt, in der jede Tasse Kaffee mit Liebe und einem Hauch von Zauber zubereitet wird.
+                Hier, wo die CaFEE Fee über dein Wohlbefinden wacht.
+            </p>
+            <div class="hero-buttons animate-fade-in-delay-2">
+                <a href="#reservation" class="btn btn-primary">
+                    <span class="btn-glow"></span>
+                    <span class="btn-text">Tisch reservieren</span>
+                </a>
+                <a href="#menu" class="btn btn-secondary">Speisekarte entdecken</a>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <div class="scroll-arrow-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M19 12l-7 7-7-7" />
+                </svg>
+            </div>
+            <span>Scrollen zum Entdecken</span>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story" id="story">
+        <div class="story-container">
+            <div class="story-visual">
+                <div class="story-image-wrapper">
+                    <video autoplay muted loop playsinline class="story-image">
+                        <source src="images/Imagefilm.mp4" type="video/mp4">
+                        Dein Browser unterstützt dieses Video nicht.
+                    </video>
+                    <div class="story-image-frame"></div>
+                </div>
+                <div class="story-play-wrapper parallax-element" data-speed="-0.15">
+                    <button class="play-button" aria-label="Video ganz ansehen" id="openVideoBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="story-content">
+                <div class="section-badge scroll-animate">Die Geschichte</div>
+                <h2 class="story-title scroll-animate">
+                    <span>Es war einmal</span>
+                    <span class="title-accent">eine Kaffeefee</span>
+                </h2>
+                <div class="story-text scroll-animate">
+                    <p>
+                        <span class="drop-cap">I</span>n einer alten Mühle an der Brücke, wo einst das Wasser die schweren Mühlsteine antrieb und das Rauschen der Murg den Takt vorgab, verzaubert heute das CaFEE seine Gäste.
+                    </p>
+                    <p>
+                        Heute mahlen hier keine Mühlsteine mehr, sondern feinste Kaffeebohnen. Und ihr Duft erzählt Geschichten von kleinen Pausen, guten Gesprächen und großen Genussmomenten.
+                    </p>
+                    <p>
+                        Unsere Namensgeberin Fee träumte von einem Ort für genau diese kleinen Auszeiten.
+                        Ein Ort, an dem Kaffee nicht nur wach macht, sondern einen Moment zum Innehalten und Entschleunigen. Ein bisschen wie Magie.
+                    </p>
+                    <p>
+                        So entstand das <strong>CaFEE Brückenmühle</strong> –
+                        ein Ort, an dem Tradition auf moderne Kaffeehauskultur trifft.
+                    </p>
+                    <p>
+                        Wo der Klang der Espressomaschine klingt wie der Lieblingssong auf dem Weg zu Freunden und ein Cappuccino sich anfühlt wie das Zurücklehnen auf dem Sofa nach einem langen Tag.
+                        Wir machen das Leben zu einer Schachtel Pralinen. Und bei uns ist jede einzelne ein Genuss.
+                        Hier wird gebacken, gebrüht, angerichtet und serviert.
+                    </p>
+                    <p>
+                        Hinter dem CaFEE steht ein Team aus Bäckern, Baristas, Gastgebern und echten Menschen, die ihr Handwerk lieben. Menschen, die wissen: Ein gutes CaFEE macht nicht nur wach – es verbindet.
+                    </p>
+                </div>
+                <div class="story-cta scroll-animate">
+                    <a href="#experience" class="inline-link">
+                        Mehr über unser CaFEE erfahren
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative elements -->
+        <div class="story-decoration story-decoration-1"></div>
+        <div class="story-decoration story-decoration-2"></div>
+    </section>
+
+    <!-- Menu Preview Section -->
+    <section class="menu-preview" id="menu">
+        <div class="menu-header">
+            <div class="section-badge scroll-animate">Genuss erleben</div>
+            <h2 class="section-title scroll-animate">
+                <span class="title-display">Unsere</span>
+                <span class="title-script">Speisekarte</span>
+            </h2>
+            <p class="section-subtitle scroll-animate">
+                Von Kaffeespezialitäten über Frühstück und Mittagstisch bis zu Daydrinking und Afterwork. Klar strukturiert, frisch serviert und nah an der tatsächlichen Karte im CaFEE.
+            </p>
+        </div>
+
+        <!-- Menu Highlights -->
+        <div class="menu-highlights scroll-animate">
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/kaffee-1.svg" alt="" class="menu-highlight-icon-img">
+                </div>
+                <h3 class="menu-highlight-title">Kaffeespezialitäten</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">ESPRESSO</span></li>
+                    <li><span class="item-name">CAPPUCCINO</span></li>
+                    <li><span class="item-name">FLAT WHITE</span></li>
+                    <li><span class="item-name">LATTE MACCHIATO</span></li>
+                </ul>
+            </div>
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/breakfast-1.svg" alt="" class="menu-highlight-icon-img">
+                </div>
+                <h3 class="menu-highlight-title">Frühstück &amp; Stullen</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">SONNENSTULLE</span></li>
+                    <li><span class="item-name">FEE-NOMENAL</span></li>
+                    <li><span class="item-name">EIERZAUBER</span></li>
+                    <li><span class="item-name">HAFER BEEREN TRAUM</span></li>
+                </ul>
+            </div>
+            <div class="menu-highlight-card">
+                <span class="menu-highlight-tag">Highlight</span>
+                <div class="menu-highlight-icon" aria-hidden="true">
+                    <img src="images/sweets-1.svg" alt="" class="menu-highlight-icon-img">
+                </div>
+                <h3 class="menu-highlight-title">Süßes &amp; Kuchen</h3>
+                <ul class="menu-highlight-list">
+                    <li><span class="item-name">ST&Uuml;CK TORTE</span></li>
+                    <li><span class="item-name">ST&Uuml;CK KUCHEN</span></li>
+                    <li><span class="item-name">AFFOGATO</span></li>
+                    <li><span class="item-name">APFELPLOTZER / BLAUBEERPLOTZER</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="menu-highlights-actions">
+            <button type="button" class="btn btn-menu-browse" id="openMenuModalBtn" aria-label="Karte durchblättern">
+                <span>Karte durchblättern</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <path d="M8 7h8" />
+                    <path d="M8 11h8" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Interactive Menu Book Modal -->
+        <div class="menu-book-modal" id="menuBookModal" role="dialog" aria-modal="true"
+            aria-labelledby="menuBookModalTitle" aria-hidden="true">
+            <div class="menu-book-container" role="document">
+                <div class="menu-book-toolbar">
+                    <h2 class="sr-only" id="menuBookModalTitle">Interaktive Speisekarte</h2>
+                    <button type="button" class="btn-close-modal" id="closeMenuModalBtn"
+                    aria-label="Schließen">&times;</button>
+                </div>
+                <div class="menu-book" id="menuBook">
+                    <div class="menu-book-stage">
+                        <!-- Book Cover -->
+                        <div class="book-cover active" id="bookCover">
+                        <div class="cover-content">
+                            <img src="images/Fee CaFEE_favicon_ohne Dampf.svg" alt="CaFEE – Fee" class="cover-logo">
+                            <h3>Speisekarte</h3>
+                            <p>Blättere durch unsere Köstlichkeiten</p>
+                            <button type="button" class="open-book-btn" id="openBookBtn"
+                                aria-controls="bookPagesContainer" aria-expanded="false">
+                                <span>Karte öffnen</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Book Pages Container for PageFlip -->
+                    <div id="bookPagesContainer">
+                        <!-- Page 1 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">CAFEE&rsquo;S HEISSE LIEBE</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">K&Auml;NNCHEN FILTERKAFFEE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ESPRESSO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ESPRESSO MACCHIATO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CAFE CREMA</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">AMERICANO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FLAT WHITE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CAPPUCCINO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CAFEE LATTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HASELZAUBER</span></div>
+                                            <p class="item-desc">HAZEL-FLAVOUR IN DER MILCH AUFGESCH&Auml;UMT.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HANGOVER</span></div>
+                                            <p class="item-desc">ESPRESSO, SALZ, ZITRONE.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">1</div>
+                        </div>
+
+                        <!-- Page 2 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">FEELING FANCY</h3>
+                                        <div class="page-section-description"><p>HEISS &amp; FROSTIG SERVIERT.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">MATCHA LATTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">PINK MATCHA LATTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CINEMON MATCHA LATTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CHAI LATTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HEISSE SCHOKI</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">MANGO COCO MATCHA</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BERRY COCO MATCHA</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">VANILLA MANGO MATCHA</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">2</div>
+                        </div>
+
+                        <!-- Page 3 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">MAGIE F&Uuml;R DEIN GETR&Auml;NK</h3>
+                                        <div class="page-section-description"><p>GERNE AUCH ALLE ICED ODER MIT HAFER-, SOJA- ODER MANDELMILCH.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HAFER-, SOJA- ODER MANDELMILCH</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SIRUPE</span></div>
+                                            <p class="item-desc">VANILLE, SCHOKO, HASEL, CARAMEL.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">TEETR&Auml;UME</h3>
+                                        <div class="page-section-description"><p>IM BEUTEL.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">PFEFFERMINZ</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SCHWARZTEE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">INGWER</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">JASMIN</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">3</div>
+                        </div>
+
+                        <!-- Page 4 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">FRISCH AUS DER SAFTPRESSE</h3>
+                                        <div class="page-section-description"><p>BIS ZU DREI WUNSCHZUTATEN WERDEN DIR FRISCH GEMIXT.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ORANGE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SELLERIE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">KAROTTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BANANE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">INGWER</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SPINAT</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ZITRONE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">APFEL</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">EXTRA INGWERSHOT</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">4</div>
+                        </div>
+
+                        <!-- Page 5 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">T&Auml;GLICHER FEENSTAUB</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ESPRESSO MARTINI</span></div>
+                                            <p class="item-desc">ESPRESSO, WODKA, KAFFEELIK&Ouml;R, ORANGENLIK&Ouml;R, ZUCKERSIRUP.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">GIN BASIL SMASH</span></div>
+                                            <p class="item-desc">GIN, BASILIKUM, ZITRONENSAFT, ZUCKERSIRUP.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HOLY APEROLI*</span></div>
+                                            <p class="item-desc">APEROL, PROSECCO, ORANGE, SODA.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SARTI SPRITZ*</span></div>
+                                            <p class="item-desc">SARTI, PROSECCO, LIMETTE, SODA.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">LIMONCELLO SPRITZ*</span></div>
+                                            <p class="item-desc">LIMONCELLO, PROSECCO, ZITRONE, MINERALWASSER.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ROTOPO*</span></div>
+                                            <p class="item-desc">ROS&Eacute; PORT WEIN, TONIC WATER, ORANGENSPALTE, ROSMARIN.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">LILLET WILDBERRY</span></div>
+                                            <p class="item-desc">LILLET, WILDBERRY, BEEREN, MINZE.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HUGO</span></div>
+                                            <p class="item-desc">HOLUNDERBL&Uuml;TENSIRUP, PROSECCO, MINERALWASSER, LIMETTENSAFT, MINZE.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section menu-footnote-section" data-section-type="text">
+                                    <div class="page-section-body page-section-copy">
+                                        <p>* AUCH ALKOHOLFREI.</p>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">5</div>
+                        </div>
+
+                        <!-- Page 6 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">OHNE FEENSTAUB</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">WASSER LAUT ODER LEISE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">COLA (CLASSIC &amp; ZERO)</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FANTA</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SPRITE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">PAULANER SPEZI</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">GENUSS LIMONADE</span></div>
+                                            <p class="item-desc">JOHANNISBEER-HOLUNDER, LIMETTE-MINZE, MANGO-MARACUJA-ORANGE, GRAPEFRUIT-HIMBEER.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">6</div>
+                        </div>
+
+                        <!-- Page 7 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">VESPERZEIT</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">WIE BEI MAMA</span></div>
+                                            <p class="item-desc">WURST- &amp; K&Auml;SEAUSWAHL, MARMELADE, BUTTER, BROTKORB.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BR&Uuml;CKENM&Uuml;HLE</span></div>
+                                            <p class="item-desc">GER&Auml;UCHERTER LACHS, TUNFISCHCREME, MEERRETTICH, FRISCHK&Auml;SE, BROTKORB.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FEE-NOMENAL</span></div>
+                                            <p class="item-desc">M&Uuml;SLI, JOGHURT, HONIG, MARMELADE, BUTTER, CROISSANT.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">K&Uuml;SS DEN FROSCH</span></div>
+                                            <p class="item-desc">FR&Uuml;HST&Uuml;CK F&Uuml;R ZWEI MIT WURST- &amp; K&Auml;SEAUSWAHL, LACHS, MARMELADE, BUTTER, BROTKORB, M&Uuml;SLI MIT OBSTSALAT UND ZWEI GL&Auml;SERN SEKT.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">7</div>
+                        </div>
+
+                        <!-- Page 8 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">ZUCKER F&Uuml;R DIE SEELE</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ST&Uuml;CK TORTE</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ST&Uuml;CK KUCHEN</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">AFFOGATO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">APFELPLOTZER</span></div>
+                                            <p class="item-desc">FLAMBIERT MIT VANILLEEIS.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BLAUBEERPLOTZER</span></div>
+                                            <p class="item-desc">FLAMBIERT MIT VANILLEEIS.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">EIERZAUBER</h3>
+                                        <div class="page-section-description"><p>W&Uuml;NSCHE DIR EINEN EIERZAUBER AUS DREI EIERN &amp; DREI WUNSCHZUTATEN. 1. R&Uuml;HREI ODER SPIEGELEI. 2. WUNSCHZUTATEN. 3. SAUERTEIG BROT ODER BRIOCHE BR&Ouml;TCHEN.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">R&Uuml;HREI (2 EIER)</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SPIEGELEI (2 EIER)</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">WUNSCHZUTATEN</span></div>
+                                            <p class="item-desc">PAPRIKA, TOMATEN, ZWIEBEL, PILZE, AVOCADO, PROSCIUTTO CRUDO, GER&Auml;UCHERTER LACHS, BACON, CHEDDAR, HOMEMADE KR&Auml;UTERBUTTER.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BROTAUSWAHL</span></div>
+                                            <p class="item-desc">SAUERTEIG BROT ODER BRIOCHE BR&Ouml;TCHEN.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">8</div>
+                        </div>
+
+                        <!-- Page 9 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">TRAUMHAFTE STULLEN</h3>
+                                        <div class="page-section-description"><p>TRAUMHAFTE STULLEN MIT WARMEM SAUERTEIG BROT.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SONNENSTULLE</span></div>
+                                            <p class="item-desc">RICOTTA, BRIE, HONIG, WALNUSSBRUCH, FRISCHE FEIGEN.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BURRATA TRAUM</span></div>
+                                            <p class="item-desc">PESTO, PROSCIUTTO CRUDO, BURRATA, BASILIKUM, RICOTTA, TR&Uuml;FFEL&Ouml;L.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FARMERSTRAUM</span></div>
+                                            <p class="item-desc">SCHWARZW&Auml;LDER SCHINKEN, PARMESAN, FRISCHK&Auml;SECREME, HOLLANDAISE, RUCOLA.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CROISSANT ROYAL</span></div>
+                                            <p class="item-desc">CROISSANT, SMOKED LACHS, POCHIERTES EI, HOLLANDAISE, RUCOLA.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FERN&Ouml;STLICHER ZAUBER</span></div>
+                                            <p class="item-desc">CURRY DATTEL CREME, FETA, ARTISCHOCKEN, PINIENKERNE, CHILISOSSE.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">AVOCADO HEX HEX</span></div>
+                                            <p class="item-desc">GUACAMOLE, BALSAMICO ZWIEBELN, SMOKED LACHS, PARMESAN, ZITRONE.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">9</div>
+                        </div>
+
+                        <!-- Page 10 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">M&Auml;RCHENHAFTE BOWLS</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">HAFER BEEREN TRAUM</span></div>
+                                            <p class="item-desc">BEERENMIX, HAFERFLOCKEN, NATURJOGHURT, GRANOLA, NUSSMIX, TOPPING.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">KNUSPRIGE BANANE</span></div>
+                                            <p class="item-desc">BANANEN, HAFERFLOCKEN, NATURJOGHURT, GRANOLA, NUSSMIX, TOPPING.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">ADAMS APFEL</span></div>
+                                            <p class="item-desc">APFEL, APFELKOMPOTT, HAFERFLOCKEN, ZIMT, GRANOLA, NUSSMIX, TOPPING.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">10</div>
+                        </div>
+
+                        <!-- Page 11 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">WEIL TAPAS VERBINDEN</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">GEGRILLTE PEPERONI</span></div>
+                                            <p class="item-desc">KNOBLAUCH, OLIVEN&Ouml;L.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">KNOBLAUCH GARNELEN</span></div>
+                                            <p class="item-desc">KNOBLAUCH, OLIVEN&Ouml;L.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">FLEISCHB&Auml;LLCHEN</span></div>
+                                            <p class="item-desc">FLEISCHB&Auml;LLCHEN (SCHWEIN), TOMATEN CREM&Eacute;.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">DATTELN IM SPECKMANTEL</span></div>
+                                            <p class="item-desc">DATTELN, SPECK.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">OLIVEN</span></div>
+                                            <p class="item-desc">ZITRONIGE OLIVEN CASTELVETRANO.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SARDELLEN</span></div>
+                                            <p class="item-desc">FEINKOSTSARDELLEN AUS DER DOSE.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">K&Auml;SE AUSWAHL</span></div>
+                                            <p class="item-desc">HANDVERLESENER K&Auml;SE.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">TAPAS PLATTE</span></div>
+                                            <p class="item-desc">DATTELN IM SPECKMANTEL, K&Auml;SE AUSWAHL, OLIVEN, SARDELLEN, FLEISCHB&Auml;LLCHEN.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">11</div>
+                        </div>
+
+                        <!-- Page 12 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">SALATE</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SALAT ZIEGENK&Auml;SE</span></div>
+                                            <p class="item-desc">BUNTER SALAT, ZIEGENK&Auml;SE, WALN&Uuml;SSE, HONIG-WALNUSS-DRESSING.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SALAT GAMBAS</span></div>
+                                            <p class="item-desc">BUNTER SALAT, GAMBAS, PARMESAN, TOMATEN, ZITRONENDRESSING.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BEILAGENSALAT</span></div>
+                                            <p class="item-desc">BUNTER SALAT, BALSAMICODRESSING, KAROTTEN- &amp; KRAUTSALAT, BAGUETTE.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">WURSTSALAT</span></div>
+                                            <p class="item-desc">ESSIGGURKEN, ZWIEBELN, BAGUETTE.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">F&Uuml;R DIE KLEINEN ZAUBERER UND FEEN</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SPAGHETTI TOMATENSOSSE</span></div>
+                                            <p class="item-desc">ALS KINDERPORTION.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SCHNITZEL WIENER ART</span></div>
+                                            <p class="item-desc">PANIERTES PUTENSCHNITZEL, KARTOFFELBREI. ALS KINDERPORTION.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">12</div>
+                        </div>
+
+                        <!-- Page 13 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">SATTMACHER</h3>
+                                        <div class="page-section-description"><p>WARME SPEISEN T&Auml;GLICH BIS 14:00 UHR.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">TAGESSUPPE</span></div>
+                                            <p class="item-desc">WECHSELNDE SUPPEN.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">KALB VITELLO AN GETR&Uuml;FFELTEM KARTOFFELBREI</span></div>
+                                            <p class="item-desc">KALB VITELLO SOUS-VIDE, GETR&Uuml;FFELTER KARTOFFELBREI, ROTKRAUT.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">WIENER SCHNITZEL MIT PREISELBEEREN</span></div>
+                                            <p class="item-desc">KALBS- ODER PUTENSCHNITZEL, PREISELBEEREN, KARTOFFELSALAT, ZITRONE, KAPERN, SARDELLEN.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">LACHS FILET MIT KARTOFFELBREI</span></div>
+                                            <p class="item-desc">GEBRATENES LACHSFILET, ZITRONENRAHM, GETR&Uuml;FFELTER KARTOFFELBREI.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">RAVIOLI IN HUMMER JUSS</span></div>
+                                            <p class="item-desc">RAVIOLI GEF&Uuml;LLT MIT ZIEGENK&Auml;SE, HUMMER JUSS.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">CHICKEN TIKKA MASALA</span></div>
+                                            <p class="item-desc">ZARTES H&Uuml;HNCHEN, W&Uuml;RZIGE TIKA MASALA SOSSE, REIS.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">PESTO SPAGHETTI GAMBAS</span></div>
+                                            <p class="item-desc">PESTO, SPAGHETTI, GEBRATENE GAMBAS.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">13</div>
+                        </div>
+
+                        <!-- Page 14 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-content">
+                                <section class="menu-page-section wine-intro-section" data-section-type="text">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">WEIN</h3>
+                                        <div class="page-section-description"><p>MAN MUSS AUCH MAL WEIN SAGEN K&Ouml;NNEN.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">ROT</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">AZELEO TINTO DE LISBOA 2021</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">VINARS DA INVIOSA RESERVA TINTO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">QUINTA DA INVIOSA RESERVA TINTO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">TRULLI PRIMITIVO ZACENA</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">ROS&Eacute;</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">S3ER ROS&Eacute; VINO VERDE 2024</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BON VENTOS ROS&Eacute;</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">DALVA ROS&Eacute; PORT</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">NARDELLI DIAMANT ROSATO</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">14</div>
+                        </div>
+
+                        <!-- Page 15 (Left) -->
+                        <div class="book-page left-page">
+                            <div class="page-content">
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">WEISS</h3>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">SCHATZ VOM VULKAN CHARDONNAY</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">MEAZERA ENCOZADO BRANCO</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BON VENTOS BRANCO 2024</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">MAGNOLI SAUVIGNON BLANC</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="menu-page-section" data-section-type="menu_items">
+                                    <div class="page-header">
+                                        <h3 class="menu-section-title">SO SCH&Ouml;N PRICKELNDES</h3>
+                                        <div class="page-section-description"><p>BESONDERER ANLASS ODER EINFACH WEIL LECKER? UNSER WEINKELLER BIETET NOCH MEHR K&Ouml;STLICHKEITEN. WIR EMPFEHLEN IHNEN GERNE UNSERE FLASCHENWEINE UND CHAMPAGNER.</p></div>
+                                        <div class="page-divider"></div>
+                                    </div>
+                                    <div class="menu-items">
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">PROSECCO IN GALERIE</span></div>
+                                            <p class="item-desc">AUCH ALS PROSECCOTOWER ZU HABEN.</p>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">BELLINI (MIT UND OHNE FEENSTAUB)</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">RACCO SPARKLING APERITIF</span></div>
+                                        </div>
+                                        <div class="menu-item">
+                                            <div class="item-header"><span class="item-name">MOET ICED IMPERIAL</span></div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="page-number">15</div>
+                        </div>
+
+                        <!-- Page 16 (Right) -->
+                        <div class="book-page right-page">
+                            <div class="page-image">
+                                <img src="images/Capuccino.webp" alt="UNSERE KAFFEESPEZIALIT&Auml;TEN">
+                            </div>
+                            <p class="page-quote">
+                                &quot;EIN GUTER KAFFEE IST WIE EIN ZAUBERSPRUCH &mdash;
+                                ER VERWANDELT DEN MORGEN IN ETWAS BESONDERES.&quot;
+                            </p>
+                            <div class="page-number">16</div>
+                        </div>
+                    </div>
+
+                    </div>
+
+                    <!-- Book Navigation -->
+                    <div class="book-navigation" id="bookNav">
+                        <button class="nav-btn prev-btn" id="prevPage" aria-label="Vorherige Seite" disabled>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <div class="page-indicator" aria-live="polite" aria-atomic="true">
+                            <span id="currentPage">1</span> / <span id="totalPages">16</span>
+                        </div>
+                        <button class="nav-btn next-btn" id="nextPage" aria-label="Nächste Seite">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <div class="experience-bg-parallax"></div>
+        <div class="experience-container">
+            <div class="experience-header">
+                <div class="section-badge scroll-animate">Das CaFEE Erlebnis</div>
+                <h2 class="section-title scroll-animate">
+                    <span class="title-display">Mehr als</span>
+                    <span class="title-script">nur Kaffee</span>
+                </h2>
+            </div>
+
+            <div class="experience-grid">
+                <!-- Card 1 -->
+                <div class="experience-card scroll-animate" data-delay="0">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2" />
+                            <path d="M32 20v12l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h3>Zeit zum Innehalten</h3>
+                    <p>
+                        In unserer schnelllebigen Welt bieten wir einen Ort der Ruhe.
+                        Hier ticken die Uhren langsamer, und jeder Moment ist zum Genießen da.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="experience-card scroll-animate" data-delay="100">
+                    <div class="card-icon">
+                        <img src="images/Herz Icon.webp" alt="" class="card-icon-img card-icon-tint" aria-hidden="true">
+                    </div>
+                    <h3>Herzliche Atmosphäre</h3>
+                    <p>
+                        Von der warmen Begrüßung bis zum letzten Schluck —
+                        bei uns bist du nicht Gast, sondern Teil unserer CaFEE-Familie.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="experience-card scroll-animate" data-delay="200">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <path d="M48 24c0-8.837-7.163-16-16-16s-16 7.163-16 16c0 12 16 28 16 28s16-16 16-28z"
+                                stroke="currentColor" stroke-width="2" />
+                            <circle cx="32" cy="24" r="6" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <h3>Ein besonderer Ort</h3>
+                    <p>
+                        Die Brückenmühle wurde erstmals im Jahr 1300 erwähnt. Seit Jahrhunderten lebt hier Geschichte
+                        weiter, und der besondere Charme vergangener Zeiten ist bis heute spürbar.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="experience-card scroll-animate" data-delay="300">
+                    <div class="card-icon">
+                        <img src="images/Kaffee Icon.webp" alt="" class="card-icon-img card-icon-tint"
+                            aria-hidden="true">
+                    </div>
+                    <h3>Vom Frühstück bis Afterwork</h3>
+                    <p>
+                        Ob Frühstück, Mittagstisch, Kaffee und Kuchen oder Daydrinking zum Afterwork:
+                        Bei uns findest du Genussmomente für jede Tageszeit.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Image Gallery -->
+            <!-- Instagram Gallery -->
+            <div class="insta-gallery scroll-animate">
+                <div class="insta-large">
+                    <img src="images/Fruehstueck.webp" alt="CaFEE Moment">
+                </div>
+                <div class="insta-grid">
+                    <div class="insta-item"><img src="images/Avocado Ei.webp" alt="Köstlichkeiten"></div>
+                    <div class="insta-item"><img src="images/Tresen.webp" alt="Ambiente"></div>
+                    <div class="insta-item"><img src="images/Kaffebohnen.webp" alt="Details"></div>
+                    <div class="insta-item"><img src="images/Cafe blurred.webp" alt="Atmosphäre"></div>
+                </div>
+                <a href="https://www.instagram.com/cafeebrueckenmuehle/" target="_blank" class="insta-btn"
+                    aria-label="Besuche uns auf Instagram">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interview Slider Section - Stimmen unserer Gäste -->
+    <section class="interviews" id="interviews">
+        <div class="interviews-container">
+            <div class="interviews-header">
+                <div class="section-badge scroll-animate">Stimmen unserer Gäste</div>
+                <h2 class="section-title scroll-animate">
+                    <span class="title-display">Was unsere</span>
+                    <span class="title-script">Gäste sagen</span>
+                </h2>
+            </div>
+
+            <div class="interview-slider scroll-animate" id="interviewSlider">
+                <div class="interview-slides" id="interviewSlides">
+                    <!-- Slide 1: Bernd Frank -->
+                    <div class="interview-slide active" data-index="0">
+                        <div class="interview-video-side">
+                            <div class="interview-video-wrapper">
+                                <video muted loop playsinline preload="metadata" class="interview-video">
+                                    <source src="images/Interviews/Bernd Frank_1-1_01.mp4"
+                                        type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="interview-play-wrapper">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="interview-text-side">
+                            <div class="interview-quote-mark">&ldquo;</div>
+                            <p class="interview-quote">Wenn die Atmosphäre stimmt, dann schmeckt auch der Kaffee gleich
+                                besser.</p>
+                            <div class="interview-author">
+                                <span class="interview-name">Bernd Frank</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Kirsten Böckner-Egner -->
+                    <div class="interview-slide" data-index="1">
+                        <div class="interview-video-side">
+                            <div class="interview-video-wrapper">
+                                <video muted loop playsinline preload="metadata" class="interview-video">
+                                    <source
+                                        src="images/Interviews/Kirsten Böckner-Egner_1-1_01.mp4"
+                                        type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="interview-play-wrapper">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="interview-text-side">
+                            <div class="interview-quote-mark">&ldquo;</div>
+                            <p class="interview-quote">Ein richtig gutes Cafe sollte verschiedene Kuchen-Auswahl haben,
+                                saisonal auch gerne und guten Kaffee.</p>
+                            <div class="interview-author">
+                                <span class="interview-name">Kirsten Böckner-Egner</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Timo Kunz -->
+                    <div class="interview-slide" data-index="2">
+                        <div class="interview-video-side">
+                            <div class="interview-video-wrapper">
+                                <video muted loop playsinline preload="metadata" class="interview-video">
+                                    <source src="images/Interviews/Timo Kunz_1-1_01.mp4"
+                                        type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="interview-play-wrapper">
+                                <button type="button" class="play-button interview-play-btn"
+                                    aria-label="Interview mit Ton in Lightbox ansehen">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="interview-text-side">
+                            <div class="interview-quote-mark">&ldquo;</div>
+                            <p class="interview-quote">Vom CaFEE Brückenmühle erwarte ich mir einen Spot, wo man im
+                                Sommer nach dem Motorrad fahren, oder davor, mal einen Kaffee trinken kann …</p>
+                            <div class="interview-author">
+                                <span class="interview-name">Timo Kunz</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slider Navigation -->
+                <div class="interview-slider-nav">
+                    <button class="interview-nav-btn interview-prev" id="interviewPrev"
+                        aria-label="Vorheriges Interview">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <div class="interview-dots" id="interviewDots">
+                        <button class="interview-dot active" data-slide="0" aria-label="Interview 1"></button>
+                        <button class="interview-dot" data-slide="1" aria-label="Interview 2"></button>
+                        <button class="interview-dot" data-slide="2" aria-label="Interview 3"></button>
+                    </div>
+                    <button class="interview-nav-btn interview-next" id="interviewNext" aria-label="Nächstes Interview">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="team-container">
+            <div class="team-header">
+                <div class="section-badge scroll-animate">Die Menschen dahinter</div>
+                <h2 class="section-title scroll-animate">
+                    <span class="title-display">Unser</span>
+                    <span class="title-script">Team</span>
+                </h2>
+                <p class="section-subtitle scroll-animate">
+                    Lerne die Menschen kennen, die das CaFEE Brückenmühle zu dem machen, was es ist.
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Team Member 1 - Fee -->
+                <div class="team-card scroll-animate" data-delay="0">
+                    <div class="card-image">
+                        <img src="images/Team/Fee.webp" alt="Fee">
+
+                    </div>
+                    <div class="card-content">
+                        <h3>Fee</h3>
+                        <span class="role">Gründerin & Namensgeberin</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card scroll-animate" data-delay="100">
+                    <div class="card-image">
+                        <img src="images/Team/Fabian.webp" alt="Fabian">
+                    </div>
+                    <div class="card-content">
+                        <h3>Fabian</h3>
+                        <span class="role">Gründer</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-card scroll-animate" data-delay="200">
+                    <div class="card-image">
+                        <img src="images/Team/Vanessa.webp" alt="Vanessa">
+                    </div>
+                    <div class="card-content">
+                        <h3>Vanessa</h3>
+                        <span class="role">Gastronomische Leitung</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 4 -->
+                <div class="team-card scroll-animate" data-delay="300">
+                    <div class="card-image">
+                        <img src="images/Team/Anja.webp" alt="Anja">
+                    </div>
+                    <div class="card-content">
+                        <h3>Anja</h3>
+                        <span class="role">Servicespezialistin</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 5 -->
+                <div class="team-card scroll-animate" data-delay="400">
+                    <div class="card-image">
+                        <img src="images/Team/Sarah.webp" alt="Sarah">
+                    </div>
+                    <div class="card-content">
+                        <h3>Sarah</h3>
+                        <span class="role">Konditorin</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 6 -->
+                <div class="team-card scroll-animate" data-delay="500">
+                    <div class="card-image">
+                        <img src="images/Team/Brian.webp" alt="Brian">
+                    </div>
+                    <div class="card-content">
+                        <h3>Brian</h3>
+                        <span class="role">Barista</span>
+                    </div>
+                </div>
+
+                <!-- Team Member 7 -->
+                <div class="team-card scroll-animate" data-delay="600">
+                    <div class="card-image">
+                        <img src="images/Team/Martin.webp" alt="Martin">
+                    </div>
+                    <div class="card-content">
+                        <h3>Martin</h3>
+                        <span class="role">Koch</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- T-Shirt Pattern Decoration -->
+        <div class="team-pattern"></div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section class="reservation" id="reservation">
+        <div class="reservation-bg"></div>
+        <div class="reservation-container">
+            <div class="reservation-content scroll-animate">
+                <div class="section-badge light">Reservierung</div>
+                <h2 class="reservation-title">
+                    <span>Werde Teil</span>
+                    <span class="title-accent">unserer Geschichte</span>
+                </h2>
+                <p class="reservation-text">
+                    Ob gemütliches Frühstück, entspannter Mittagstisch, Nachmittagskaffee oder Daydrinking zum Afterwork —
+                    wir freuen uns darauf, dich bei uns zu begrüßen. Reserviere deinen Platz in der Brückenmühle.
+                </p>
+                <div class="reservation-widget">
+                    <script type='text/javascript'
+                        src='https://www.opentable.de/widget/reservation/loader?rid=457257&type=standard&theme=wide&color=8&dark=false&iframe=false&domain=de&lang=de-DE&newtab=false&ot_source=Restaurant%20website&font=garamond&ot_logo=subtle&primary_color=c18b71&primary_font_color=333333&button_color=000000&button_font_color=ffffff&cfe=true'></script>
+                </div>
+
+                <div class="reservation-info">
+                    <div class="info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <div>
+                            <strong>Adresse</strong>
+                            <span>Hofstätte 2,<br>76593 Gernsbach</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <div>
+                            <strong>Öffnungszeiten</strong>
+                            <span>9:00 – 17:00 Uhr | Mittwoch Ruhetag</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div>
+                            <strong>Telefon</strong>
+                            <span><a href="tel:+4915110310059">+49 151/103 100 59</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reservation-buttons">
+                    <a href="tel:+4915110310059" class="btn btn-primary">
+                        <span class="btn-glow"></span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        <span class="btn-text">Jetzt anrufen</span>
+                    </a>
+                    <a href="mailto:hallo@cafee-gernsbach.de" class="btn btn-secondary-light">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                stroke="currentColor" stroke-width="2" />
+                            <path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span>E-Mail schreiben</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kontakt: Auf WordPress per Shortcode [wpforms id="171"] (Theme: block-home-sections.php) -->
+            <div class="contact-form-wrapper scroll-animate contact-form-wrapper--static-placeholder"
+                aria-label="Kontaktformular erscheint auf der Live-Website (WordPress)">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <img src="images/Logo CaFEE vektorisiert.svg" alt="CaFEE Brückenmühle Logo" class="footer-logo">
+                    <p>
+                        Ein magischer Ort für Kaffeeliebhaber.
+                        Wo Genuss Flügel hat.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#story">Unsere Geschichte</a></li>
+                            <li><a href="#menu">Speisekarte</a></li>
+                            <li><a href="#team">Team</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Kontakt</h4>
+                        <ul>
+                            <li>Hofstätte 2</li>
+                            <li>76593 Gernsbach</li>
+                            <li><a href="tel:+4915110310059">+49 151/103 100 59</a></li>
+                            <li><a href="mailto:hallo@cafee-gernsbach.de">hallo@cafee-gernsbach.de</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Öffnungszeiten</h4>
+                        <ul>
+                            <li>Montag, Dienstag, Donnerstag – Sonntag: 9:00 – 17:00 Uhr</li>
+                            <li>Mittwoch Ruhetag</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-container bottom-inner">
+                <p>&copy; 2026 CaFEE Brückenmühle. Alle Rechte vorbehalten.</p>
+                <nav class="footer-legal" aria-label="Rechtliches">
+                    <a href="impressum.html">Impressum</a>
+                    <span class="footer-legal-sep" aria-hidden="true">·</span>
+                    <a href="datenschutz.html">Datenschutz</a>
+                </nav>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/cafeebrueckenmuehle/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2" />
+                            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
+                            <circle cx="18" cy="6" r="1" fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fairy dust footer decoration -->
+        <div class="footer-fairy-dust"></div>
+    </footer>
+
+    <!-- Video Lightbox -->
+    <div class="video-lightbox" id="videoLightbox">
+        <button class="lightbox-close" id="closeVideoBtn" aria-label="Schließen">&times;</button>
+        <div class="lightbox-content">
+            <video controls id="lightboxVideo">
+                <source src="images/Imagefilm.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- Interview Video Lightbox -->
+    <div class="video-lightbox" id="interviewLightbox">
+        <button class="lightbox-close" id="closeInterviewBtn" aria-label="Schließen">&times;</button>
+        <div class="lightbox-content">
+            <video controls id="interviewLightboxVideo">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- OpenTable Fallback Overlay -->
+    <div class="ot-fallback-modal" id="otFallbackModal" aria-hidden="true">
+        <button class="ot-fallback-close" id="otFallbackClose" aria-label="Schließen">&times;</button>
+        <iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="lazy"></iframe>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

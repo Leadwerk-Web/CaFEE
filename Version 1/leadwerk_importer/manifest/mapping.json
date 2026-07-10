@@ -64,6 +64,24 @@
       }
     },
     {
+      "source_key": "eroeffnung-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "eroeffnung",
+      "title": "Große Eröffnung",
+      "content_file": "eroeffnung-content.html",
+      "seo": {
+        "title": "Große Eröffnung CaFEE Brückenmühle am 11. Juli – 10% Rabatt sichern",
+        "meta_description": "Am 11. Juli öffnet das CaFEE Brückenmühle in Gernsbach seine Türen. Sichere dir jetzt deinen exklusiven 10%-Eröffnungsrabatt per QR-Code.",
+        "og_title": "Große Eröffnung CaFEE Brückenmühle am 11. Juli – 10% Rabatt sichern",
+        "og_description": "Wo Magie auf CaFEE trifft: Am 11. Juli ist es so weit. Sichere dir deinen exklusiven 10%-Eröffnungsrabatt per QR-Code.",
+        "og_image_source": "images/Fruehstueck.webp",
+        "focus_keyphrase": "CaFEE Brückenmühle Eröffnung",
+        "meta_robots": "index, follow",
+        "schema_type": "Event"
+      }
+    },
+    {
       "source_key": "404-v1",
       "target_type": "page",
       "post_status": "publish",

@@ -68,10 +68,14 @@ class Leadwerk_Importer {
 		}
 		// Startseite: ACF home_sections aus index.html befüllen (nur bei Apply).
 		if ( ! $this->dry_run && $this->source_root !== '' ) {
+			$filler = new Leadwerk_ACF_Filler();
 			$front_page_id = $this->find_page_by_source_key( 'cafee-home-v1' );
 			if ( $front_page_id ) {
-				$filler = new Leadwerk_ACF_Filler();
 				$filler->fill_front_page( $front_page_id, $this->source_root );
+			}
+			$eroeffnung_page_id = $this->find_page_by_source_key( 'eroeffnung-v1' );
+			if ( $eroeffnung_page_id ) {
+				$filler->fill_eroeffnung_page( $eroeffnung_page_id, $this->source_root );
 			}
 		}
 		// ACF-Optionsseite befüllen (Logo, Kontakt, Social, Footer etc.).
@@ -110,12 +114,91 @@ class Leadwerk_Importer {
 
 		Leadwerk_Logger::log( $this->dry_run ? '--- Targeted Dry-Run: ' . $source_key . ' ---' : '--- Targeted Import: ' . $source_key . ' ---' );
 		$this->process_page( $page_config );
+		if ( ! $this->dry_run && 'eroeffnung-v1' === $source_key && $this->source_root !== '' ) {
+			$this->import_eroeffnung_media();
+			$eroeffnung_page_id = $this->find_page_by_source_key( 'eroeffnung-v1' );
+			if ( $eroeffnung_page_id ) {
+				$filler = new Leadwerk_ACF_Filler();
+				$filler->fill_eroeffnung_page( $eroeffnung_page_id, $this->source_root );
+			}
+		}
 		Leadwerk_Logger::save();
 
 		return array(
 			'status'     => 'completed',
 			'source_key' => $source_key,
 		);
+	}
+
+	/**
+	 * Aktualisiert ausschließlich die MenuBook-Repeaterdaten der Startseite.
+	 *
+	 * @return array<string,string>|WP_Error
+	 */
+	public function run_menu_book_only() {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		Leadwerk_Logger::log( $this->dry_run ? '--- Targeted Dry-Run: MenuBook only ---' : '--- Targeted Import: MenuBook only ---' );
+
+		if ( $this->dry_run ) {
+			Leadwerk_Logger::log( 'MenuBook würde aktualisiert; andere Startseiten-Sektionen würden unverändert bleiben.' );
+			Leadwerk_Logger::save();
+			return array(
+				'status' => 'dry_run',
+				'target' => 'menu_book',
+			);
+		}
+
+		$front_page_id = $this->find_page_by_source_key( 'cafee-home-v1' );
+		if ( ! $front_page_id ) {
+			$front_page_id = (int) get_option( 'page_on_front' );
+		}
+
+		if ( ! $front_page_id ) {
+			Leadwerk_Logger::save();
+			return new WP_Error( 'leadwerk_front_page_not_found', 'Startseite nicht gefunden. MenuBook konnte nicht aktualisiert werden.' );
+		}
+
+		$filler = new Leadwerk_ACF_Filler();
+		$ok     = $filler->fill_menu_book_only( $front_page_id, $this->source_root );
+		if ( ! $ok ) {
+			Leadwerk_Logger::save();
+			return new WP_Error( 'leadwerk_menu_book_import_failed', 'MenuBook konnte nicht aktualisiert werden. Bitte Log prüfen.' );
+		}
+
+		$this->maybe_rebuild_yoast_indexable( (int) $front_page_id );
+		Leadwerk_Logger::save();
+
+		return array(
+			'status'  => 'completed',
+			'target'  => 'menu_book',
+			'post_id' => (string) $front_page_id,
+		);
+	}
+
+	/**
+	 * Importiert nur die Medien, die die Eröffnungsseite fuer ACF-Bildfelder braucht.
+	 *
+	 * @return void
+	 */
+	protected function import_eroeffnung_media() {
+		if ( ! $this->media_importer ) {
+			return;
+		}
+		$files = array(
+			'images/Capuccino.webp',
+			'images/Tresen.webp',
+			'images/rabatt-qr-eroeffnung.png',
+			'images/kaffee-1.svg',
+			'images/breakfast-1.svg',
+			'images/sweets-1.svg',
+			'images/Kaffee Icon.webp',
+		);
+		foreach ( $files as $file ) {
+			$this->media_importer->import_file( $file );
+		}
 	}
 
 	/**

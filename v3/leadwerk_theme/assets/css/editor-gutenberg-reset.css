@@ -1,0 +1,69 @@
+/**
+ * Nur Block-Editor / Site-Editor (add_editor_style).
+ * Gutenberg-Layout-Reset – nicht im Frontend laden.
+ */
+
+/* WordPress Block-Theme: Alle Gutenberg-Layout-Eingriffe neutralisieren */
+body {
+    --wp--style--block-gap: 0px !important;
+}
+.wp-site-blocks {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.wp-site-blocks > * + * {
+    margin-block-start: 0 !important;
+}
+.wp-site-blocks > .wp-block-group,
+.wp-site-blocks > .wp-block-template-part,
+.wp-site-blocks > header,
+.wp-site-blocks > main,
+.wp-site-blocks > footer {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+}
+body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)),
+body .is-layout-default > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.wp-block-group,
+.wp-block-template-part {
+    max-width: none !important;
+    box-sizing: border-box;
+}
+body .is-layout-constrained,
+body .is-layout-default,
+body .is-layout-flow {
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+}
+:where(body .is-layout-constrained) > :first-child:first-child,
+:where(body .is-layout-default) > :first-child:first-child {
+    margin-block-start: 0 !important;
+}
+:where(body .is-layout-constrained) > :last-child:last-child,
+:where(body .is-layout-default) > :last-child:last-child {
+    margin-block-end: 0 !important;
+}
+body .has-global-padding {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+.footer.wp-block-group {
+    max-width: none !important;
+    margin: 0 !important;
+    /* Entspricht Theme --space-4xl / --space-xl (ohne :root im Editor) */
+    padding: 6rem 2rem 0 !important;
+}
+/* ACF-Block-Container: kein Gutenberg-Spacing */
+.acf-block-preview,
+.acf-block-preview > *,
+[data-type="acf/cafee-home-sections"],
+[data-type="acf/cafee-home-sections"] > * {
+    max-width: none !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+}

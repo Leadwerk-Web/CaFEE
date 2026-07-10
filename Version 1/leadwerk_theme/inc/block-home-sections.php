@@ -719,6 +719,9 @@ function leadwerk_render_reservation( $f ) {
 					<span class="title-accent"><?php echo esc_html( $line2 ); ?></span>
 				</h2>
 				<?php if ( $intro ) : ?><p class="reservation-text"><?php echo wp_kses_post( nl2br( $intro ) ); ?></p><?php endif; ?>
+				<div class="reservation-widget">
+					<script type="text/javascript" src="https://www.opentable.de/widget/reservation/loader?rid=457257&amp;type=standard&amp;theme=wide&amp;color=8&amp;dark=false&amp;iframe=false&amp;domain=de&amp;lang=de-DE&amp;newtab=false&amp;ot_source=Restaurant%20website&amp;font=garamond&amp;ot_logo=subtle&amp;primary_color=c18b71&amp;primary_font_color=333333&amp;button_color=000000&amp;button_font_color=ffffff&amp;cfe=true"></script>
+				</div>
 				<div class="reservation-info">
 					<div class="info-item">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>

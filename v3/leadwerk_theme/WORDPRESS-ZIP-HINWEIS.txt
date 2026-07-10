@@ -1,0 +1,30 @@
+================================================================================
+WordPress: Theme-ZIP richtig packen
+================================================================================
+
+Fehler "Dem Theme fehlt das Stylesheet style.css" erscheint, wenn das ZIP die
+falsche Struktur hat.
+
+RICHTIG
+-------
+ZIP so erstellen, dass style.css hier liegt (eine Ordner-Ebene):
+
+  leadwerk_theme/style.css
+  leadwerk_theme/functions.php
+  leadwerk_theme/theme.json
+  ...
+
+Am einfachsten: Im Explorer den Ordner "leadwerk_theme" markieren und diesen
+EINEN Ordner als ZIP packen (Rechtsklick -> Komprimieren / Senden an ->
+ZIP-komprimierter Ordner).
+
+
+FALSCH
+------
+Nicht zippen:
+- den ganzen GitHub-Ordner "CaFEE" oder "Version 1"
+- mehrere Ebenen, sodass style.css erst unter Version 1/leadwerk_theme/ liegt
+
+WordPress sucht style.css im Wurzelordner des entpackten Themes.
+
+================================================================================

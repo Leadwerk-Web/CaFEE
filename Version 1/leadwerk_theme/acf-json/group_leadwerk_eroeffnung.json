@@ -1,0 +1,149 @@
+{
+  "key": "group_leadwerk_eroeffnung",
+  "title": "Eröffnung – Sektionen",
+  "fields": [
+    {
+      "key": "field_leadwerk_eroeffnung_sections",
+      "label": "Eröffnungs-Sektionen",
+      "name": "eroeffnung_sections",
+      "type": "flexible_content",
+      "layouts": {
+        "layout_ero_hero": {
+          "key": "layout_ero_hero",
+          "name": "hero",
+          "label": "Hero",
+          "sub_fields": [
+            { "key": "f_ero_hero_bg", "name": "background_image", "label": "Hintergrundbild", "type": "image", "return_format": "array", "preview_size": "medium" },
+            { "key": "f_ero_hero_badge", "name": "badge_text", "label": "Badge", "type": "text" },
+            { "key": "f_ero_hero_eyebrow", "name": "title_eyebrow", "label": "Titel Eyebrow", "type": "text" },
+            { "key": "f_ero_hero_main", "name": "title_main", "label": "Titel Hauptzeile", "type": "text" },
+            { "key": "f_ero_hero_script", "name": "title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_ero_hero_subtitle", "name": "subtitle", "label": "Untertitel", "type": "textarea", "new_lines": "br" },
+            { "key": "f_ero_hero_opening_date", "name": "opening_date", "label": "Eröffnungsdatum ISO", "type": "text", "instructions": "Beispiel: 2026-07-11T09:00:00+02:00" },
+            { "key": "f_ero_hero_btn1_t", "name": "primary_button_text", "label": "Button 1 Text", "type": "text" },
+            { "key": "f_ero_hero_btn1_u", "name": "primary_button_url", "label": "Button 1 URL", "type": "text" },
+            { "key": "f_ero_hero_btn2_t", "name": "secondary_button_text", "label": "Button 2 Text", "type": "text" },
+            { "key": "f_ero_hero_btn2_u", "name": "secondary_button_url", "label": "Button 2 URL", "type": "text" },
+            { "key": "f_ero_hero_note", "name": "note_text", "label": "Hinweis", "type": "text" },
+            { "key": "f_ero_hero_scroll", "name": "scroll_text", "label": "Scroll-Hinweis", "type": "text" }
+          ]
+        },
+        "layout_ero_story": {
+          "key": "layout_ero_story",
+          "name": "story",
+          "label": "Story",
+          "sub_fields": [
+            { "key": "f_ero_story_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_story_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_ero_story_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_ero_story_content", "name": "content", "label": "Text", "type": "wysiwyg", "tabs": "all", "toolbar": "basic", "media_upload": 0 }
+          ]
+        },
+        "layout_ero_discount": {
+          "key": "layout_ero_discount",
+          "name": "discount",
+          "label": "Rabatt / QR",
+          "sub_fields": [
+            { "key": "f_ero_disc_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_disc_percent", "name": "percent", "label": "Prozent", "type": "text" },
+            { "key": "f_ero_disc_title", "name": "title", "label": "Titel", "type": "text" },
+            { "key": "f_ero_disc_lead", "name": "lead_text", "label": "Einleitung", "type": "wysiwyg", "tabs": "all", "toolbar": "basic", "media_upload": 0 },
+            { "key": "f_ero_disc_items", "name": "checklist", "label": "Checkliste", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_disc_item_text", "name": "text", "label": "Text", "type": "text" }
+            ]},
+            { "key": "f_ero_disc_qr", "name": "qr_image", "label": "QR-Code", "type": "image", "return_format": "array", "preview_size": "medium" },
+            { "key": "f_ero_disc_ribbon", "name": "qr_ribbon", "label": "QR Ribbon", "type": "text" },
+            { "key": "f_ero_disc_kicker", "name": "qr_kicker", "label": "QR Kicker", "type": "text" },
+            { "key": "f_ero_disc_caption", "name": "qr_caption", "label": "QR Caption", "type": "text" },
+            { "key": "f_ero_disc_validity", "name": "qr_validity", "label": "Gültigkeit", "type": "text" },
+            { "key": "f_ero_disc_download", "name": "download_label", "label": "Download Button", "type": "text" },
+            { "key": "f_ero_disc_bookmark", "name": "bookmark_label", "label": "Lesezeichen Button", "type": "text" },
+            { "key": "f_ero_disc_share", "name": "share_label", "label": "Share Label", "type": "text" }
+          ]
+        },
+        "layout_ero_steps": {
+          "key": "layout_ero_steps",
+          "name": "steps",
+          "label": "Ablauf",
+          "sub_fields": [
+            { "key": "f_ero_steps_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_steps_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_ero_steps_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_ero_steps_items", "name": "steps", "label": "Schritte", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_step_number", "name": "number", "label": "Nummer", "type": "text" },
+              { "key": "f_ero_step_icon", "name": "icon", "label": "Icon", "type": "select", "choices": { "download": "Download", "user": "Person", "wallet": "Wallet" }, "default_value": "download", "return_format": "value" },
+              { "key": "f_ero_step_title", "name": "title", "label": "Titel", "type": "text" },
+              { "key": "f_ero_step_text", "name": "text", "label": "Text", "type": "textarea" }
+            ]}
+          ]
+        },
+        "layout_ero_taste": {
+          "key": "layout_ero_taste",
+          "name": "taste",
+          "label": "Was dich erwartet",
+          "sub_fields": [
+            { "key": "f_ero_taste_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_taste_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_ero_taste_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_ero_taste_sub", "name": "section_subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_ero_taste_cards", "name": "cards", "label": "Karten", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_taste_icon", "name": "icon", "label": "Icon", "type": "image", "return_format": "array", "preview_size": "thumbnail" },
+              { "key": "f_ero_taste_title", "name": "title", "label": "Titel", "type": "text" },
+              { "key": "f_ero_taste_text", "name": "text", "label": "Text", "type": "textarea" }
+            ]},
+            { "key": "f_ero_taste_btn_t", "name": "button_text", "label": "Button Text", "type": "text" },
+            { "key": "f_ero_taste_btn_u", "name": "button_url", "label": "Button URL", "type": "text" }
+          ]
+        },
+        "layout_ero_details": {
+          "key": "layout_ero_details",
+          "name": "details",
+          "label": "Event Details",
+          "sub_fields": [
+            { "key": "f_ero_details_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_details_title", "name": "title", "label": "Titel", "type": "text" },
+            { "key": "f_ero_details_items", "name": "details", "label": "Details", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_detail_icon", "name": "icon", "label": "Icon", "type": "select", "choices": { "calendar": "Kalender", "clock": "Uhr", "location": "Ort", "phone": "Telefon" }, "default_value": "calendar", "return_format": "value" },
+              { "key": "f_ero_detail_label", "name": "label", "label": "Label", "type": "text" },
+              { "key": "f_ero_detail_value", "name": "value", "label": "Wert", "type": "text" },
+              { "key": "f_ero_detail_url", "name": "url", "label": "Link URL", "type": "text" }
+            ]},
+            { "key": "f_ero_details_actions", "name": "actions", "label": "Buttons", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_action_text", "name": "text", "label": "Text", "type": "text" },
+              { "key": "f_ero_action_url", "name": "url", "label": "URL", "type": "text" },
+              { "key": "f_ero_action_style", "name": "style", "label": "Stil", "type": "select", "choices": { "primary": "Primary", "secondary": "Secondary" }, "default_value": "primary", "return_format": "value" },
+              { "key": "f_ero_action_target", "name": "new_tab", "label": "Neuer Tab", "type": "true_false" }
+            ]}
+          ]
+        },
+        "layout_ero_faq": {
+          "key": "layout_ero_faq",
+          "name": "faq",
+          "label": "FAQ",
+          "sub_fields": [
+            { "key": "f_ero_faq_badge", "name": "section_badge", "label": "Badge", "type": "text" },
+            { "key": "f_ero_faq_title_d", "name": "section_title_display", "label": "Titel Display", "type": "text" },
+            { "key": "f_ero_faq_title_s", "name": "section_title_script", "label": "Titel Script", "type": "text" },
+            { "key": "f_ero_faq_items", "name": "items", "label": "Fragen", "type": "repeater", "sub_fields": [
+              { "key": "f_ero_faq_q", "name": "question", "label": "Frage", "type": "text" },
+              { "key": "f_ero_faq_a", "name": "answer", "label": "Antwort", "type": "wysiwyg", "tabs": "all", "toolbar": "basic", "media_upload": 0 }
+            ]}
+          ]
+        },
+        "layout_ero_final": {
+          "key": "layout_ero_final",
+          "name": "final_cta",
+          "label": "Final CTA",
+          "sub_fields": [
+            { "key": "f_ero_final_bg", "name": "background_image", "label": "Hintergrundbild", "type": "image", "return_format": "array", "preview_size": "medium" },
+            { "key": "f_ero_final_title", "name": "title", "label": "Titel", "type": "text" },
+            { "key": "f_ero_final_sub", "name": "subtitle", "label": "Untertitel", "type": "textarea" },
+            { "key": "f_ero_final_btn_t", "name": "button_text", "label": "Button Text", "type": "text" },
+            { "key": "f_ero_final_btn_u", "name": "button_url", "label": "Button URL", "type": "text" }
+          ]
+        }
+      }
+    }
+  ],
+  "location": [[{ "param": "leadwerk_source_key", "operator": "==", "value": "eroeffnung-v1" }]]
+}

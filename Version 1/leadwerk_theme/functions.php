@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_THEME_VERSION', '1.0.1' );
+define( 'LEADWERK_THEME_VERSION', '1.0.11' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
 /** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
@@ -104,8 +104,80 @@ function leadwerk_theme_enqueue_assets() {
 			'pageTurnSoundUrl' => $page_turn_url ? esc_url( $page_turn_url ) : '',
 		)
 	);
+	if ( is_page( 'eroeffnung' ) ) {
+		wp_enqueue_style(
+			'leadwerk-eroeffnung',
+			LEADWERK_THEME_URI . '/assets/css/eroeffnung.css',
+			array( 'leadwerk-theme-style' ),
+			LEADWERK_THEME_VERSION
+		);
+		wp_enqueue_script(
+			'leadwerk-eroeffnung',
+			LEADWERK_THEME_URI . '/assets/js/eroeffnung.js',
+			array( 'leadwerk-theme-main' ),
+			LEADWERK_THEME_VERSION,
+			true
+		);
+		wp_localize_script(
+			'leadwerk-eroeffnung',
+			'cafeeEroeffnung',
+			array(
+				'shareUrl' => esc_url( home_url( '/eroeffnung/' ) ),
+			)
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'leadwerk_theme_enqueue_assets' );
+
+/**
+ * OpenTable-Buchungs-Popup (Fallback-Modal) immer im Footer ausgeben.
+ * WordPress speichert Template-Parts oft in der DB; wp_footer ist hier zuverlässiger.
+ */
+function leadwerk_theme_render_opentable_fallback_modal() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	static $rendered = false;
+	if ( $rendered ) {
+		return;
+	}
+	$rendered = true;
+	?>
+	<div class="ot-fallback-modal" id="otFallbackModal" aria-hidden="true">
+		<button type="button" class="ot-fallback-close" id="otFallbackClose" aria-label="<?php esc_attr_e( 'Schließen', 'leadwerk-theme' ); ?>">&times;</button>
+		<iframe id="otFallbackFrame" class="ot-fallback-frame" title="<?php esc_attr_e( 'OpenTable Reservierung', 'leadwerk-theme' ); ?>" loading="lazy"></iframe>
+	</div>
+	<?php
+}
+add_action( 'wp_footer', 'leadwerk_theme_render_opentable_fallback_modal', 5 );
+
+/**
+ * window.open vor dem OpenTable-Widget abfangen, damit Buchungen im Popup bleiben.
+ */
+function leadwerk_theme_opentable_early_patch() {
+	if ( is_admin() ) {
+		return;
+	}
+	?>
+	<script>
+	(function () {
+		if (window.__otFallbackOpenPatched) return;
+		var nativeOpen = window.open.bind(window);
+		window.open = function (url, target, features) {
+			if (typeof url === 'string' && /opentable\.[^/]+\/(?:booking|restref)/i.test(url)) {
+				window.__otPendingBookingUrl = url;
+				window.dispatchEvent(new CustomEvent('cafee-ot-fallback-open', { detail: { url: url } }));
+				return window;
+			}
+			return nativeOpen(url, target, features);
+		};
+		window.__otFallbackOpenPatched = true;
+	})();
+	</script>
+	<?php
+}
+add_action( 'wp_head', 'leadwerk_theme_opentable_early_patch', 1 );
 
 /**
  * Truncate a human-readable SEO title for Yoast pixel/width hints (character-based heuristic).
@@ -164,6 +236,13 @@ function leadwerk_theme_get_yoast_analysis_content( $post_id ) {
 			include LEADWERK_THEME_DIR . '/inc/block-home-sections.php';
 			$html = (string) ob_get_clean();
 		}
+	}
+
+	if ( 'eroeffnung-v1' === $source_key ) {
+		$sections = function_exists( 'get_field' ) ? get_field( 'eroeffnung_sections', $post_id ) : array();
+		ob_start();
+		include LEADWERK_THEME_DIR . '/inc/block-eroeffnung-sections.php';
+		$html = (string) ob_get_clean();
 	}
 
 	if ( '' === $html ) {
@@ -370,6 +449,9 @@ function leadwerk_theme_body_class_subpages( $classes ) {
 		$classes[] = 'page-404';
 		$classes[] = 'header-scrolled';
 	}
+	if ( is_page( 'eroeffnung' ) ) {
+		$classes[] = 'eroeffnung-page';
+	}
 	if ( is_front_page() || is_page( array( 'impressum', 'datenschutz' ) ) ) {
 		$classes[] = 'has-ambient-fairy-home';
 	} else {
@@ -524,6 +606,60 @@ add_filter( 'acf/settings/save_json', 'leadwerk_theme_acf_json_save_point' );
 add_filter( 'acf/settings/load_json', 'leadwerk_theme_acf_json_load_point' );
 
 /**
+ * ACF-Location-Regel: Feldgruppen anhand des importierten Leadwerk Source Keys anzeigen.
+ *
+ * @param array<string,mixed> $choices Rule types.
+ * @return array<string,mixed>
+ */
+function leadwerk_theme_acf_location_rule_types( $choices ) {
+	$choices['Leadwerk']['leadwerk_source_key'] = __( 'Leadwerk Source Key', 'leadwerk-theme' );
+	return $choices;
+}
+add_filter( 'acf/location/rule_types', 'leadwerk_theme_acf_location_rule_types' );
+
+/**
+ * Werte fuer die Leadwerk Source Key Location-Regel.
+ *
+ * @param array<string,string> $choices Choices.
+ * @return array<string,string>
+ */
+function leadwerk_theme_acf_location_rule_values_source_key( $choices ) {
+	$choices['eroeffnung-v1'] = __( 'Eröffnung', 'leadwerk-theme' );
+	return $choices;
+}
+add_filter( 'acf/location/rule_values/leadwerk_source_key', 'leadwerk_theme_acf_location_rule_values_source_key' );
+
+/**
+ * Match-Logik fuer die Leadwerk Source Key Location-Regel.
+ *
+ * @param bool                $match   Existing match result.
+ * @param array<string,mixed> $rule    Rule.
+ * @param array<string,mixed> $options Screen options.
+ * @return bool
+ */
+function leadwerk_theme_acf_location_rule_match_source_key( $match, $rule, $options ) {
+	unset( $match );
+
+	$post_id = isset( $options['post_id'] ) ? (string) $options['post_id'] : '';
+	if ( preg_match( '/^post_(\d+)$/', $post_id, $m ) ) {
+		$post_id = $m[1];
+	}
+	if ( '' === $post_id && isset( $_GET['post'] ) ) {
+		$post_id = (string) absint( $_GET['post'] );
+	}
+	if ( '' === $post_id || ! is_numeric( $post_id ) ) {
+		return false;
+	}
+
+	$actual   = sanitize_key( (string) get_post_meta( (int) $post_id, 'leadwerk_source_key', true ) );
+	$expected = sanitize_key( (string) ( $rule['value'] ?? '' ) );
+	$matched  = ( $actual === $expected );
+
+	return ( isset( $rule['operator'] ) && '!=' === $rule['operator'] ) ? ! $matched : $matched;
+}
+add_filter( 'acf/location/rule_match/leadwerk_source_key', 'leadwerk_theme_acf_location_rule_match_source_key', 10, 3 );
+
+/**
  * Block: Logo (aus ACF-Option).
  */
 function leadwerk_theme_register_logo_block() {
@@ -564,6 +700,15 @@ function leadwerk_theme_register_blocks() {
 		'render_callback' => 'leadwerk_theme_render_home_sections',
 		'category'        => 'theme',
 		'icon'            => 'coffee',
+		'supports'        => array( 'align' => false ),
+	) );
+	acf_register_block_type( array(
+		'name'            => 'cafee-eroeffnung-sections',
+		'title'           => __( 'CaFEE Eröffnungs-Sektionen', 'leadwerk-theme' ),
+		'description'     => __( 'Eröffnungs-Landingpage mit Hero, Rabatt, Ablauf, Details und FAQ', 'leadwerk-theme' ),
+		'render_callback' => 'leadwerk_theme_render_eroeffnung_sections',
+		'category'        => 'theme',
+		'icon'            => 'tickets-alt',
 		'supports'        => array( 'align' => false ),
 	) );
 }
@@ -1027,4 +1172,16 @@ function leadwerk_theme_render_home_sections() {
 		return;
 	}
 	include LEADWERK_THEME_DIR . '/inc/block-home-sections.php';
+}
+
+/**
+ * Render-Callback: ACF Flexible Content "eroeffnung_sections" ausgeben.
+ */
+function leadwerk_theme_render_eroeffnung_sections() {
+	$post_id  = get_the_ID();
+	$sections = array();
+	if ( $post_id && function_exists( 'get_field' ) ) {
+		$sections = get_field( 'eroeffnung_sections', $post_id );
+	}
+	include LEADWERK_THEME_DIR . '/inc/block-eroeffnung-sections.php';
 }

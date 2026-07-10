@@ -81,6 +81,14 @@ function promoteModalToBody(modalEl) {
     document.body.appendChild(modalEl);
 }
 
+function promoteCursorLayers() {
+    [dom.fairyDust, dom.cursorTrail, dom.cursorDot].forEach((layer) => {
+        if (layer && layer.parentElement !== document.body) {
+            document.body.appendChild(layer);
+        }
+    });
+}
+
 function syncVideoLightboxBodyState() {
     document.body.classList.toggle(
         'video-lightbox-open',
@@ -130,8 +138,11 @@ function createParticle(x, y, { spread = 50, minSize = 3, maxSize = 6, opacity, 
 // ============================================
 // Custom Cursor
 // ============================================
+const cursorBridgeSelector = '.video-lightbox video, .video-lightbox iframe';
+
 function initCursor() {
     if (!dom.cursorDot || !dom.cursorTrail) return;
+    promoteCursorLayers();
     if (window.matchMedia('(hover: none)').matches) return;
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -157,7 +168,50 @@ function initCursor() {
         });
     });
 
+    initCursorBridgeSurfaces();
     animateCursor();
+}
+
+function setCursorBridgeActive(isActive) {
+    document.body.classList.toggle('cursor-bridge-active', Boolean(isActive));
+}
+
+function wakeCustomCursor() {
+    if (!dom.cursorDot || !dom.cursorTrail) return;
+
+    promoteCursorLayers();
+    setCursorBridgeActive(false);
+    dom.cursorDot.style.opacity = '1';
+    dom.cursorTrail.style.opacity = '0.6';
+}
+
+function getCursorBridgeTarget(event) {
+    const target = event.target instanceof Element ? event.target : null;
+    return target ? target.closest(cursorBridgeSelector) : null;
+}
+
+function initCursorBridgeSurfaces() {
+    document.addEventListener('mouseover', (event) => {
+        if (getCursorBridgeTarget(event)) {
+            setCursorBridgeActive(true);
+        }
+    }, true);
+
+    document.addEventListener('mouseout', (event) => {
+        const bridge = getCursorBridgeTarget(event);
+        if (!bridge) return;
+
+        const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
+        if (related && bridge.contains(related)) return;
+
+        setCursorBridgeActive(false);
+    }, true);
+
+    document.addEventListener('mousemove', (event) => {
+        if (!getCursorBridgeTarget(event) && document.body.classList.contains('cursor-bridge-active')) {
+            setCursorBridgeActive(false);
+        }
+    }, true);
 }
 
 function handleMouseMove(e) {
@@ -347,9 +401,12 @@ function initMenuBook() {
 
     function openBook() {
         closeMobileNavIfOpen();
+        promoteModalToBody(menuBookModal);
+        wakeCustomCursor();
         unlockPageTurnAudio();
         state.isBookOpen = true;
         document.body.classList.add('modal-open');
+        document.body.classList.add('menu-book-cursor-open');
         document.body.style.overflow = 'hidden';
 
         dom.bookCover.classList.add('hidden');
@@ -390,7 +447,9 @@ function initMenuBook() {
 
     function closeBook() {
         state.isBookOpen = false;
+        setCursorBridgeActive(false);
         document.body.classList.remove('modal-open');
+        document.body.classList.remove('menu-book-cursor-open');
         document.body.style.overflow = '';
         dom.bookCover.classList.remove('hidden');
         dom.bookPages.classList.remove('active');
@@ -614,6 +673,7 @@ function createLightboxController(lightboxEl, videoEl, closeBtn, { onOpen, onClo
     function close() {
         lightboxEl.classList.remove('active');
         syncVideoLightboxBodyState();
+        setCursorBridgeActive(false);
         document.body.style.overflow = '';
         videoEl.pause();
         videoEl.currentTime = 0;
@@ -733,6 +793,184 @@ function initInterviewLightbox() {
 }
 
 // ============================================
+// OpenTable Overlay Fallback
+// ============================================
+function isOpenTableBookingUrl(url) {
+    return typeof url === 'string' && /opentable\.[^/]+\/(?:booking|restref)/i.test(url);
+}
+
+function normalizeOpenTableHost(host) {
+    if (!host) return 'https://www.opentable.de';
+    const normalized = host.replace(/^https?:https?:\/\//i, 'https://');
+    return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
+}
+
+function setOpenTableParam(params, key, value) {
+    if (value !== undefined && value !== null && value !== '') {
+        params.set(key, value);
+    }
+}
+
+function buildOpenTableBookingUrl(trigger) {
+    const dataTrigger = trigger?.closest?.('[data-ot-restref]') || trigger;
+    const picker = trigger?.closest?.('.ot-dtp-picker');
+    const widget = trigger?.closest?.('[data-ot-reservationwidgethost], #ot-reservation-widget') ||
+        picker?.closest?.('[data-ot-reservationwidgethost], #ot-reservation-widget');
+    const restref = dataTrigger?.getAttribute?.('data-ot-restref');
+    if (!restref) return '';
+
+    const host = normalizeOpenTableHost(
+        dataTrigger.getAttribute('data-ot-host') ||
+        widget?.getAttribute?.('data-ot-reservationwidgethost')
+    );
+    const path = dataTrigger.getAttribute('data-ot-path') || '/booking/restref/availability';
+    const url = new URL(path, host);
+    const params = new URLSearchParams(restref.replace(/&amp;/g, '&'));
+
+    const controlsRoot = picker || widget;
+    const partySize = controlsRoot?.querySelector?.('[data-test="reservation-widget-party-size-picker"]')?.value;
+    const timeValue = controlsRoot?.querySelector?.('[data-test="reservation-widget-time-picker"]')?.value;
+    const datePart = (params.get('datetime') || '').split('T')[0];
+    const timePart = (timeValue || '').match(/T(\d{2}:\d{2})/)?.[1];
+
+    setOpenTableParam(params, 'partysize', partySize);
+    if (datePart && timePart) {
+        params.set('datetime', `${datePart}T${timePart}`);
+    }
+
+    setOpenTableParam(params, 'color', widget?.getAttribute?.('data-ot-colorthemeid'));
+    setOpenTableParam(params, 'dark', widget?.getAttribute?.('data-ot-isdarkmode'));
+    setOpenTableParam(params, 'ot_source', widget?.getAttribute?.('data-ot-otsource'));
+    setOpenTableParam(params, 'logo_pid', widget?.getAttribute?.('data-ot-logopid'));
+    setOpenTableParam(params, 'background_pid', widget?.getAttribute?.('data-ot-backgroundpid'));
+    setOpenTableParam(params, 'font', widget?.getAttribute?.('data-ot-font'));
+    setOpenTableParam(params, 'ot_logo', widget?.getAttribute?.('data-ot-otlogo'));
+    setOpenTableParam(params, 'primary_color', widget?.getAttribute?.('data-ot-primarycolor'));
+    setOpenTableParam(params, 'primary_font_color', widget?.getAttribute?.('data-ot-primaryfontcolor'));
+    setOpenTableParam(params, 'button_color', widget?.getAttribute?.('data-ot-buttoncolor'));
+    setOpenTableParam(params, 'button_font_color', widget?.getAttribute?.('data-ot-buttonfontcolor'));
+
+    url.search = params.toString();
+    return url.toString();
+}
+
+function ensureOtFallbackModal() {
+    let modal = document.getElementById('otFallbackModal');
+    if (modal) return modal;
+
+    modal = document.createElement('div');
+    modal.className = 'ot-fallback-modal';
+    modal.id = 'otFallbackModal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML =
+        '<button type="button" class="ot-fallback-close" id="otFallbackClose" aria-label="Schließen">&times;</button>' +
+        '<iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="lazy"></iframe>';
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function initOpenTableOverlayFallback() {
+    const fallbackModal = ensureOtFallbackModal();
+    const fallbackFrame = document.getElementById('otFallbackFrame');
+    const fallbackClose = document.getElementById('otFallbackClose');
+
+    if (!fallbackModal || !fallbackFrame) return;
+
+    promoteModalToBody(fallbackModal);
+
+    const closeFallback = () => {
+        fallbackModal.classList.remove('active');
+        fallbackModal.setAttribute('aria-hidden', 'true');
+        setCursorBridgeActive(false);
+        document.body.classList.remove('ot-overlay-open');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!fallbackModal.classList.contains('active')) {
+                fallbackFrame.removeAttribute('src');
+            }
+        }, 200);
+    };
+
+    const openFallback = (url) => {
+        if (!isOpenTableBookingUrl(url)) return;
+        closeMobileNavIfOpen();
+        wakeCustomCursor();
+        fallbackFrame.setAttribute('src', url);
+        fallbackModal.classList.add('active');
+        fallbackModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('ot-overlay-open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    if (!window.__otFallbackOpenPatched) {
+        const nativeWindowOpen = window.open.bind(window);
+        window.open = function patchedWindowOpen(url, target, features) {
+            if (isOpenTableBookingUrl(url)) {
+                openFallback(url);
+                return window;
+            }
+            return nativeWindowOpen(url, target, features);
+        };
+        window.__otFallbackOpenPatched = true;
+    }
+
+    if (typeof window.__otPendingBookingUrl === 'string' && window.__otPendingBookingUrl) {
+        openFallback(window.__otPendingBookingUrl);
+        delete window.__otPendingBookingUrl;
+    }
+
+    window.addEventListener('cafee-ot-fallback-open', (event) => {
+        const url = event.detail && event.detail.url;
+        if (url) {
+            openFallback(url);
+            delete window.__otPendingBookingUrl;
+        }
+    });
+
+    document.addEventListener('submit', (event) => {
+        const form = event.target.closest('.ot-dtp-picker-form');
+        const trigger = form?.querySelector?.('[data-ot-restref]');
+        const url = trigger ? buildOpenTableBookingUrl(trigger) : '';
+        if (!url) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openFallback(url);
+    }, true);
+
+    document.addEventListener('click', (event) => {
+        const openTableTrigger = event.target.closest('[data-ot-restref], .ot-dtp-picker-button');
+        const bookingUrl = openTableTrigger ? buildOpenTableBookingUrl(openTableTrigger) : '';
+        if (bookingUrl) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openFallback(bookingUrl);
+            return;
+        }
+
+        const link = event.target.closest('a[href*="opentable"]');
+        if (!link || !isOpenTableBookingUrl(link.href)) return;
+        event.preventDefault();
+        openFallback(link.href);
+    }, true);
+
+    if (fallbackClose) {
+        fallbackClose.addEventListener('click', closeFallback);
+    }
+
+    fallbackModal.addEventListener('click', (event) => {
+        if (event.target === fallbackModal) {
+            closeFallback();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && fallbackModal.classList.contains('active')) {
+            closeFallback();
+        }
+    });
+}
+
+// ============================================
 // Initialize Everything
 // ============================================
 function init() {
@@ -755,6 +993,7 @@ function initAll() {
     initVideoLightbox();
     initInterviewSlider();
     initInterviewLightbox();
+    initOpenTableOverlayFallback();
 
     setTimeout(() => document.body.classList.add('loaded'), 100);
     console.log('✨ CaFEE Brückenmühle website initialized');

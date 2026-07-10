@@ -25,6 +25,19 @@ const dom = {
     experienceBgParallax: document.querySelector('.experience-bg-parallax'),
 };
 
+function promoteModalToBody(modalEl) {
+    if (!modalEl || modalEl.parentElement === document.body) return;
+    document.body.appendChild(modalEl);
+}
+
+function promoteCursorLayers() {
+    [dom.fairyDust, dom.cursorTrail, dom.cursorDot].forEach((layer) => {
+        if (layer && layer.parentElement !== document.body) {
+            document.body.appendChild(layer);
+        }
+    });
+}
+
 const scrollLockState = {
     sources: new Set(),
     scrollY: 0,
@@ -289,8 +302,11 @@ let state = {
 // ============================================
 // Custom Cursor
 // ============================================
+const cursorBridgeSelector = '.video-lightbox video, .video-lightbox iframe';
+
 function initCursor() {
     if (!dom.cursorDot || !dom.cursorTrail) return;
+    promoteCursorLayers();
 
     // Check if device supports hover (not touch-only)
     if (window.matchMedia('(hover: none)').matches) return;
@@ -319,7 +335,50 @@ function initCursor() {
     });
 
     // Start animation loop
+    initCursorBridgeSurfaces();
     animateCursor();
+}
+
+function setCursorBridgeActive(isActive) {
+    document.body.classList.toggle('cursor-bridge-active', Boolean(isActive));
+}
+
+function wakeCustomCursor() {
+    if (!dom.cursorDot || !dom.cursorTrail) return;
+
+    promoteCursorLayers();
+    setCursorBridgeActive(false);
+    dom.cursorDot.style.opacity = '1';
+    dom.cursorTrail.style.opacity = '0.6';
+}
+
+function getCursorBridgeTarget(event) {
+    const target = event.target instanceof Element ? event.target : null;
+    return target ? target.closest(cursorBridgeSelector) : null;
+}
+
+function initCursorBridgeSurfaces() {
+    document.addEventListener('mouseover', (event) => {
+        if (getCursorBridgeTarget(event)) {
+            setCursorBridgeActive(true);
+        }
+    }, true);
+
+    document.addEventListener('mouseout', (event) => {
+        const bridge = getCursorBridgeTarget(event);
+        if (!bridge) return;
+
+        const related = event.relatedTarget instanceof Element ? event.relatedTarget : null;
+        if (related && bridge.contains(related)) return;
+
+        setCursorBridgeActive(false);
+    }, true);
+
+    document.addEventListener('mousemove', (event) => {
+        if (!getCursorBridgeTarget(event) && document.body.classList.contains('cursor-bridge-active')) {
+            setCursorBridgeActive(false);
+        }
+    }, true);
 }
 
 function handleMouseMove(e) {
@@ -459,6 +518,8 @@ function initMenuBook() {
     const menuBookModal = document.getElementById('menuBookModal');
     const closeMenuModalBtn = document.getElementById('closeMenuModalBtn');
     if (!openMenuModalBtn || !menuBookModal || !closeMenuModalBtn || !window.St?.PageFlip) return;
+
+    promoteModalToBody(menuBookModal);
 
     const pageElements = Array.from(dom.bookPages.querySelectorAll('.book-page'));
     const modalParent = menuBookModal.parentElement;
@@ -692,6 +753,7 @@ function initMenuBook() {
 
     function resetBookState() {
         state.isBookOpen = false;
+        setCursorBridgeActive(false);
         dom.bookCover.classList.remove('hidden');
         dom.bookPages.classList.remove('active');
 
@@ -704,9 +766,12 @@ function initMenuBook() {
 
     function openMenuModal() {
         closeMobileNavIfOpen('menu-modal');
+        promoteModalToBody(menuBookModal);
+        wakeCustomCursor();
         lastActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : openMenuModalBtn;
         menuBookModal.classList.add('active');
         menuBookModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('menu-book-cursor-open');
 
         lockBackgroundScroll();
         setSiblingsInert(true);
@@ -730,6 +795,7 @@ function initMenuBook() {
         resetBookState();
         menuBookModal.classList.remove('active');
         menuBookModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-book-cursor-open');
 
         unlockBackgroundScroll();
         setSiblingsInert(false);
@@ -740,6 +806,8 @@ function initMenuBook() {
     }
 
     function openBook() {
+        document.body.classList.add('menu-book-cursor-open');
+        wakeCustomCursor();
         state.isBookOpen = true;
         refreshPageFlipLayoutIfNeeded();
         dom.bookCover.classList.add('hidden');
@@ -1125,6 +1193,7 @@ function initVideoLightbox() {
     function closeLightbox() {
         lightbox.classList.remove('active');
         syncVideoLightboxBodyState();
+        setCursorBridgeActive(false);
         document.body.style.overflow = '';
         video.pause();
         video.currentTime = 0;
@@ -1280,6 +1349,7 @@ function initInterviewLightbox() {
     function closeLightbox() {
         lightbox.classList.remove('active');
         syncVideoLightboxBodyState();
+        setCursorBridgeActive(false);
         document.body.style.overflow = '';
         lightboxVideo.pause();
         lightboxVideo.currentTime = 0;
@@ -1303,6 +1373,65 @@ function initInterviewLightbox() {
 // ============================================
 // OpenTable Overlay Fallback
 // ============================================
+function isOpenTableBookingUrl(url) {
+    return typeof url === 'string' && /opentable\.[^/]+\/(?:booking|restref)/i.test(url);
+}
+
+function normalizeOpenTableHost(host) {
+    if (!host) return 'https://www.opentable.de';
+    const normalized = host.replace(/^https?:https?:\/\//i, 'https://');
+    return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
+}
+
+function setOpenTableParam(params, key, value) {
+    if (value !== undefined && value !== null && value !== '') {
+        params.set(key, value);
+    }
+}
+
+function buildOpenTableBookingUrl(trigger) {
+    const dataTrigger = trigger?.closest?.('[data-ot-restref]') || trigger;
+    const picker = trigger?.closest?.('.ot-dtp-picker');
+    const widget = trigger?.closest?.('[data-ot-reservationwidgethost], #ot-reservation-widget') ||
+        picker?.closest?.('[data-ot-reservationwidgethost], #ot-reservation-widget');
+    const restref = dataTrigger?.getAttribute?.('data-ot-restref');
+    if (!restref) return '';
+
+    const host = normalizeOpenTableHost(
+        dataTrigger.getAttribute('data-ot-host') ||
+        widget?.getAttribute?.('data-ot-reservationwidgethost')
+    );
+    const path = dataTrigger.getAttribute('data-ot-path') || '/booking/restref/availability';
+    const url = new URL(path, host);
+    const params = new URLSearchParams(restref.replace(/&amp;/g, '&'));
+
+    const controlsRoot = picker || widget;
+    const partySize = controlsRoot?.querySelector?.('[data-test="reservation-widget-party-size-picker"]')?.value;
+    const timeValue = controlsRoot?.querySelector?.('[data-test="reservation-widget-time-picker"]')?.value;
+    const datePart = (params.get('datetime') || '').split('T')[0];
+    const timePart = (timeValue || '').match(/T(\d{2}:\d{2})/)?.[1];
+
+    setOpenTableParam(params, 'partysize', partySize);
+    if (datePart && timePart) {
+        params.set('datetime', `${datePart}T${timePart}`);
+    }
+
+    setOpenTableParam(params, 'color', widget?.getAttribute?.('data-ot-colorthemeid'));
+    setOpenTableParam(params, 'dark', widget?.getAttribute?.('data-ot-isdarkmode'));
+    setOpenTableParam(params, 'ot_source', widget?.getAttribute?.('data-ot-otsource'));
+    setOpenTableParam(params, 'logo_pid', widget?.getAttribute?.('data-ot-logopid'));
+    setOpenTableParam(params, 'background_pid', widget?.getAttribute?.('data-ot-backgroundpid'));
+    setOpenTableParam(params, 'font', widget?.getAttribute?.('data-ot-font'));
+    setOpenTableParam(params, 'ot_logo', widget?.getAttribute?.('data-ot-otlogo'));
+    setOpenTableParam(params, 'primary_color', widget?.getAttribute?.('data-ot-primarycolor'));
+    setOpenTableParam(params, 'primary_font_color', widget?.getAttribute?.('data-ot-primaryfontcolor'));
+    setOpenTableParam(params, 'button_color', widget?.getAttribute?.('data-ot-buttoncolor'));
+    setOpenTableParam(params, 'button_font_color', widget?.getAttribute?.('data-ot-buttonfontcolor'));
+
+    url.search = params.toString();
+    return url.toString();
+}
+
 function initOpenTableOverlayFallback() {
     const fallbackModal = document.getElementById('otFallbackModal');
     const fallbackFrame = document.getElementById('otFallbackFrame');
@@ -1310,11 +1439,10 @@ function initOpenTableOverlayFallback() {
 
     if (!fallbackModal || !fallbackFrame) return;
 
-    const nativeWindowOpen = window.open.bind(window);
-    const otAvailabilityPattern = /^https:\/\/www\.opentable\.[^/]+\/booking\/restref\/availability\?/i;
-
     const closeFallback = () => {
         fallbackModal.classList.remove('active');
+        fallbackModal.setAttribute('aria-hidden', 'true');
+        setCursorBridgeActive(false);
         document.body.classList.remove('ot-overlay-open');
         unlockPageScroll('ot-fallback');
 
@@ -1327,15 +1455,19 @@ function initOpenTableOverlayFallback() {
     };
 
     const openFallback = (url) => {
+        if (!isOpenTableBookingUrl(url)) return;
+        wakeCustomCursor();
         fallbackFrame.setAttribute('src', url);
         fallbackModal.classList.add('active');
+        fallbackModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('ot-overlay-open');
         lockPageScroll('ot-fallback');
     };
 
     if (!window.__otFallbackOpenPatched) {
+        const nativeWindowOpen = window.open.bind(window);
         window.open = function patchedWindowOpen(url, target, features) {
-            if (typeof url === 'string' && otAvailabilityPattern.test(url)) {
+            if (isOpenTableBookingUrl(url)) {
                 openFallback(url);
                 return window;
             }
@@ -1343,6 +1475,45 @@ function initOpenTableOverlayFallback() {
         };
         window.__otFallbackOpenPatched = true;
     }
+
+    if (typeof window.__otPendingBookingUrl === 'string' && window.__otPendingBookingUrl) {
+        openFallback(window.__otPendingBookingUrl);
+        delete window.__otPendingBookingUrl;
+    }
+
+    window.addEventListener('cafee-ot-fallback-open', (event) => {
+        const url = event.detail && event.detail.url;
+        if (url) {
+            openFallback(url);
+            delete window.__otPendingBookingUrl;
+        }
+    });
+
+    document.addEventListener('submit', (event) => {
+        const form = event.target.closest('.ot-dtp-picker-form');
+        const trigger = form?.querySelector?.('[data-ot-restref]');
+        const url = trigger ? buildOpenTableBookingUrl(trigger) : '';
+        if (!url) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openFallback(url);
+    }, true);
+
+    document.addEventListener('click', (event) => {
+        const openTableTrigger = event.target.closest('[data-ot-restref], .ot-dtp-picker-button');
+        const bookingUrl = openTableTrigger ? buildOpenTableBookingUrl(openTableTrigger) : '';
+        if (bookingUrl) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            openFallback(bookingUrl);
+            return;
+        }
+
+        const link = event.target.closest('a[href*="opentable"]');
+        if (!link || !isOpenTableBookingUrl(link.href)) return;
+        event.preventDefault();
+        openFallback(link.href);
+    }, true);
 
     if (fallbackClose) {
         fallbackClose.addEventListener('click', closeFallback);

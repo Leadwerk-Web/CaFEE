@@ -28,8 +28,8 @@ Optional können Sie einen eigenen Quellordner setzen (z. B. mit vollständige
 1. **Tools → Leadwerk Import** im Backend öffnen.
 2. **Dry-Run**: Es wird nur geloggt, was passieren würde (keine Datenbankänderungen).
 3. **Import ausführen**: Es werden u. a.:
-   - **vier Seiten** angelegt bzw. aktualisiert: Startseite (als Front Page), **Impressum**, **Datenschutz**, **Danke**
-   - Inhalte für Impressum, Datenschutz und Danke aus den Dateien unter `manifest/` geladen (`*-content.html`)
+   - alle Seiten aus `manifest/mapping.json` angelegt bzw. aktualisiert, u. a. Startseite (als Front Page), **Eröffnung**, **Impressum**, **Datenschutz**, **Danke** und **404**
+   - Seiteninhalte aus den Dateien unter `manifest/` geladen (`*-content.html`)
    - Site-Titel und Tagline aus `mapping.json` gesetzt
    - Medien aus `source_assets` (oder `source_root`) in die Mediathek importiert
    - **ACF-Optionen** (Logo, Kontakt, Footer, Social, …) befüllt
@@ -37,6 +37,12 @@ Optional können Sie einen eigenen Quellordner setzen (z. B. mit vollständige
    - **WPForms:** siehe Abschnitt unten
 
 Die Texte in `manifest/impressum-content.html`, `manifest/datenschutz-content.html` und `manifest/danke-content.html` sind **Projektvorlagen für CaFEE** – bitte **rechtlich prüfen** und an Ihre finalen Angaben anpassen.
+
+Unterhalb der Vollimport-Buttons kann zusätzlich eine einzelne Manifest-Seite per Dropdown ausgewählt und importiert bzw. aktualisiert werden.
+
+Für die Online-Speisekarte gibt es außerdem den Button **Nur MenuBook importieren**. Dieser aktualisiert ausschließlich `home_sections` → `menu_preview` → `menu_book_pages` auf der Startseite. Andere ACF-Sektionen, Seiten, Medien, Optionen und SEO-Felder werden dabei nicht neu importiert.
+
+Die Seite **Eröffnung** nutzt wie die Startseite ein eigenes ACF-Sektionsfeld (`eroeffnung_sections`). Beim Vollimport oder beim Einzelimport der Eröffnungsseite werden Hero, Rabatt/QR, Ablauf, Erwartungs-Karten, Eventdetails, FAQ und Final-CTA als editierbare ACF-Sektionen vorbefüllt.
 
 ## Re-Import
 
@@ -67,7 +73,9 @@ Die Feldgruppen liegen im Theme unter `acf-json/`. Nach dem Import die Startseit
 
 ### Speisekarte / PageFlip-Buch
 
-Der ACF-Filler liest die interaktiven Buchseiten aus **`#bookPagesContainer`** (jeweils `div.book-page` mit links/rechts, Menüzeilen, Zitat, Seitenbild) und schreibt sie in **`menu_book_pages`**. Gibt es keinen solchen Container, greift der **Legacy-Pfad** über **`book-spread`** nach wie vor auf **`menu_categories`**. Optional: Datei **`page-turn.mp3`** ins Theme unter `assets/audio/` legen (Blätterton im Modal).
+Die aktuelle gedruckte Speisekarte ist im ACF-Filler als editierbare PageFlip-Struktur gepflegt und wird in **`menu_book_pages`** geschrieben. Das passiert beim Vollimport der Startseite und gezielt über **Nur MenuBook importieren**; der gezielte Import ersetzt nur die Buchseiten und lässt alle anderen Startseiten-Sektionen unverändert.
+
+Der Parser für **`#bookPagesContainer`** und der **Legacy-Pfad** über **`book-spread`** bleiben als Fallback im Code erhalten. Optional: Datei **`page-turn.mp3`** ins Theme unter `assets/audio/` legen (Blätterton im Modal).
 
 ### Hero-Hintergrundvideo (MP4)
 
