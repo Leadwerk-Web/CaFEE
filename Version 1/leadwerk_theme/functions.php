@@ -1031,6 +1031,165 @@ function leadwerk_theme_local_business_schema() {
 }
 add_action( 'wp_head', 'leadwerk_theme_local_business_schema', 25 );
 
+/**
+ * Event- und FAQ-Schema aus den sichtbaren ACF-Inhalten der Eröffnungsseite bauen.
+ * Breadcrumbs kommen bereits von Yoast und werden hier bewusst nicht dupliziert.
+ */
+function leadwerk_theme_eroeffnung_schema() {
+	$post_id = get_queried_object_id();
+	if ( ! $post_id || ( ! is_page( 'eroeffnung' ) && 'eroeffnung-v1' !== (string) get_post_meta( $post_id, 'leadwerk_source_key', true ) ) ) {
+		return;
+	}
+	if ( leadwerk_theme_post_is_noindex( $post_id ) || ! function_exists( 'get_field' ) ) {
+		return;
+	}
+
+	$sections = get_field( 'eroeffnung_sections', $post_id );
+	if ( ! is_array( $sections ) || empty( $sections ) ) {
+		return;
+	}
+
+	$hero        = array();
+	$details     = array();
+	$faq_entries = array();
+	foreach ( $sections as $section ) {
+		if ( ! is_array( $section ) || empty( $section['acf_fc_layout'] ) ) {
+			continue;
+		}
+		if ( 'hero' === $section['acf_fc_layout'] ) {
+			$hero = $section;
+		} elseif ( 'details' === $section['acf_fc_layout'] ) {
+			$details = $section;
+		} elseif ( 'faq' === $section['acf_fc_layout'] && ! empty( $section['items'] ) && is_array( $section['items'] ) ) {
+			foreach ( $section['items'] as $item ) {
+				$question = isset( $item['question'] ) ? trim( wp_strip_all_tags( (string) $item['question'] ) ) : '';
+				$answer   = isset( $item['answer'] ) ? trim( wp_strip_all_tags( (string) $item['answer'] ) ) : '';
+				if ( '' === $question || '' === $answer ) {
+					continue;
+				}
+				$faq_entries[] = array(
+					'@type'          => 'Question',
+					'name'           => $question,
+					'acceptedAnswer' => array(
+						'@type' => 'Answer',
+						'text'  => preg_replace( '/\s+/u', ' ', $answer ),
+					),
+				);
+			}
+		}
+	}
+
+	$page_url = trailingslashit( get_permalink( $post_id ) );
+	$base_url = trailingslashit( home_url( '/' ) );
+	$graph    = array();
+
+	$start_date = isset( $hero['opening_date'] ) ? trim( (string) $hero['opening_date'] ) : '';
+	if ( '' !== $start_date ) {
+		try {
+			$start = new DateTimeImmutable( $start_date );
+		} catch ( Exception $exception ) {
+			$start = false;
+		}
+
+		if ( $start ) {
+			$end_hour   = 17;
+			$end_minute = 0;
+			if ( ! empty( $details['details'] ) && is_array( $details['details'] ) ) {
+				foreach ( $details['details'] as $detail ) {
+					$value = isset( $detail['value'] ) ? (string) $detail['value'] : '';
+					if ( preg_match( '/(\d{1,2}):(\d{2})\s*(?:–|-)\s*(\d{1,2}):(\d{2})/u', $value, $time_matches ) ) {
+						$end_hour   = (int) $time_matches[3];
+						$end_minute = (int) $time_matches[4];
+						break;
+					}
+				}
+			}
+			$end = $start->setTime( $end_hour, $end_minute );
+			if ( $end <= $start ) {
+				$end = $end->modify( '+1 day' );
+			}
+
+			$description = (string) get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+			if ( '' === trim( $description ) && ! empty( $hero['subtitle'] ) ) {
+				$description = wp_strip_all_tags( (string) $hero['subtitle'] );
+			}
+
+			$image = '';
+			if ( ! empty( $hero['background_image'] ) ) {
+				$image = leadwerk_theme_resolve_acf_image_url( $hero['background_image'], 'full' );
+			}
+			if ( ! $image ) {
+				$image = get_the_post_thumbnail_url( $post_id, 'full' );
+			}
+			if ( ! $image ) {
+				$image = LEADWERK_THEME_URI . '/assets/images/Capuccino.webp';
+			}
+
+			$street   = (string) get_field( 'street', 'option' );
+			$city_raw = (string) get_field( 'city', 'option' );
+			$city     = trim( preg_replace( '/^\d{4,5}\s+/', '', $city_raw ) );
+			$postal   = '';
+			if ( preg_match( '/(\d{4,5})/', $city_raw, $postal_matches ) ) {
+				$postal = $postal_matches[1];
+			}
+
+			$event = array(
+				'@type'               => 'Event',
+				'@id'                 => $page_url . '#event',
+				'name'                => get_the_title( $post_id ),
+				'url'                 => $page_url,
+				'startDate'           => $start->format( DateTimeInterface::ATOM ),
+				'endDate'             => $end->format( DateTimeInterface::ATOM ),
+				'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+				'description'         => preg_replace( '/\s+/u', ' ', trim( $description ) ),
+				'image'               => esc_url_raw( $image ),
+				'location'            => array(
+					'@type'   => 'Place',
+					'name'    => get_bloginfo( 'name' ),
+					'address' => array(
+						'@type'           => 'PostalAddress',
+						'streetAddress'   => $street ?: 'Hofstätte 2',
+						'postalCode'      => $postal ?: '76593',
+						'addressLocality' => $city ?: 'Gernsbach',
+						'addressCountry'  => 'DE',
+					),
+				),
+				'organizer'           => array(
+					'@type' => 'Organization',
+					'@id'   => $base_url . '#organization',
+					'name'  => get_bloginfo( 'name' ),
+					'url'   => $base_url,
+				),
+			);
+			if ( $start->getTimestamp() > current_datetime()->getTimestamp() ) {
+				$event['eventStatus'] = 'https://schema.org/EventScheduled';
+			}
+			$graph[] = $event;
+		}
+	}
+
+	if ( ! empty( $faq_entries ) ) {
+		$graph[] = array(
+			'@type'      => 'FAQPage',
+			'@id'        => $page_url . '#faq',
+			'url'        => $page_url,
+			'inLanguage' => get_bloginfo( 'language' ),
+			'mainEntity' => $faq_entries,
+		);
+	}
+
+	if ( empty( $graph ) ) {
+		return;
+	}
+
+	$schema = array(
+		'@context' => 'https://schema.org',
+		'@graph'   => $graph,
+	);
+	echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+add_action( 'wp_head', 'leadwerk_theme_eroeffnung_schema', 26 );
+
 function leadwerk_theme_seo_fallback() {
 	if ( defined( 'WPSEO_VERSION' ) ) {
 		return;

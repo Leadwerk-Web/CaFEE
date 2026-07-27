@@ -283,11 +283,13 @@ class Leadwerk_ACF_Filler {
 					$this->menu_item( 'Cappuccino groß', '5,00', '300ml' ),
 					$this->menu_item( 'Latte Macchiato', '5,00', '300ml' ),
 					$this->menu_item( 'Heiße Schoki', '4,50', '300ml' ),
+					$this->menu_item( 'Babyccino', '1,50', '100ml' ),
 					$this->menu_item( 'Iced', '+0,50' ),
+					$this->menu_item( 'Hafer-, Soja-, Mandelmilch', '+0,00' ),
 				) ),
 			) ),
 			$this->menu_page( 'right-page', array(
-				$this->menu_section( 'Feeling Fancy', array(
+				$this->menu_section( 'Matcha & mehr', array(
 					$this->menu_item( 'Matcha Latte', '5,50' ),
 					$this->menu_item( 'Cinnamon Matcha Latte', '6,20' ),
 					$this->menu_item( 'Chai Latte', '5,00' ),
@@ -296,24 +298,28 @@ class Leadwerk_ACF_Filler {
 					$this->menu_item( 'Mango Coco Matcha', '7,50' ),
 					$this->menu_item( 'Berry Coco Matcha', '7,50' ),
 				), '300ml' ),
+				$this->menu_section( 'Magie für dein Getränk', array(
+					$this->menu_item( 'Sirupe', '0,50', 'Vanille | Schoko | Hasel | Caramel' ),
+				) ),
 			) ),
 			$this->menu_page( 'left-page', array(
 				$this->menu_section( 'Teeträume', array(
-					$this->menu_item( 'Im Beutel', '4,00', 'Pfefferminz | Schwarztee | Ingwer | Jasmin' ),
+					$this->menu_item( 'Im Beutel', '3,00', 'Pfefferminz | Schwarztee | Ingwer | Früchte | Grüntee' ),
 				) ),
 				$this->menu_section( 'Frisch aus der Saftpresse', array(
-					$this->menu_item( 'Bis zu drei Wunschzutaten', '6,50', 'Orange | Sellerie | Karotte | Ingwer | Banane | Spinat | Apfel | Zitrone' ),
+					$this->menu_item( 'Bis zu drei Wunschzutaten', '6,50', 'Orange | Zitrone | Karotte | Ingwer | Banane | Apfel' ),
 					$this->menu_item( 'Extra Ingwershot', '+2,00' ),
+					$this->menu_item( 'Frisch gepresster O-Saft', '5,50' ),
 				), 'Wird dir frisch gemixt.' ),
 			) ),
 			$this->menu_page( 'right-page', array(
 				$this->menu_section( 'Täglicher Feenstaub', array(
 					$this->menu_item( 'Espresso Martini', '12,00', 'Espresso | Wodka 2cl | Kaffeelikör 2cl | Orangenlikör 2cl | Zuckersirup' ),
-					$this->menu_item( 'Holy Aperoli*', '8,50', 'Zinos Aperitivo 6cl | Prosecco 9cl | Soda' ),
-					$this->menu_item( 'Sarti Spritz*', '8,50', 'Sarti 6cl | Prosecco 9cl | Soda' ),
-					$this->menu_item( 'Limoncello Spritz*', '8,50', 'Limoncello 6cl | Prosecco 9cl | Soda' ),
+					$this->menu_item( 'Holy Aperoli', '8,50', 'Zinos Aperitivo 6cl | Prosecco 9cl | Soda' ),
+					$this->menu_item( 'Sarti Spritz', '8,50', 'Sarti 6cl | Prosecco 9cl | Soda' ),
+					$this->menu_item( 'Limoncello Spritz', '8,50', 'Limoncello 6cl | Prosecco 9cl | Soda' ),
 					$this->menu_item( 'Lillet Wildberry', '8,50', 'Lillet 5cl | Schweppes Wildberry' ),
-					$this->menu_item( 'Hugo', '8,50', 'Prosecco 150ml | Holunderblütensirup | Soda' ),
+					$this->menu_item( 'Hugo*', '8,50', 'Prosecco 150ml | Holunderblütensirup | Soda' ),
 					$this->menu_item( 'Wein & Tonic Rosé', '7,50', 'Wein & Tonic Rosé 0,2l' ),
 				) ),
 				$this->menu_text_section( '', '*auch ohne Feenstaub' ),
@@ -324,8 +330,8 @@ class Leadwerk_ACF_Filler {
 					$this->menu_item( 'Pils*, Radler', '4,00', '0,33l | *auch ohne Feenstaub' ),
 				) ),
 				$this->menu_section( 'Ohne Feenstaub', array(
-					$this->menu_item( 'Wasser laut, leise klein', '3,50', '0,5l' ),
-					$this->menu_item( 'Wasser laut, leise groß', '5,00', '1,0l' ),
+					$this->menu_item( 'Wasser laut, leise klein', '3,00', '0,5l' ),
+					$this->menu_item( 'Wasser laut, leise groß', '4,50', '1,0l' ),
 					$this->menu_item( 'Cola (Classic & Zero)', '4,00', '0,33l' ),
 					$this->menu_item( 'Fanta', '4,00', '0,33l' ),
 					$this->menu_item( 'Sprite', '4,00', '0,33l' ),
@@ -334,34 +340,14 @@ class Leadwerk_ACF_Filler {
 				) ),
 			) ),
 			$this->menu_page( 'right-page', array(
-				$this->menu_text_section( '', 'Frühstück täglich von 9:00 bis 12:00 Uhr.' ),
-				$this->menu_section( 'Guter Start in den Tag', array(
-					$this->menu_item( 'Wie bei Mama', '14,50', 'Wurst- & Käseauswahl | Marmelade | Butter | Brotkorb' ),
-					$this->menu_item( 'Fee-nomenal', '16,00', 'Bircher Müsli | Joghurt | Honig | Marmelade | Butter | Croissant' ),
-					$this->menu_item( 'Küss den Frosch', '34,00', 'Frühstück für zwei | Wurst- & Käseauswahl | Lachs | Marmelade | Butter | Brotkorb | Bircher | Joghurt | zwei Gläser Sekt' ),
-				) ),
-				$this->menu_section( 'Wir zaubern dazu', array(
-					$this->menu_item( 'Hartes oder weiches Ei', '+2,00' ),
-					$this->menu_item( 'Rühr-/Spiegelei', '+3,50' ),
-					$this->menu_item( 'Lachs', '+5,00' ),
-					$this->menu_item( 'Speck', '+2,00' ),
-					$this->menu_item( 'Avocado', '+3,00' ),
-				) ),
-			) ),
-			$this->menu_page( 'left-page', array(
+				$this->menu_text_section( '', 'Täglich von 9:00 bis 12:00 Uhr.' ),
 				$this->menu_section( 'Märchenhafte Bowls', array(
-					$this->menu_item( 'Banane & Beerenfantasie', '10,00', 'Beerenmix | Haferflocken | Naturjoghurt | Granola | Nussmix | Topping Apfel & Banane | vegan' ),
+					$this->menu_item( 'Banane & Beeren Fantasie', '10,00', 'Beerenmix | Haferflocken | Naturjoghurt | Granola | Nussmix | Topping Apfel & Banane | vegan' ),
 					$this->menu_item( 'Apfelglück', '10,00', 'Apfel | Apfelkompott | Haferflocken | Zimt | Granola | Nussmix | Topping | vegan' ),
 				) ),
-				$this->menu_section( 'Zucker für die Seele', array(
-					$this->menu_item( 'Stück Torte', '4,00' ),
-					$this->menu_item( 'Stück Kuchen', '3,70' ),
-					$this->menu_item( 'Cupcake', '3,80' ),
-					$this->menu_item( 'Muffin', '3,20' ),
-					$this->menu_item( 'Affogato', '5,00' ),
+				$this->menu_section( 'Süßer Start in den Tag', array(
+					$this->menu_item( 'Fee-nomenal', '16,00', 'Bircher Müsli | Joghurt | Honig | Marmelade | Butter | Croissant' ),
 				) ),
-			) ),
-			$this->menu_page( 'right-page', array(
 				$this->menu_section( 'Eierzauber', array(
 					$this->menu_item( 'Eierzauber', '10,00', 'Rührei oder Spiegelei aus drei Eiern' ),
 					$this->menu_item( 'Paprika', '' ),
@@ -378,17 +364,22 @@ class Leadwerk_ACF_Filler {
 			) ),
 			$this->menu_page( 'left-page', array(
 				$this->menu_section( 'Traumhafte Stullen', array(
-					$this->menu_item( 'Morgensonne', '12,00', 'Ricotta | Brie | Honig | Walnussbruch | frische Feige' ),
+					$this->menu_item( 'Morgensonne', '12,00', 'Ricotta | Brie | Honig | Walnussbruch | frische Feigen' ),
 					$this->menu_item( 'Burrataglück', '14,00', 'Pesto | Prosciutto Crudo | Burrata | Basilikum | Ricotta | Trüffelöl' ),
+					$this->menu_item( 'Murgbrise', '14,00', 'Guacamole | Balsamico Zwiebeln | Smoked Lachs | Parmesan | Zitrone' ),
 					$this->menu_item( 'Croissant Royal', '14,00', 'Croissant | Smoked Lachs | pochiertes Ei | Hollandaise | Rucola' ),
-				), 'Traumhafte Stullen mit warmem Sauerteigbrot.' ),
+					$this->menu_item( 'Bauerntraum', '14,00', 'Schwarzwälder Schinken | Parmesan | Frischkäsecreme | Hollandaise | Rucola' ),
+					$this->menu_item( 'Mühlenzauber', '14,00', 'Curry Dattel Creme | Feta | Artischocken | Walnussbruch | Agavendicksaft | Chilissosse' ),
+				), 'Alle Stullen auf warmem Sauerteigbrot. Täglich von 9:00 Uhr bis 13:00 Uhr.' ),
 			) ),
 			$this->menu_page( 'right-page', array(
-				$this->menu_section( 'Traumhafte Stullen', array(
-					$this->menu_item( 'Bauerntraum', '14,00', 'Schwarzwälder Schinken | Parmesan | Frischkäsecreme | Hollandaise | Rucola' ),
-					$this->menu_item( 'Mühlenzauber', '14,00', 'Curry Dattel Creme | Feta | Artischocken | Walnussbruch | Agavendicksaft | Chilisoße' ),
-					$this->menu_item( 'Murgbrise', '14,00', 'Guacamole | Balsamico Zwiebeln | Smoked Lachs | Parmesan | Zitrone' ),
-				), 'Traumhafte Stullen mit warmem Sauerteigbrot.' ),
+				$this->menu_section( 'Selbstgemachte Leckereien', array(
+					$this->menu_item( 'Stück Torte', '4,00' ),
+					$this->menu_item( 'Stück Kuchen', '3,70' ),
+					$this->menu_item( 'Cupcake', '3,80' ),
+					$this->menu_item( 'Muffin', '3,20' ),
+					$this->menu_item( 'Affogato', '5,00' ),
+				), 'Alle Leckereien gibt es den ganzen Tag.' ),
 			) ),
 			$this->menu_page( 'left-page', array(
 				$this->menu_text_section( '', 'Mittagstisch täglich von 12:00 bis 15:00 Uhr.' ),
@@ -402,23 +393,20 @@ class Leadwerk_ACF_Filler {
 			) ),
 			$this->menu_page( 'right-page', array(
 				$this->menu_section( 'Sattmacher', array(
-					$this->menu_item( 'Tagessuppe', '7,00', 'Wechselnde köstliche Tagessuppe' ),
-					$this->menu_item( 'Kalb an getrüffeltem Kartoffelbrei', '29,00', 'Kalb Sous-Vide | getrüffelter Kartoffelbrei | Rotkraut | Bratensoße' ),
-					$this->menu_item( 'Lachsfilet', '24,00', 'Zitronenrahm | Kartoffelbrei' ),
+					$this->menu_item( 'Tagessuppe', '7,00', 'Wechselnde köstliche Suppen' ),
 					$this->menu_item( 'Ravioli in Hummerjus', '20,00', 'Ravioli gefüllt mit Ziegenkäse | Hummerjus' ),
 					$this->menu_item( 'Ravioli in Pilzfond', '18,00', 'Ravioli Panselli e Menta | Pilzfond' ),
-					$this->menu_item( 'Pesto Spaghetti Gambas', '23,00', 'Pesto | Spaghetti | gebratene Gambas' ),
 				), 'Mittagstisch täglich von 12:00 bis 15:00 Uhr.' ),
 			) ),
 			$this->menu_page( 'left-page', array(
 				$this->menu_section( 'Für die kleinen Zauberer und Feen', array(
-					$this->menu_item( 'Spaghetti Tomatensoße', '9,00', 'Als Kinderportion' ),
-					$this->menu_item( 'Schnitzel Wienerart', '11,00', 'Paniertes Putenschnitzel | Kartoffelbrei' ),
+					$this->menu_item( 'Spaghetti Tomatensosse', '9,00', 'Als Kinderportion' ),
+					$this->menu_item( 'Chicken Nuggets', '11,00', 'Knusprige Chicken Nuggets | Kartoffelbrei' ),
 				), 'Nur für Kinder bis 12 Jahre' ),
 				$this->menu_text_section( 'Weil Tapas verbinden', 'Tapas täglich ab 15:00 Uhr.' ),
 				$this->menu_section( 'Tapas', array(
 					$this->menu_item( 'Knoblauch Garnelen', '14,00', 'Gambas | Knoblauch | Olivenöl' ),
-					$this->menu_item( 'Feinkostsardellen', '8,00' ),
+					$this->menu_item( 'Sardellen', '8,00', 'Feinkostsardellen' ),
 					$this->menu_item( 'Oliven', '4,50', 'Zitronige Oliven Castelvetrano' ),
 					$this->menu_item( 'Aioli und Brot', '+2,00' ),
 				) ),
@@ -426,9 +414,8 @@ class Leadwerk_ACF_Filler {
 			$this->menu_page( 'right-page', array(
 				$this->menu_section( 'Tapas', array(
 					$this->menu_item( 'Datteln im Speckmantel', '9,00', 'Datteln | Speck' ),
-					$this->menu_item( 'Käseplatte', '15,00', 'Handverlesene Käseauswahl' ),
-					$this->menu_item( 'Tapas Platte', '30,00', 'Datteln im Speckmantel | Käseauswahl | Oliven | Feinkostsardellen | Feigen | Aioli | Brot' ),
 				) ),
+				$this->menu_text_section( '', 'Bei Unverträglichkeiten oder Allergien sprechen Sie bitte unser Servicepersonal an.' ),
 			) ),
 			$this->menu_page( 'left-page', array(
 				$this->menu_text_section( 'Wine not?', 'Man muss auch mal Wein sagen können.' ),
@@ -459,14 +446,11 @@ class Leadwerk_ACF_Filler {
 				$this->menu_section( 'So schön Prickelndes', array(
 					$this->menu_item( 'Civa Prosecco Rosé Millesimato', '9,00 / 25,00', 'Italien. Rote Beeren, floral. Zarte Perlage. Fruchtig, elegant, erfrischend.' ),
 					$this->menu_item( 'Racco Sparkling (ohne Feenstaub)', '7,00 / 18,50', 'Deutschland. Alkoholfrei. Rote Äpfel, rote Beeren. Frisch, prickelnd, harmonisch.' ),
-				), 'Glas 100ml / Flasche' ),
-			) ),
-			$this->menu_page( 'right-page', array(
-				$this->menu_section( 'So schön Prickelndes', array(
 					$this->menu_item( 'Moet Iced Imperial', '120,00', 'Frankreich. Champagner. Tropische Früchte, Mango und Grapefruit. Fruchtig, elegant, erfrischend.' ),
-					$this->menu_item( 'Frisante Baggio Dela Luna', '6,00 / 16,00', 'Italien. Frizzante. Grüne Äpfel, Birnen & weiße Blüten. Feine Perlage. Frisch, fruchtig, lebendig.' ),
+					$this->menu_item( 'Frisante Baggio Dela Luna', '6,00 / 22,00', 'Italien. Frizzante. Grüne Äpfel, Birnen & weiße Blüten. Feine Perlage. Frisch, fruchtig, lebendig.' ),
 				), 'Glas 100ml / Flasche' ),
 			) ),
+			$this->menu_page( 'right-page', array() ),
 		);
 	}
 
