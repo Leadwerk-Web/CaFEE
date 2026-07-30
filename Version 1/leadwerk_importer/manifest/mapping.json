@@ -82,6 +82,19 @@
       }
     },
     {
+      "source_key": "karriere-v1",
+      "target_type": "page",
+      "post_status": "publish",
+      "slug": "karriere",
+      "title": "Karriere bei CaFEE",
+      "content_file": "karriere-content.html",
+      "seo": {
+        "title": "Karriere – Werde Teil des CaFEE Brückenmühle Teams",
+        "meta_description": "Wir suchen Kaffeeliebhaber! Entdecke unsere offenen Stellen als Barista, Servicekraft oder Konditor/in und bewirb dich bei uns in Gernsbach.",
+        "meta_robots": "index, follow"
+      }
+    },
+    {
       "source_key": "404-v1",
       "target_type": "page",
       "post_status": "publish",

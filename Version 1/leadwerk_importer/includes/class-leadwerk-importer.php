@@ -179,6 +179,80 @@ class Leadwerk_Importer {
 	}
 
 	/**
+	 * Aktualisiert ausschließlich die Bildergalerie auf der Startseite.
+	 *
+	 * @return array<string,string>|WP_Error
+	 */
+	public function run_gallery_only() {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		Leadwerk_Logger::log( $this->dry_run ? '--- Targeted Dry-Run: Gallery only ---' : '--- Targeted Import: Gallery only ---' );
+
+		if ( $this->dry_run ) {
+			Leadwerk_Logger::log( 'Galerie würde aktualisiert; andere Startseiten-Sektionen würden unverändert bleiben.' );
+			Leadwerk_Logger::save();
+			return array(
+				'status' => 'dry_run',
+				'target' => 'gallery',
+			);
+		}
+
+		$front_page_id = $this->find_page_by_source_key( 'cafee-home-v1' );
+		if ( ! $front_page_id ) {
+			$front_page_id = (int) get_option( 'page_on_front' );
+		}
+
+		if ( ! $front_page_id ) {
+			Leadwerk_Logger::save();
+			return new WP_Error( 'leadwerk_front_page_not_found', 'Startseite nicht gefunden. Galerie konnte nicht aktualisiert werden.' );
+		}
+
+		// Import media first to ensure new gallery images are in WP Media Library
+		$this->run_media_import();
+
+		$filler = new Leadwerk_ACF_Filler();
+		$ok     = $filler->fill_gallery_only( $front_page_id, $this->source_root );
+		if ( ! $ok ) {
+			Leadwerk_Logger::save();
+			return new WP_Error( 'leadwerk_gallery_import_failed', 'Galerie konnte nicht aktualisiert werden. Bitte Log prüfen.' );
+		}
+
+		$this->maybe_rebuild_yoast_indexable( (int) $front_page_id );
+		Leadwerk_Logger::save();
+
+		return array(
+			'status'  => 'completed',
+			'target'  => 'gallery',
+			'post_id' => (string) $front_page_id,
+		);
+	}
+
+	/**
+	 * Importiert die Karriere-Seite und erstellt das zugehörige Bewerbungsformular.
+	 *
+	 * @return array<string,string>|WP_Error
+	 */
+	public function run_karriere_import() {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		Leadwerk_Logger::log( $this->dry_run ? '--- Targeted Dry-Run: Karriere-Seite ---' : '--- Targeted Import: Karriere-Seite ---' );
+
+		// Import media first to ensure all images for Karriere are uploaded
+		if ( ! $this->dry_run ) {
+			$this->run_media_import();
+			$this->create_wpforms_career();
+		}
+
+		$result = $this->run_page_by_source_key( 'karriere-v1' );
+
+		return $result;
+	}
+
+	/**
 	 * Importiert nur die Medien, die die Eröffnungsseite fuer ACF-Bildfelder braucht.
 	 *
 	 * @return void
@@ -273,6 +347,14 @@ class Leadwerk_Importer {
 			$content_path = $this->manifest_dir . $config['content_file'];
 			if ( is_file( $content_path ) ) {
 				$content = file_get_contents( $content_path );
+				
+				// Inject WPForms shortcode for karriere
+				if ( $source_key === 'karriere-v1' && ! $this->dry_run && function_exists( 'get_field' ) ) {
+					$form_id = (int) get_field( 'wpforms_career_id', 'option' );
+					if ( $form_id ) {
+						$content = preg_replace( '/<form id="applicationForm" class="application-form" novalidate>.*?<\/form>/s', '[wpforms id="' . $form_id . '"]', $content );
+					}
+				}
 			}
 		}
 		$post_data = array(
@@ -667,6 +749,137 @@ class Leadwerk_Importer {
 			Leadwerk_Logger::log( "WPForms-Formular erstellt: ID $form_id (ACF-Option gesetzt)" );
 		} else {
 			Leadwerk_Logger::log( 'WPForms-Formular konnte nicht erstellt werden.' );
+		}
+	}
+
+	protected function create_wpforms_career() {
+		if ( ! function_exists( 'wpforms' ) ) {
+			Leadwerk_Logger::log( 'WPForms nicht installiert – Karriere-Formular-Erstellung übersprungen.' );
+			return;
+		}
+		
+		if ( function_exists( 'get_field' ) ) {
+			$existing_id = (int) get_field( 'wpforms_career_id', 'option' );
+			if ( $existing_id && get_post_status( $existing_id ) ) {
+				Leadwerk_Logger::log( "WPForms-Karriere-Formular bereits vorhanden: ID $existing_id" );
+				return;
+			}
+		}
+
+		$form_data = array(
+			'fields' => array(
+				'1' => array(
+					'id'                => '1',
+					'type'              => 'name',
+					'label'             => 'Dein vollständiger Name',
+					'format'            => 'first-last',
+					'required'          => '1',
+					'size'              => 'large',
+					'first_placeholder' => 'Vorname',
+					'last_placeholder'  => 'Nachname',
+				),
+				'2' => array(
+					'id'          => '2',
+					'type'        => 'email',
+					'label'       => 'E-Mail-Adresse',
+					'required'    => '1',
+					'size'        => 'large',
+					'placeholder' => 'deine@email.de',
+				),
+				'3' => array(
+					'id'          => '3',
+					'type'        => 'phone',
+					'label'       => 'Telefonnummer',
+					'required'    => '0',
+					'size'        => 'large',
+					'placeholder' => '+49 ...',
+					'format'      => 'smart',
+				),
+				'4' => array(
+					'id'          => '4',
+					'type'        => 'select',
+					'label'       => 'Für welche Position interessierst du dich?',
+					'required'    => '1',
+					'size'        => 'large',
+					'choices'     => array(
+						'1' => array( 'label' => 'Barista (m/w/d)', 'value' => 'Barista (m/w/d)', 'default' => '' ),
+						'2' => array( 'label' => 'Servicekraft (m/w/d)', 'value' => 'Servicekraft (m/w/d)', 'default' => '' ),
+						'3' => array( 'label' => 'Konditor/in (m/w/d)', 'value' => 'Konditor/in (m/w/d)', 'default' => '' ),
+						'4' => array( 'label' => 'Initiativbewerbung', 'value' => 'Initiativbewerbung', 'default' => '' ),
+					),
+				),
+				'5' => array(
+					'id'          => '5',
+					'type'        => 'textarea',
+					'label'       => 'Warum möchtest du Teil unseres Teams werden?',
+					'required'    => '0',
+					'size'        => 'large',
+					'placeholder' => 'Erzähl uns etwas über dich...',
+				),
+				'6' => array(
+					'id'                => '6',
+					'type'              => 'file-upload',
+					'label'             => 'Lebenslauf hochladen',
+					'description'       => 'Erlaubte Dateitypen: PDF, DOC, DOCX. Max. 10MB pro Datei.',
+					'required'          => '0',
+					'extensions'        => 'pdf,doc,docx',
+					'max_size'          => '10',
+					'max_file_number'   => '3', // Allows multiple files
+				),
+				'7' => array(
+					'id'          => '7',
+					'type'        => 'checkbox',
+					'label'       => 'Datenschutz',
+					'required'    => '1',
+					'choices'     => array(
+						'1' => array(
+							'label' => 'Ich habe die Datenschutzerklärung gelesen und stimme zu.',
+							'value' => 'Zugestimmt',
+						),
+					),
+				),
+			),
+			'settings' => array(
+				'form_title'             => 'CaFEE Karriere Bewerbung',
+				'submit_text'            => 'Bewerbung absenden',
+				'submit_text_processing' => 'Wird gesendet …',
+				'notification_enable'    => '1',
+				'notifications'          => array(
+					'1' => array(
+						'email'          => '{admin_email}',
+						'subject'        => 'Neue Bewerbung von {field_id="1"} für {field_id="4"}',
+						'sender_name'    => 'CaFEE Karriere',
+						'sender_address' => '{admin_email}',
+						'replyto'        => '{field_id="2"}',
+						'message'        => "Name: {field_id=\"1\"}\nE-Mail: {field_id=\"2\"}\nTelefon: {field_id=\"3\"}\nPosition: {field_id=\"4\"}\n\nNachricht:\n{field_id=\"5\"}",
+					),
+				),
+				'confirmations' => array(
+					'1' => array(
+						'type'           => 'message',
+						'name'           => 'Standardbestätigung',
+						'message'        => 'Vielen Dank für deine Bewerbung! Wir werden uns so schnell wie möglich bei dir melden.',
+						'message_scroll' => '1',
+						'page'           => '0',
+					),
+				),
+				'antispam'    => '1',
+				'form_class'  => 'career-form',
+			),
+		);
+		$form_id = wp_insert_post( array(
+			'post_title'   => 'CaFEE Karriere Bewerbung',
+			'post_status'  => 'publish',
+			'post_type'    => 'wpforms',
+			'post_content' => wp_json_encode( $form_data ),
+		) );
+		if ( $form_id && ! is_wp_error( $form_id ) ) {
+			if ( function_exists( 'update_field' ) ) {
+				update_field( 'wpforms_career_id', $form_id, 'option' );
+			}
+			Leadwerk_Logger::log( "WPForms-Karriere-Formular erstellt: ID $form_id (ACF-Option gesetzt)" );
+		} else {
+			Leadwerk_Logger::log( 'WPForms-Karriere-Formular konnte nicht erstellt werden.' );
 		}
 	}
 

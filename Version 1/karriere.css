@@ -1,0 +1,1284 @@
+/* ==========================================================================
+   CaFEE Karriere (Career) Page – Extended Styles
+   Extends styles.css – DO NOT redefine base variables.
+   ========================================================================== */
+
+/* ----------------------------------------
+   Karriere Page Body Overrides
+   ---------------------------------------- */
+.karriere-page {
+    cursor: auto;
+}
+
+.karriere-page a {
+    cursor: auto;
+}
+
+/* Force scrolled header on karriere page (dark bg hero needs colored nav) */
+.karriere-page .nav {
+    background-color: rgba(250, 247, 244, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--space-md) 0;
+    box-shadow: var(--shadow-md);
+}
+
+.karriere-page .nav .nav-logo img {
+    height: 60px;
+    filter: none;
+}
+
+.karriere-page .nav .nav-menu a {
+    color: var(--color-secondary);
+}
+
+.karriere-page .nav .nav-menu a.active {
+    color: var(--color-primary);
+}
+
+.karriere-page .nav .nav-menu a.active::after {
+    width: 100%;
+}
+
+/* ========================================
+   1. HERO SECTION
+   ======================================== */
+.karriere-hero {
+    position: relative;
+    min-height: 75vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: calc(var(--space-5xl) + 80px) var(--space-xl) var(--space-4xl);
+    overflow: hidden;
+    background: linear-gradient(135deg, #3c3c3b 0%, #2a2a29 50%, #1a1a1a 100%);
+}
+
+.karriere-hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('images/Tresen.webp') center/cover no-repeat;
+    opacity: 0.15;
+    transform: scale(1.05);
+}
+
+.karriere-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(60, 60, 59, 0.9) 0%,
+        rgba(60, 60, 59, 0.6) 50%,
+        rgba(26, 26, 26, 0.9) 100%
+    );
+}
+
+.karriere-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.karriere-hero .section-badge.light {
+    color: var(--color-white) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.karriere-hero .section-title {
+    margin-bottom: var(--space-lg);
+}
+
+.karriere-hero .title-display {
+    color: var(--color-white);
+}
+
+.karriere-hero .title-script {
+    font-size: var(--text-5xl);
+}
+
+.karriere-hero-subtitle {
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto var(--space-2xl);
+    line-height: 1.8;
+}
+
+.karriere-hero .btn {
+    margin-top: var(--space-md);
+}
+
+.karriere-hero-scroll {
+    position: absolute;
+    bottom: var(--space-2xl);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ========================================
+   2. WER WIR SIND (About)
+   ======================================== */
+.karriere-about {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-cream);
+}
+
+.karriere-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4xl);
+    align-items: center;
+}
+
+.karriere-about-image {
+    position: relative;
+}
+
+.karriere-about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    object-fit: cover;
+}
+
+.karriere-about-image-accent {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    background: var(--gradient-fairy);
+    border-radius: var(--radius-lg);
+    z-index: -1;
+}
+
+.karriere-about-text .section-badge {
+    margin-bottom: var(--space-sm);
+}
+
+.karriere-about-text p {
+    color: var(--color-secondary-light);
+    line-height: 1.8;
+    margin-bottom: var(--space-md);
+}
+
+.karriere-about-stats {
+    display: flex;
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-cream-dark);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-secondary-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   3. SO ARBEITEN WIR (Workstyle)
+   ======================================== */
+.karriere-workstyle {
+    position: relative;
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-secondary);
+    color: var(--color-white);
+    overflow: hidden;
+}
+
+.karriere-workstyle-bg {
+    position: absolute;
+    inset: 0;
+    background: url('images/Kaffebohnen.webp') center/cover no-repeat;
+    opacity: 0.08;
+    transform: scale(1.1);
+}
+
+.karriere-workstyle-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.karriere-workstyle-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.karriere-workstyle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+}
+
+.workstyle-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.workstyle-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-warm);
+}
+
+.workstyle-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-lg);
+    color: var(--color-primary-light);
+}
+
+.workstyle-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.workstyle-card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-md);
+    color: var(--color-white);
+}
+
+.workstyle-card p {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+}
+
+/* ========================================
+   4. DEINE VORTEILE (Benefits)
+   ======================================== */
+.karriere-benefits {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--gradient-warm);
+}
+
+.karriere-benefits-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.karriere-benefits-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.karriere-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+}
+
+.benefit-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+}
+
+.benefit-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+.benefit-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-lg);
+    color: var(--color-primary);
+}
+
+.benefit-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.benefit-card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.benefit-card p {
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+    line-height: 1.7;
+}
+
+/* ========================================
+   5. STELLENANGEBOTE (Job Listings)
+   ======================================== */
+.karriere-jobs {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-cream);
+}
+
+.karriere-jobs-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.karriere-jobs-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.karriere-jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.job-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-cream-dark);
+    overflow: hidden;
+    transition: box-shadow var(--transition-base);
+}
+
+.job-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.job-card-header {
+    padding: var(--space-lg) var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-fast);
+}
+
+.job-card-header:hover {
+    background: rgba(189, 137, 113, 0.03);
+}
+
+.job-card-info h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.job-card-meta {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.job-badge {
+    display: inline-block;
+    background: var(--gradient-fairy);
+    color: var(--color-primary-dark);
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(189, 137, 113, 0.2);
+}
+
+.job-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+}
+
+.job-card-toggle {
+    color: var(--color-primary);
+    transition: transform var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.job-card.expanded .job-card-toggle {
+    transform: rotate(180deg);
+}
+
+.job-card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+.job-card.expanded .job-card-body {
+    max-height: 2000px;
+}
+
+.job-card-content {
+    padding: 0 var(--space-xl) var(--space-xl);
+    border-top: 1px solid var(--color-cream-dark);
+}
+
+.job-section {
+    margin-top: var(--space-lg);
+}
+
+.job-section h4 {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.job-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.job-section ul li {
+    position: relative;
+    padding-left: var(--space-lg);
+    margin-bottom: var(--space-xs);
+    color: var(--color-secondary-light);
+    line-height: 1.7;
+    font-size: var(--text-sm);
+}
+
+.job-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+.job-card-content > .btn {
+    margin-top: var(--space-xl);
+}
+
+/* ========================================
+   6. BEWERBUNGSPROZESS (Process Timeline)
+   ======================================== */
+.karriere-process {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-cream-dark);
+}
+
+.karriere-process-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.karriere-process-header {
+    text-align: center;
+    margin-bottom: var(--space-4xl);
+}
+
+.karriere-process-timeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 var(--space-md);
+}
+
+.process-line {
+    position: absolute;
+    top: 30px;
+    left: 60px;
+    right: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-primary-light), var(--color-primary), var(--color-primary-light));
+    z-index: 0;
+}
+
+.process-step {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 22%;
+}
+
+.process-circle {
+    width: 60px;
+    height: 60px;
+    background: var(--color-white);
+    border: 3px solid var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-lg);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(189, 137, 113, 0.15);
+}
+
+.process-step:hover .process-circle {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(189, 137, 113, 0.4);
+}
+
+.process-content h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.process-content p {
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+    line-height: 1.6;
+}
+
+/* ========================================
+   7. BEWERBUNGSFORMULAR (Application Form)
+   ======================================== */
+.karriere-form-section {
+    position: relative;
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-secondary);
+    background-image: var(--gradient-dark);
+    color: var(--color-white);
+    overflow: hidden;
+}
+
+.karriere-form-bg {
+    position: absolute;
+    inset: 0;
+    background: url('images/Kaffebohnen.webp') center/cover no-repeat;
+    opacity: 0.05;
+}
+
+.karriere-form-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.karriere-form-content {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.karriere-form-intro {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 500px;
+    margin: var(--space-md) auto 0;
+    line-height: 1.7;
+}
+
+.karriere-form-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transition: transform var(--transition-slow);
+}
+
+.karriere-form-wrapper:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.application-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--space-xs);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(212, 162, 118, 0.2);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    transition: all var(--transition-base);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d4a88e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.form-group select option {
+    background: var(--color-secondary);
+    color: var(--color-white);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(212, 162, 118, 0.6);
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow: 0 0 15px rgba(212, 162, 118, 0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* File Upload Area */
+.file-upload-area {
+    border: 2px dashed rgba(212, 162, 118, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.file-upload-area:hover,
+.file-upload-area.dragover {
+    border-color: var(--color-primary);
+    background: rgba(189, 137, 113, 0.08);
+}
+
+.file-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.file-upload-content svg {
+    color: var(--color-primary-light);
+    opacity: 0.7;
+}
+
+.file-upload-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: var(--text-sm);
+}
+
+.file-upload-link {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.file-upload-hint {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: var(--text-xs);
+}
+
+.file-upload-selected {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: rgba(189, 137, 113, 0.1);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(189, 137, 113, 0.3);
+}
+
+.file-upload-selected svg {
+    color: var(--color-primary-light);
+    flex-shrink: 0;
+}
+
+.file-name {
+    color: var(--color-white);
+    font-size: var(--text-sm);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-remove {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    transition: color var(--transition-fast);
+}
+
+.file-remove:hover {
+    color: var(--color-white);
+}
+
+/* Privacy Checkbox */
+.form-privacy {
+    padding-top: var(--space-sm);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin-top: 3px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.checkbox-label a {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+}
+
+/* Form Success State */
+.form-success {
+    text-align: center;
+    padding: var(--space-3xl);
+}
+
+.form-success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.form-success-content h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-white);
+}
+
+.form-success-content p {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 400px;
+    line-height: 1.7;
+}
+
+/* ========================================
+   8. ANSPRECHPARTNERIN (Contact Person)
+   ======================================== */
+.karriere-contact {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-cream);
+}
+
+.karriere-contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.karriere-contact-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.karriere-contact-card {
+    display: flex;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-base);
+}
+
+.karriere-contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.contact-card-image {
+    width: 40%;
+    min-height: 300px;
+}
+
+.contact-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.contact-card-info {
+    width: 60%;
+    padding: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-card-info h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.contact-card-role {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-primary);
+    margin-bottom: var(--space-md);
+}
+
+.contact-card-info p {
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+}
+
+.contact-card-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+    transition: color var(--transition-base);
+}
+
+.contact-link:hover {
+    color: var(--color-primary);
+}
+
+.contact-link svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+/* ========================================
+   9. FAQ (Accordion)
+   ======================================== */
+.karriere-faq {
+    padding: var(--space-5xl) var(--space-xl);
+    background: var(--color-cream-dark);
+}
+
+.karriere-faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.karriere-faq-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.karriere-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.faq-item {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: box-shadow var(--transition-base);
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.faq-header {
+    width: 100%;
+    padding: var(--space-lg) var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-secondary);
+    transition: color var(--transition-base);
+}
+
+.faq-header:hover {
+    color: var(--color-primary);
+}
+
+.faq-chevron {
+    color: var(--color-primary);
+    transition: transform var(--transition-base);
+    flex-shrink: 0;
+    margin-left: var(--space-md);
+}
+
+.faq-item.active .faq-chevron {
+    transform: rotate(180deg);
+}
+
+.faq-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.faq-item.active .faq-body {
+    max-height: 500px;
+}
+
+.faq-body p {
+    padding: 0 var(--space-xl) var(--space-xl);
+    font-size: var(--text-sm);
+    color: var(--color-secondary-light);
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+/* Tablet: max-width 1024px */
+@media (max-width: 1024px) {
+    .karriere-workstyle-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .karriere-benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-step {
+        width: 24%;
+    }
+
+    .process-content h3 {
+        font-size: var(--text-sm);
+    }
+}
+
+/* Mobile: max-width 767.98px */
+@media (max-width: 767.98px) {
+    .karriere-hero {
+        min-height: 60vh;
+        padding-top: calc(var(--space-4xl) + 70px);
+    }
+
+    .karriere-about-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+
+    .karriere-about-image-accent {
+        display: none;
+    }
+
+    .karriere-about-stats {
+        justify-content: center;
+    }
+
+    .karriere-workstyle-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .karriere-benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Timeline vertical on mobile */
+    .karriere-process-timeline {
+        flex-direction: column;
+        gap: var(--space-xl);
+        padding-left: 45px;
+    }
+
+    .process-line {
+        top: 0;
+        bottom: 0;
+        left: 30px;
+        right: auto;
+        width: 2px;
+        height: 100%;
+    }
+
+    .process-step {
+        width: 100%;
+        display: flex;
+        text-align: left;
+        gap: var(--space-lg);
+    }
+
+    .process-circle {
+        margin: 0;
+        flex-shrink: 0;
+        position: relative;
+        left: -45px;
+    }
+
+    .process-content {
+        flex: 1;
+        margin-left: calc(var(--space-lg) * -1);
+    }
+
+    /* Contact card vertical on mobile */
+    .karriere-contact-card {
+        flex-direction: column;
+    }
+
+    .contact-card-image {
+        width: 100%;
+        min-height: 250px;
+    }
+
+    .contact-card-info {
+        width: 100%;
+    }
+
+    .job-card-header {
+        padding: var(--space-md) var(--space-lg);
+    }
+
+    .job-card-content {
+        padding: 0 var(--space-lg) var(--space-lg);
+    }
+
+    .faq-header {
+        padding: var(--space-md) var(--space-lg);
+        font-size: var(--text-base);
+    }
+
+    .faq-body p {
+        padding: 0 var(--space-lg) var(--space-lg);
+    }
+}
+
+/* Small mobile: max-width 480px */
+@media (max-width: 480px) {
+    .karriere-about-stats {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .job-card-meta {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+}
+
+/* ========================================
+   11. WPFORMS OVERRIDES (To match static form)
+   ======================================== */
+.career-form .wpforms-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.career-form .wpforms-field-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+}
+
+.career-form .wpforms-field-container .wpforms-field-textarea,
+.career-form .wpforms-field-container .wpforms-field-file-upload,
+.career-form .wpforms-field-container .wpforms-field-checkbox {
+    grid-column: 1 / -1;
+}
+
+.career-form .wpforms-submit-container {
+    grid-column: 1 / -1;
+    margin-top: var(--space-md);
+}
+
+.career-form .wpforms-field label.wpforms-field-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: var(--space-xs);
+    letter-spacing: 0.5px;
+}
+
+.career-form .wpforms-field input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.career-form .wpforms-field select,
+.career-form .wpforms-field textarea {
+    width: 100%;
+    background: rgba(26, 26, 26, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-md) !important;
+    color: var(--color-white) !important;
+    font-family: var(--font-body) !important;
+    font-size: var(--text-base) !important;
+    transition: all var(--transition-base) !important;
+}
+
+.career-form .wpforms-field input:focus,
+.career-form .wpforms-field select:focus,
+.career-form .wpforms-field textarea:focus {
+    outline: none !important;
+    border-color: var(--color-gold) !important;
+    background: rgba(26, 26, 26, 0.6) !important;
+    box-shadow: 0 0 15px rgba(201, 168, 108, 0.2) !important;
+}
+
+.career-form .wpforms-field select option {
+    background: var(--color-secondary);
+    color: var(--color-white);
+}
+
+.career-form .wpforms-field-checkbox label {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    text-transform: none;
+    margin-left: 8px;
+}
+
+.career-form .wpforms-submit-container button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-md) var(--space-2xl);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--color-white);
+    box-shadow: var(--shadow-warm);
+    width: 100%;
+}
+
+.career-form .wpforms-submit-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+@media (max-width: 767.98px) {
+    .career-form .wpforms-field-container {
+        grid-template-columns: 1fr;
+    }
+}

@@ -131,6 +131,77 @@ class Leadwerk_ACF_Filler {
 	}
 
 	/**
+	 * Aktualisiert nur die Bildergalerie auf der Startseite aus der index.html
+	 *
+	 * @param int    $post_id     Page-ID.
+	 * @param string $source_root  Quellordner.
+	 * @return bool
+	 */
+	public function fill_gallery_only( $post_id, $source_root ) {
+		if ( ! function_exists( 'update_sub_field' ) || ! $post_id ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen (ACF nicht aktiv oder keine Post-ID).' );
+			return false;
+		}
+
+		$this->source_root = rtrim( (string) $source_root, '/\\' );
+		$sections          = get_field( 'home_sections', $post_id, false );
+		if ( ! is_array( $sections ) || empty( $sections ) ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen: home_sections nicht gefunden oder leer (ID ' . (int) $post_id . ').' );
+			return false;
+		}
+
+		$exp_index = null;
+		foreach ( $sections as $index => $section ) {
+			if ( is_array( $section ) && isset( $section['acf_fc_layout'] ) && 'experience' === $section['acf_fc_layout'] ) {
+				$exp_index = $index;
+				break;
+			}
+		}
+
+		if ( null === $exp_index ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen: experience-Layout nicht gefunden (ID ' . (int) $post_id . ').' );
+			return false;
+		}
+
+		$html_path = $this->source_root . DIRECTORY_SEPARATOR . 'index.html';
+		if ( ! file_exists( $html_path ) ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen: index.html nicht in source_root gefunden.' );
+			return false;
+		}
+		
+		$html = file_get_contents( $html_path );
+		if ( ! $html ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen: index.html konnte nicht gelesen werden.' );
+			return false;
+		}
+
+		$parsed_sections = $this->build_home_sections_from_html( $html );
+		
+		$gallery_data = null;
+		foreach ( $parsed_sections as $parsed_sec ) {
+			if ( 'experience' === $parsed_sec['acf_fc_layout'] ) {
+				$gallery_data = $parsed_sec['gallery'];
+				break;
+			}
+		}
+
+		if ( null === $gallery_data ) {
+			Leadwerk_Logger::log( 'Galerie-Import abgebrochen: experience-Layout nicht in index.html gefunden.' );
+			return false;
+		}
+
+		$updated = update_sub_field(
+			array( 'home_sections', $exp_index + 1, 'gallery' ),
+			$gallery_data,
+			$post_id
+		);
+
+		$state = $updated ? 'aktualisiert' : 'abgeglichen (keine Datenbankänderung nötig oder Wert unverändert)';
+		Leadwerk_Logger::log( 'Nur Galerie ' . $state . ': ' . count( $gallery_data ) . ' Bilder für Startseite (ID ' . (int) $post_id . '). Andere Sektionen blieben unverändert.' );
+		return true;
+	}
+
+	/**
 	 * Eröffnungsseite mit ACF eroeffnung_sections befüllen.
 	 *
 	 * @param int    $post_id     Page-ID.

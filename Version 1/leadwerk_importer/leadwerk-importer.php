@@ -61,6 +61,8 @@ function leadwerk_importer_admin_page() {
 	$manifest_pages   = leadwerk_importer_get_manifest_pages();
 	$single_page_run  = isset( $_POST['leadwerk_import_single_page'] ) && current_user_can( 'manage_options' );
 	$menu_book_run    = isset( $_POST['leadwerk_import_menu_book'] ) && current_user_can( 'manage_options' );
+	$gallery_run      = isset( $_POST['leadwerk_import_gallery'] ) && current_user_can( 'manage_options' );
+	$karriere_run     = isset( $_POST['leadwerk_import_karriere'] ) && current_user_can( 'manage_options' );
 	$posted_source_key = isset( $_POST['leadwerk_source_key'] ) && is_scalar( $_POST['leadwerk_source_key'] )
 		? (string) wp_unslash( $_POST['leadwerk_source_key'] )
 		: 'eroeffnung-v1';
@@ -104,6 +106,36 @@ function leadwerk_importer_admin_page() {
 			echo '<div class="notice notice-success"><p>MenuBook-Import abgeschlossen. Nur die Online-Speisekarte im PageFlip-Buch wurde aktualisiert; andere Sektionen blieben unverändert. Siehe <a href="' . esc_url( admin_url( 'admin.php?page=leadwerk-import&log=1' ) ) . '">Log</a>.</p></div>';
 		}
 	}
+
+	if ( $gallery_run && check_admin_referer( 'leadwerk_import_gallery' ) ) {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		$importer = new Leadwerk_Importer( true );
+		$result   = $importer->run_gallery_only();
+
+		if ( is_wp_error( $result ) ) {
+			echo '<div class="notice notice-error"><p>' . esc_html( $result->get_error_message() ) . '</p></div>';
+		} else {
+			echo '<div class="notice notice-success"><p>Galerie-Import abgeschlossen. Nur die Bildergalerie auf der Startseite wurde aktualisiert. Siehe <a href="' . esc_url( admin_url( 'admin.php?page=leadwerk-import&log=1' ) ) . '">Log</a>.</p></div>';
+		}
+	}
+
+	if ( $karriere_run && check_admin_referer( 'leadwerk_import_karriere' ) ) {
+		if ( function_exists( 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 300 );
+		}
+
+		$importer = new Leadwerk_Importer( true );
+		$result   = $importer->run_karriere_import();
+
+		if ( is_wp_error( $result ) ) {
+			echo '<div class="notice notice-error"><p>' . esc_html( $result->get_error_message() ) . '</p></div>';
+		} else {
+			echo '<div class="notice notice-success"><p>Karriere-Import abgeschlossen. Seite und Formular wurden aktualisiert. Siehe <a href="' . esc_url( admin_url( 'admin.php?page=leadwerk-import&log=1' ) ) . '">Log</a>.</p></div>';
+		}
+	}
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Leadwerk Import', 'leadwerk-importer' ); ?></h1>
@@ -140,6 +172,20 @@ function leadwerk_importer_admin_page() {
 		<h2 style="margin-top:0;">Nur Online-Speisekarte importieren</h2>
 		<p>Aktualisiert ausschließlich das PageFlip-MenuBook der Startseite anhand der aktuellen Speisekarte. Andere ACF-Sektionen, Seiten, Medien, Optionen und SEO-Felder werden nicht neu importiert.</p>
 		<button type="submit" class="button button-primary">Nur MenuBook importieren</button>
+	</form>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=leadwerk-import' ) ); ?>" style="margin:1.5em 0;padding:1em;background:#fff;border:1px solid #ccd0d4;max-width:680px;">
+		<?php wp_nonce_field( 'leadwerk_import_gallery' ); ?>
+		<input type="hidden" name="leadwerk_import_gallery" value="1">
+		<h2 style="margin-top:0;">Nur Galerie importieren</h2>
+		<p>Aktualisiert ausschließlich die Bildergalerie auf der Startseite. Neue Bilder werden geladen und die Galerie aktualisiert. Andere Sektionen bleiben unverändert.</p>
+		<button type="submit" class="button button-primary">Nur Galerie importieren</button>
+	</form>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=leadwerk-import' ) ); ?>" style="margin:1.5em 0;padding:1em;background:#fff;border:1px solid #ccd0d4;max-width:680px;">
+		<?php wp_nonce_field( 'leadwerk_import_karriere' ); ?>
+		<input type="hidden" name="leadwerk_import_karriere" value="1">
+		<h2 style="margin-top:0;">Karriere-Seite importieren (Alle Neu)</h2>
+		<p>Importiert die komplette Karriere-Seite inklusive Bilder. Erstellt außerdem automatisch das WPForms Formular für Bewerbungen mit Datei-Upload.</p>
+		<button type="submit" class="button button-primary">Karriere-Seite importieren</button>
 	</form>
 	<?php if ( isset( $_GET['log'] ) ) : ?>
 		<pre style="background:#f5f5f5;padding:1em;max-height:400px;overflow:auto;"><?php echo esc_html( get_option( 'leadwerk_import_log', '' ) ); ?></pre>
