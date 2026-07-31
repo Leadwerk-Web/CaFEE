@@ -59,7 +59,7 @@
 .karriere-hero-bg {
     position: absolute;
     inset: 0;
-    background: url('images/Tresen.webp') center/cover no-repeat;
+    background: url('images/karriere-hero.webp') center/cover no-repeat;
     opacity: 0.15;
     transform: scale(1.05);
 }

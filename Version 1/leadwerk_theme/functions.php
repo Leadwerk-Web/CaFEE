@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_THEME_VERSION', '1.0.11' );
+define( 'LEADWERK_THEME_VERSION', '1.0.12' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
 /** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
@@ -146,7 +146,7 @@ function leadwerk_theme_render_opentable_fallback_modal() {
 	?>
 	<div class="ot-fallback-modal" id="otFallbackModal" aria-hidden="true">
 		<button type="button" class="ot-fallback-close" id="otFallbackClose" aria-label="<?php esc_attr_e( 'Schließen', 'leadwerk-theme' ); ?>">&times;</button>
-		<iframe id="otFallbackFrame" class="ot-fallback-frame" title="<?php esc_attr_e( 'OpenTable Reservierung', 'leadwerk-theme' ); ?>" loading="lazy"></iframe>
+		<iframe id="otFallbackFrame" class="ot-fallback-frame" title="<?php esc_attr_e( 'OpenTable Reservierung', 'leadwerk-theme' ); ?>" loading="eager"></iframe>
 	</div>
 	<?php
 }

@@ -864,7 +864,7 @@ function ensureOtFallbackModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.innerHTML =
         '<button type="button" class="ot-fallback-close" id="otFallbackClose" aria-label="Schließen">&times;</button>' +
-        '<iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="lazy"></iframe>';
+        '<iframe id="otFallbackFrame" class="ot-fallback-frame" title="OpenTable Reservierung" loading="eager"></iframe>';
     document.body.appendChild(modal);
     return modal;
 }
@@ -877,10 +877,32 @@ function initOpenTableOverlayFallback() {
     if (!fallbackModal || !fallbackFrame) return;
 
     promoteModalToBody(fallbackModal);
+    let fallbackReadyTimer = null;
+    let fallbackLoadFrame = null;
+
+    const setFallbackLoading = (isLoading) => {
+        fallbackModal.classList.toggle('is-loading', isLoading);
+        fallbackFrame.classList.toggle('is-ready', !isLoading);
+        fallbackModal.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+    };
+
+    const finishFallbackLoading = () => {
+        window.clearTimeout(fallbackReadyTimer);
+        fallbackReadyTimer = window.setTimeout(() => {
+            if (fallbackModal.classList.contains('active')) {
+                setFallbackLoading(false);
+            }
+        }, 350);
+    };
+
+    fallbackFrame.addEventListener('load', finishFallbackLoading);
 
     const closeFallback = () => {
+        window.clearTimeout(fallbackReadyTimer);
+        window.cancelAnimationFrame(fallbackLoadFrame);
         fallbackModal.classList.remove('active');
         fallbackModal.setAttribute('aria-hidden', 'true');
+        setFallbackLoading(false);
         setCursorBridgeActive(false);
         document.body.classList.remove('ot-overlay-open');
         document.body.style.overflow = '';
@@ -895,11 +917,18 @@ function initOpenTableOverlayFallback() {
         if (!isOpenTableBookingUrl(url)) return;
         closeMobileNavIfOpen();
         wakeCustomCursor();
-        fallbackFrame.setAttribute('src', url);
+        window.clearTimeout(fallbackReadyTimer);
+        window.cancelAnimationFrame(fallbackLoadFrame);
+        setFallbackLoading(true);
         fallbackModal.classList.add('active');
         fallbackModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('ot-overlay-open');
         document.body.style.overflow = 'hidden';
+        fallbackLoadFrame = window.requestAnimationFrame(() => {
+            if (fallbackModal.classList.contains('active')) {
+                fallbackFrame.setAttribute('src', url);
+            }
+        });
     };
 
     if (!window.__otFallbackOpenPatched) {
