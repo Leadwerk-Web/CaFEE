@@ -4772,8 +4772,57 @@ body.is-subpage .thanks-page-deco .legal-page {
 }
 
 .ot-dtp-picker.ot-standard.wide {
-    width: 32.5rem !important;
-    align-items: normal !important;
+    width: 100% !important;
+    max-width: 32.5rem !important;
+    box-sizing: border-box !important;
+    align-items: stretch !important;
+}
+
+.ot-dtp-picker.ot-standard.wide .ot-dtp-picker-form {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 901px) {
+    .reservation-widget,
+    [id^="ot-widget-container"],
+    .ot-dtp-picker.ot-standard.wide {
+        width: 100% !important;
+        max-width: 36rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .reservation-widget,
+    [id^="ot-widget-container"],
+    .ot-dtp-picker.ot-standard.wide {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+}
+
+/*
+ * Der OpenTable-Kalender erbt sonst die weiße Schrift der dunklen
+ * Reservierungssektion. Seine weißen Kalenderflächen benötigen dunkle Zahlen.
+ */
+.reservation-widget .ot-dtp-picker,
+.reservation-widget .ot-dtp-picker .picker,
+.reservation-widget .ot-dtp-picker .picker__box,
+.reservation-widget .ot-dtp-picker table,
+.reservation-widget .ot-dtp-picker th,
+.reservation-widget .ot-dtp-picker td,
+.reservation-widget .ot-dtp-picker .picker__day,
+.reservation-widget .ot-dtp-picker .picker__weekday,
+.reservation-widget .ot-dtp-picker .picker__nav,
+.reservation-widget .ot-dtp-picker .picker__button_reset {
+    color: #333333 !important;
+}
+
+.reservation-widget .ot-dtp-picker .picker__day[disabled] {
+    color: #767676 !important;
+    opacity: 0.65 !important;
 }
 
 /* =================================================================

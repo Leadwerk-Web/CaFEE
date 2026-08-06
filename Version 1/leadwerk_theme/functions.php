@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_THEME_VERSION', '1.0.12' );
+define( 'LEADWERK_THEME_VERSION', '1.0.17' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
 /** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
@@ -164,6 +164,7 @@ function leadwerk_theme_opentable_early_patch() {
 	(function () {
 		if (window.__otFallbackOpenPatched) return;
 		var nativeOpen = window.open.bind(window);
+		window.__otNativeOpen = nativeOpen;
 		window.open = function (url, target, features) {
 			if (typeof url === 'string' && /opentable\.[^/]+\/(?:booking|restref)/i.test(url)) {
 				window.__otPendingBookingUrl = url;

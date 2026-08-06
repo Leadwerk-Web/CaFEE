@@ -799,6 +799,17 @@ function isOpenTableBookingUrl(url) {
     return typeof url === 'string' && /opentable\.[^/]+\/(?:booking|restref)/i.test(url);
 }
 
+function isDesktopSafariBrowser() {
+    const userAgent = navigator.userAgent || '';
+    const isSafari = navigator.vendor === 'Apple Computer, Inc.' &&
+        /Safari/i.test(userAgent) &&
+        !/(?:CriOS|FxiOS|EdgiOS|OPiOS|Chrome|Chromium|Android)/i.test(userAgent);
+    const isTouchAppleDevice = /(?:iPhone|iPad|iPod)/i.test(userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    return isSafari && !isTouchAppleDevice;
+}
+
 function normalizeOpenTableHost(host) {
     if (!host) return 'https://www.opentable.de';
     const normalized = host.replace(/^https?:https?:\/\//i, 'https://');
@@ -877,6 +888,9 @@ function initOpenTableOverlayFallback() {
     if (!fallbackModal || !fallbackFrame) return;
 
     promoteModalToBody(fallbackModal);
+    if (!window.__otFallbackOpenPatched && typeof window.__otNativeOpen !== 'function') {
+        window.__otNativeOpen = window.open.bind(window);
+    }
     let fallbackReadyTimer = null;
     let fallbackLoadFrame = null;
 
@@ -916,6 +930,28 @@ function initOpenTableOverlayFallback() {
     const openFallback = (url) => {
         if (!isOpenTableBookingUrl(url)) return;
         closeMobileNavIfOpen();
+
+        /*
+         * Desktop-Safari blockiert die OpenTable-Sitzung im Cross-Site-iframe
+         * (ITP). Dort zuverlässig außerhalb des iframes öffnen; mobiles Safari
+         * kann den bestehenden Vollbild-Modal-Flow weiterhin verwenden.
+         */
+        if (isDesktopSafariBrowser()) {
+            if (typeof window.__otNativeOpen === 'function') {
+                const bookingWindow = window.__otNativeOpen(url, '_blank');
+                if (bookingWindow) {
+                    try {
+                        bookingWindow.opener = null;
+                    } catch (error) {
+                        // Cross-origin WindowProxy kann den Zugriff verweigern.
+                    }
+                    return;
+                }
+            }
+            window.location.assign(url);
+            return;
+        }
+
         wakeCustomCursor();
         window.clearTimeout(fallbackReadyTimer);
         window.cancelAnimationFrame(fallbackLoadFrame);
@@ -932,7 +968,8 @@ function initOpenTableOverlayFallback() {
     };
 
     if (!window.__otFallbackOpenPatched) {
-        const nativeWindowOpen = window.open.bind(window);
+        const nativeWindowOpen = window.__otNativeOpen || window.open.bind(window);
+        window.__otNativeOpen = nativeWindowOpen;
         window.open = function patchedWindowOpen(url, target, features) {
             if (isOpenTableBookingUrl(url)) {
                 openFallback(url);

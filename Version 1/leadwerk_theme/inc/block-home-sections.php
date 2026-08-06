@@ -720,7 +720,7 @@ function leadwerk_render_reservation( $f ) {
 				</h2>
 				<?php if ( $intro ) : ?><p class="reservation-text"><?php echo wp_kses_post( nl2br( $intro ) ); ?></p><?php endif; ?>
 				<div class="reservation-widget">
-					<script type="text/javascript" src="https://www.opentable.de/widget/reservation/loader?rid=457257&amp;type=standard&amp;theme=wide&amp;color=8&amp;dark=false&amp;iframe=false&amp;domain=de&amp;lang=de-DE&amp;newtab=false&amp;ot_source=Restaurant%20website&amp;font=garamond&amp;ot_logo=subtle&amp;primary_color=c18b71&amp;primary_font_color=333333&amp;button_color=000000&amp;button_font_color=ffffff&amp;cfe=true"></script>
+					<script type="text/javascript" src="https://www.opentable.de/widget/reservation/loader?rid=457257&amp;type=standard&amp;theme=wide&amp;color=8&amp;dark=false&amp;iframe=false&amp;domain=de&amp;lang=de-DE&amp;newtab=false&amp;ot_source=Restaurant%20website&amp;font=verdana&amp;ot_logo=subtle&amp;primary_color=c18b71&amp;primary_font_color=333333&amp;button_color=000000&amp;button_font_color=ffffff&amp;logo_pid=92135119&amp;cfe=true"></script>
 				</div>
 				<div class="reservation-info">
 					<div class="info-item">
