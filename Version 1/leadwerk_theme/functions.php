@@ -11,11 +11,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_THEME_VERSION', '1.0.17' );
+define( 'LEADWERK_THEME_VERSION', '1.0.21' );
 define( 'LEADWERK_THEME_DIR', get_template_directory() );
 define( 'LEADWERK_THEME_URI', get_template_directory_uri() );
 /** Standard-WPForms-ID für die Reservierungs-/Kontakt-Sektion, falls keine ACF-Option gesetzt ist. */
 define( 'LEADWERK_WPFORMS_RESERVATION_DEFAULT_ID', 171 );
+
+/**
+ * Ob die aktuelle Anfrage die Karriere-Seite ist.
+ *
+ * @return bool
+ */
+function leadwerk_theme_is_karriere_page() {
+	if ( is_page( 'karriere' ) ) {
+		return true;
+	}
+	$queried_id = get_queried_object_id();
+	return (bool) ( $queried_id && 'karriere-v1' === (string) get_post_meta( $queried_id, 'leadwerk_source_key', true ) );
+}
 
 /**
  * WPForms-ID der Kontakt-/Reservierungs-Sektion (ACF-Option oder Theme-Konstante).
@@ -71,6 +84,8 @@ add_filter( 'wpforms_process_before_form_data', 'leadwerk_theme_wpforms_force_da
  * Alle Styles liegen in style.css; Bilder/Assets in assets/images/ (mit im Theme).
  */
 function leadwerk_theme_enqueue_assets() {
+	$is_karriere = leadwerk_theme_is_karriere_page();
+
 	wp_enqueue_style(
 		'leadwerk-theme-style',
 		get_stylesheet_uri(),
@@ -124,6 +139,21 @@ function leadwerk_theme_enqueue_assets() {
 			array(
 				'shareUrl' => esc_url( home_url( '/eroeffnung/' ) ),
 			)
+		);
+	}
+	if ( $is_karriere ) {
+		wp_enqueue_style(
+			'leadwerk-karriere',
+			LEADWERK_THEME_URI . '/assets/css/karriere.css',
+			array( 'leadwerk-theme-style' ),
+			LEADWERK_THEME_VERSION
+		);
+		wp_enqueue_script(
+			'leadwerk-karriere',
+			LEADWERK_THEME_URI . '/assets/js/karriere.js',
+			array( 'leadwerk-theme-main' ),
+			LEADWERK_THEME_VERSION,
+			true
 		);
 	}
 }
@@ -443,7 +473,8 @@ add_action( 'wp_enqueue_scripts', 'leadwerk_theme_dequeue_block_styles', 100 );
  * @return string[]
  */
 function leadwerk_theme_body_class_subpages( $classes ) {
-	if ( ! is_front_page() ) {
+	$is_karriere = leadwerk_theme_is_karriere_page();
+	if ( ! is_front_page() && ! $is_karriere ) {
 		$classes[] = 'is-subpage';
 	}
 	if ( is_404() || is_page( '404' ) ) {
@@ -453,6 +484,10 @@ function leadwerk_theme_body_class_subpages( $classes ) {
 	if ( is_page( 'eroeffnung' ) ) {
 		$classes[] = 'eroeffnung-page';
 	}
+	if ( $is_karriere ) {
+		$classes[] = 'karriere-page';
+		$classes[] = 'header-scrolled';
+	}
 	if ( is_front_page() || is_page( array( 'impressum', 'datenschutz' ) ) ) {
 		$classes[] = 'has-ambient-fairy-home';
 	} else {
@@ -461,6 +496,17 @@ function leadwerk_theme_body_class_subpages( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'leadwerk_theme_body_class_subpages' );
+
+/**
+ * Karriere-Inhalt stammt aus einer vollständigen, bereits formatierten HTML-Vorlage.
+ * Automatische Absatz-/Zeilenumbruch-Tags würden deren Layout-Struktur beschädigen.
+ */
+function leadwerk_theme_disable_wpautop_for_karriere() {
+	if ( leadwerk_theme_is_karriere_page() ) {
+		remove_filter( 'the_content', 'wpautop' );
+	}
+}
+add_action( 'wp', 'leadwerk_theme_disable_wpautop_for_karriere', 20 );
 
 /**
  * Unterseiten: Navigation nur „Home“ (zentriert per CSS), Link zur Startseite /#home.
@@ -479,6 +525,27 @@ function leadwerk_theme_render_navigation_subpage( $block_content, $block ) {
 	$nav_label = esc_attr__( 'Hauptmenü', 'leadwerk-theme' );
 	$toggle_label = esc_attr__( 'Navigation öffnen', 'leadwerk-theme' );
 	$toggle_close_label = esc_attr__( 'Navigation schließen', 'leadwerk-theme' );
+	if ( leadwerk_theme_is_karriere_page() ) {
+		$home_url = esc_url( home_url( '/' ) );
+		return '<nav class="wp-block-group nav scrolled" id="mainNav" role="navigation" aria-label="' . $nav_label . '">' .
+			'<div class="nav-container">' .
+			$logo_html .
+			'<button type="button" class="nav-toggle" id="navToggle" aria-controls="navMenu" aria-expanded="false" aria-label="' . $toggle_label . '" data-label-open="' . $toggle_label . '" data-label-close="' . $toggle_close_label . '">' .
+			'<span></span><span></span><span></span>' .
+			'</button>' .
+			'<ul class="nav-menu" id="navMenu" aria-hidden="true">' .
+			'<li><a href="' . $home_url . '#home">Home</a></li>' .
+			'<li><a href="' . $home_url . '#story">Unsere Geschichte</a></li>' .
+			'<li><a href="' . $home_url . '#menu">Speisekarte</a></li>' .
+			'<li><a href="' . $home_url . '#experience">Erlebnis</a></li>' .
+			'<li><a href="' . $home_url . '#team">Team</a></li>' .
+			'<li><a href="#karriere-jobs" class="active">Karriere</a></li>' .
+			'<li><a href="' . $home_url . '#reservation" class="nav-cta">Reservieren</a></li>' .
+			'</ul>' .
+			'</div>' .
+			'<div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>' .
+			'</nav>';
+	}
 	return '<nav class="wp-block-group nav" id="mainNav" role="navigation" aria-label="' . $nav_label . '">' .
 		'<div class="nav-container">' .
 		$logo_html .
@@ -758,6 +825,15 @@ function leadwerk_theme_dynamic_footer( $content ) {
 		'<img src="' . esc_url( $logo_url ) . '" alt="CaFEE Brückenmühle Logo" class="footer-logo">',
 		$content
 	);
+
+	if ( ! is_front_page() ) {
+		$home = esc_url( home_url( '/' ) );
+		$content = preg_replace(
+			'/href="#(home|story|menu|experience|team|reservation)"/',
+			'href="' . $home . '#$1"',
+			$content
+		);
+	}
 
 	if ( ! $has_acf ) {
 		return $content;

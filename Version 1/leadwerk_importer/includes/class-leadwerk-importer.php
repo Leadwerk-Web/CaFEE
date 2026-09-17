@@ -354,6 +354,7 @@ class Leadwerk_Importer {
 					if ( $form_id ) {
 						$content = preg_replace( '/<form id="applicationForm" class="application-form" novalidate>.*?<\/form>/s', '[wpforms id="' . $form_id . '"]', $content );
 					}
+					$content = $this->prepare_karriere_content( $content );
 				}
 			}
 		}
@@ -396,6 +397,134 @@ class Leadwerk_Importer {
 		if ( $existing && ! $this->dry_run && ! empty( $config['seo'] ) ) {
 			$this->apply_seo_meta( $existing, $config['seo'], $config );
 		}
+	}
+
+	/**
+	 * Standalone-Karriere-HTML auf den eigentlichen WordPress-Seiteninhalt reduzieren.
+	 * Theme-Header/-Footer und Assets werden separat vom Theme ausgegeben.
+	 *
+	 * @param string $content Vollständiges HTML-Dokument.
+	 * @return string
+	 */
+	protected function prepare_karriere_content( $content ) {
+		$content = (string) $content;
+		if ( '' === trim( $content ) ) {
+			return '';
+		}
+
+		if ( class_exists( 'DOMDocument' ) && class_exists( 'DOMXPath' ) ) {
+			$previous_errors = libxml_use_internal_errors( true );
+			$document        = new DOMDocument( '1.0', 'UTF-8' );
+			$loaded          = $document->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
+
+			if ( $loaded ) {
+				$xpath = new DOMXPath( $document );
+				$remove_nodes = $xpath->query(
+					'//nav[@id="mainNav"] | //footer[contains(concat(" ", normalize-space(@class), " "), " footer ")] | //script'
+				);
+				if ( $remove_nodes ) {
+					foreach ( $remove_nodes as $node ) {
+						if ( $node->parentNode ) {
+							$node->parentNode->removeChild( $node );
+						}
+					}
+				}
+
+				$asset_nodes = $xpath->query( '//*[@src]' );
+				if ( $asset_nodes ) {
+					foreach ( $asset_nodes as $node ) {
+						$src = trim( html_entity_decode( (string) $node->getAttribute( 'src' ), ENT_QUOTES, 'UTF-8' ) );
+						if ( 0 === strpos( $src, 'images/' ) ) {
+							$node->setAttribute( 'src', $this->resolve_imported_asset_url( $src ) );
+						}
+					}
+				}
+
+				$link_nodes = $xpath->query( '//a[@href]' );
+				if ( $link_nodes ) {
+					foreach ( $link_nodes as $node ) {
+						$node->setAttribute( 'href', $this->rewrite_karriere_href( (string) $node->getAttribute( 'href' ) ) );
+					}
+				}
+
+				$body = $document->getElementsByTagName( 'body' )->item( 0 );
+				if ( $body ) {
+					$body_content = '';
+					foreach ( $body->childNodes as $child ) {
+						$body_content .= $document->saveHTML( $child );
+					}
+					$content = $body_content;
+				}
+			}
+
+			libxml_clear_errors();
+			libxml_use_internal_errors( $previous_errors );
+		} else {
+			if ( preg_match( '/<body\b[^>]*>(.*)<\/body>/is', $content, $body_match ) ) {
+				$content = $body_match[1];
+			}
+			$content = (string) preg_replace( '/<nav\b[^>]*id=["\']mainNav["\'][^>]*>.*?<\/nav>/is', '', $content );
+			$content = (string) preg_replace( '/<footer\b[^>]*>.*?<\/footer>/is', '', $content );
+			$content = (string) preg_replace( '/<script\b[^>]*>.*?<\/script>/is', '', $content );
+			$content = (string) preg_replace_callback(
+				'/\bsrc=(["\'])(images\/[^"\']+)\1/i',
+				function ( $matches ) {
+					return 'src=' . $matches[1] . esc_url( $this->resolve_imported_asset_url( $matches[2] ) ) . $matches[1];
+				},
+				$content
+			);
+			$content = (string) preg_replace_callback(
+				'/\bhref=(["\'])([^"\']+)\1/i',
+				function ( $matches ) {
+					return 'href=' . $matches[1] . esc_url( $this->rewrite_karriere_href( $matches[2] ) ) . $matches[1];
+				},
+				$content
+			);
+		}
+
+		return trim( $content );
+	}
+
+	/**
+	 * Karriere-Asset bevorzugt auf das importierte Mediathek-Objekt auflösen.
+	 *
+	 * @param string $relative_path Relativer Pfad unter source_assets.
+	 * @return string
+	 */
+	protected function resolve_imported_asset_url( $relative_path ) {
+		$relative_path = ltrim( (string) $relative_path, '/\\' );
+		if ( $this->media_importer ) {
+			$attachment_id = $this->media_importer->get_attachment_id_by_source( $relative_path );
+			if ( $attachment_id ) {
+				$url = wp_get_attachment_url( $attachment_id );
+				if ( $url ) {
+					return $url;
+				}
+			}
+		}
+
+		return LEADWERK_IMPORTER_URL . 'source_assets/' . $relative_path;
+	}
+
+	/**
+	 * Standalone-Dateilinks in WordPress-Permalinks übersetzen.
+	 *
+	 * @param string $href Ursprünglicher Link.
+	 * @return string
+	 */
+	protected function rewrite_karriere_href( $href ) {
+		$href = trim( html_entity_decode( (string) $href, ENT_QUOTES, 'UTF-8' ) );
+		if ( 0 === strpos( $href, 'index.html' ) ) {
+			return home_url( '/' ) . ltrim( substr( $href, strlen( 'index.html' ) ), '/' );
+		}
+
+		$permalinks = array(
+			'karriere.html'   => home_url( '/karriere/' ),
+			'impressum.html'  => home_url( '/impressum/' ),
+			'datenschutz.html' => home_url( '/datenschutz/' ),
+		);
+
+		return isset( $permalinks[ $href ] ) ? $permalinks[ $href ] : $href;
 	}
 
 	/**
@@ -757,13 +886,10 @@ class Leadwerk_Importer {
 			Leadwerk_Logger::log( 'WPForms nicht installiert – Karriere-Formular-Erstellung übersprungen.' );
 			return;
 		}
-		
+
+		$existing_id = 0;
 		if ( function_exists( 'get_field' ) ) {
 			$existing_id = (int) get_field( 'wpforms_career_id', 'option' );
-			if ( $existing_id && get_post_status( $existing_id ) ) {
-				Leadwerk_Logger::log( "WPForms-Karriere-Formular bereits vorhanden: ID $existing_id" );
-				return;
-			}
 		}
 
 		$form_data = array(
@@ -771,17 +897,16 @@ class Leadwerk_Importer {
 				'1' => array(
 					'id'                => '1',
 					'type'              => 'name',
-					'label'             => 'Dein vollständiger Name',
-					'format'            => 'first-last',
+					'label'             => 'Name',
+					'format'            => 'simple',
 					'required'          => '1',
 					'size'              => 'large',
-					'first_placeholder' => 'Vorname',
-					'last_placeholder'  => 'Nachname',
+					'simple_placeholder' => 'Dein vollständiger Name',
 				),
 				'2' => array(
 					'id'          => '2',
 					'type'        => 'email',
-					'label'       => 'E-Mail-Adresse',
+					'label'       => 'E-Mail',
 					'required'    => '1',
 					'size'        => 'large',
 					'placeholder' => 'deine@email.de',
@@ -789,7 +914,7 @@ class Leadwerk_Importer {
 				'3' => array(
 					'id'          => '3',
 					'type'        => 'phone',
-					'label'       => 'Telefonnummer',
+					'label'       => 'Telefon',
 					'required'    => '0',
 					'size'        => 'large',
 					'placeholder' => '+49 ...',
@@ -798,23 +923,24 @@ class Leadwerk_Importer {
 				'4' => array(
 					'id'          => '4',
 					'type'        => 'select',
-					'label'       => 'Für welche Position interessierst du dich?',
+					'label'       => 'Gewünschte Stelle',
 					'required'    => '1',
 					'size'        => 'large',
+					'placeholder' => 'Bitte wählen ...',
 					'choices'     => array(
-						'1' => array( 'label' => 'Barista (m/w/d)', 'value' => 'Barista (m/w/d)', 'default' => '' ),
-						'2' => array( 'label' => 'Servicekraft (m/w/d)', 'value' => 'Servicekraft (m/w/d)', 'default' => '' ),
-						'3' => array( 'label' => 'Konditor/in (m/w/d)', 'value' => 'Konditor/in (m/w/d)', 'default' => '' ),
-						'4' => array( 'label' => 'Initiativbewerbung', 'value' => 'Initiativbewerbung', 'default' => '' ),
+						'1' => array( 'label' => 'Barista (m/w/d)', 'value' => 'Barista (m/w/d)' ),
+						'2' => array( 'label' => 'Servicekraft (m/w/d)', 'value' => 'Servicekraft (m/w/d)' ),
+						'3' => array( 'label' => 'Küchenhilfe (m/w/d)', 'value' => 'Küchenhilfe (m/w/d)' ),
+						'4' => array( 'label' => 'Initiativbewerbung', 'value' => 'Initiativbewerbung' ),
 					),
 				),
 				'5' => array(
 					'id'          => '5',
 					'type'        => 'textarea',
-					'label'       => 'Warum möchtest du Teil unseres Teams werden?',
+					'label'       => 'Nachricht',
 					'required'    => '0',
 					'size'        => 'large',
-					'placeholder' => 'Erzähl uns etwas über dich...',
+					'placeholder' => 'Erzähl uns, warum du Teil unseres Teams werden möchtest...',
 				),
 				'6' => array(
 					'id'                => '6',
@@ -830,10 +956,12 @@ class Leadwerk_Importer {
 					'id'          => '7',
 					'type'        => 'checkbox',
 					'label'       => 'Datenschutz',
+					'label_hide'  => '1',
 					'required'    => '1',
+					'show_values' => '1',
 					'choices'     => array(
 						'1' => array(
-							'label' => 'Ich habe die Datenschutzerklärung gelesen und stimme zu.',
+							'label' => 'Ich stimme der Verarbeitung meiner Daten gemäß der <a class="career-privacy-link" href="' . esc_url( home_url( '/datenschutz/' ) ) . '" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a> zu.',
 							'value' => 'Zugestimmt',
 						),
 					),
@@ -843,15 +971,22 @@ class Leadwerk_Importer {
 				'form_title'             => 'CaFEE Karriere Bewerbung',
 				'submit_text'            => 'Bewerbung absenden',
 				'submit_text_processing' => 'Wird gesendet …',
+				'ajax_submit'             => '1',
 				'notification_enable'    => '1',
 				'notifications'          => array(
 					'1' => array(
-						'email'          => '{admin_email}',
-						'subject'        => 'Neue Bewerbung von {field_id="1"} für {field_id="4"}',
-						'sender_name'    => 'CaFEE Karriere',
-						'sender_address' => '{admin_email}',
-						'replyto'        => '{field_id="2"}',
-						'message'        => "Name: {field_id=\"1\"}\nE-Mail: {field_id=\"2\"}\nTelefon: {field_id=\"3\"}\nPosition: {field_id=\"4\"}\n\nNachricht:\n{field_id=\"5\"}",
+						'enable'                                 => '1',
+						'notification_name'                      => 'Standard-Benachrichtigung',
+						'email'                                  => 'hallo@cafee-brueckenmuehle.de',
+						'subject'                                => 'Neue Bewerbung von {field_id="1"} für {field_id="4"}',
+						'sender_name'                            => 'CaFEE Webseite',
+						'sender_address'                         => 'administrator@leadwerk.de',
+						'replyto'                                => '{field_id="2"}',
+						'message'                                => '{all_fields}',
+						'template'                               => '',
+						'file_upload_attachment_fields'          => array(),
+						'entry_csv_attachment_entry_information' => array(),
+						'entry_csv_attachment_file_name'         => 'entry-details',
 					),
 				),
 				'confirmations' => array(
@@ -867,19 +1002,38 @@ class Leadwerk_Importer {
 				'form_class'  => 'career-form',
 			),
 		);
-		$form_id = wp_insert_post( array(
-			'post_title'   => 'CaFEE Karriere Bewerbung',
-			'post_status'  => 'publish',
-			'post_type'    => 'wpforms',
-			'post_content' => wp_json_encode( $form_data ),
-		) );
+		$post_data = array(
+			'post_title'  => 'CaFEE Karriere Bewerbung',
+			'post_status' => 'publish',
+			'post_type'   => 'wpforms',
+		);
+		if ( $existing_id && get_post_status( $existing_id ) ) {
+			$form_data['id']          = (string) $existing_id;
+			$post_data['ID']          = $existing_id;
+			$post_data['post_content'] = wp_slash( wp_json_encode( $form_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
+			$form_id                  = wp_update_post( $post_data, true );
+		} else {
+			$form_id = wp_insert_post( $post_data, true );
+			if ( $form_id && ! is_wp_error( $form_id ) ) {
+				$form_data['id'] = (string) $form_id;
+				$form_id         = wp_update_post(
+					array(
+						'ID'           => $form_id,
+						'post_content' => wp_slash( wp_json_encode( $form_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ),
+					),
+					true
+				);
+			}
+		}
 		if ( $form_id && ! is_wp_error( $form_id ) ) {
 			if ( function_exists( 'update_field' ) ) {
 				update_field( 'wpforms_career_id', $form_id, 'option' );
 			}
-			Leadwerk_Logger::log( "WPForms-Karriere-Formular erstellt: ID $form_id (ACF-Option gesetzt)" );
+			$action = $existing_id ? 'aktualisiert' : 'erstellt';
+			Leadwerk_Logger::log( "WPForms-Karriere-Formular $action: ID $form_id (ACF-Option gesetzt)" );
 		} else {
-			Leadwerk_Logger::log( 'WPForms-Karriere-Formular konnte nicht erstellt werden.' );
+			$error = is_wp_error( $form_id ) ? ': ' . $form_id->get_error_message() : '';
+			Leadwerk_Logger::log( 'WPForms-Karriere-Formular konnte nicht gespeichert werden' . $error . '.' );
 		}
 	}
 

@@ -89,8 +89,12 @@
       "title": "Karriere bei CaFEE",
       "content_file": "karriere-content.html",
       "seo": {
-        "title": "Karriere – Werde Teil des CaFEE Brückenmühle Teams",
-        "meta_description": "Wir suchen Kaffeeliebhaber! Entdecke unsere offenen Stellen als Barista, Servicekraft oder Konditor/in und bewirb dich bei uns in Gernsbach.",
+        "title": "Karriere – CaFEE Brückenmühle",
+        "meta_description": "Karriere beim CaFEE Brückenmühle – Offene Stellen als Barista, Servicekraft und Küchenhilfe. Arbeitszeiten 9–17 Uhr, kreative Freiheit und moderne digitale Prozesse. Bewirb dich jetzt!",
+        "og_title": "Karriere beim CaFEE Brückenmühle – Werde Teil unseres Teams",
+        "og_description": "Entdecke offene Stellen im CaFEE Brückenmühle. Werde Teil unserer magischen Café-Familie in Gernsbach.",
+        "og_image_source": "images/karriere-hero.webp",
+        "focus_keyphrase": "Karriere CaFEE Brückenmühle",
         "meta_robots": "index, follow"
       }
     },

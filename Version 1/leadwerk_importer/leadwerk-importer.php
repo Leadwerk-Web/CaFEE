@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Leadwerk Importer
  * Description: Import statischer CaFEE-Inhalte in WordPress (Pages, Medien, ACF). Dry-Run, Re-Import, Logging.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Leadwerk
  * Text Domain: leadwerk-importer
  * Requires at least: 6.0
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'LEADWERK_IMPORTER_VERSION', '1.0.0' );
+define( 'LEADWERK_IMPORTER_VERSION', '1.0.1' );
 define( 'LEADWERK_IMPORTER_PATH', plugin_dir_path( __FILE__ ) );
 define( 'LEADWERK_IMPORTER_URL', plugin_dir_url( __FILE__ ) );
 
